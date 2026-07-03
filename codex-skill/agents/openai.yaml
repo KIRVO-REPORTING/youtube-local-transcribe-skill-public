@@ -1,0 +1,6 @@
+interface:
+  display_name: "Video Report Builder"
+  short_description: "Use captions first, then local Whisper, and build browser reports"
+  default_prompt: "Use $youtube-local-transcribe for this video link. Prefer downloadable captions, fall back to local Whisper, write summary.txt, finalize report.html, and update the dashboard."
+policy:
+  allow_implicit_invocation: true
