@@ -44,7 +44,7 @@ The JSON output includes the folder and report paths. Read `metadata.json` and `
 
 ## Write The Summary
 
-Write a grounded plain-text summary to `<video-folder>/summary.txt`. Use the user's language unless the user requests another language.
+Write a grounded Markdown summary to `<video-folder>/summary.md`. Use the user's language unless the user requests another language.
 
 Use this structure:
 
@@ -91,7 +91,7 @@ Each processed folder should contain:
 
 - `metadata.json`: source URL, title, channel, platform, publish time, duration, processing time, and `transcript_source`
 - `transcript.txt`: subtitle-derived or local Whisper transcript
-- `summary.txt`: Codex-written summary, after the summary step
+- `summary.md`: Codex-written summary, after the summary step
 - `report.html`: browser-readable report
 
 `transcript_source` is one of:

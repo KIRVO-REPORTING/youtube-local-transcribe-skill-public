@@ -15,11 +15,13 @@ from .captions import choose_caption_track, download_caption, write_transcript_f
 from .config import configured_model_path, config_path, model_cache_dir, model_cache_path, write_config
 from .ffmpeg import resolve_ffmpeg_path
 from .reporting import (
+    SUMMARY_FILENAME,
     delete_video_files,
     make_video_folder,
     normalize_metadata,
     read_metadata,
     rebuild_index,
+    summary_file_path,
     write_report,
 )
 from .spec import MODEL_MATRIX, default_workspace, install_commands, probe, recommend, should_cache_model, to_json
@@ -199,11 +201,12 @@ def finalize(args: argparse.Namespace) -> int:
     metadata = read_metadata(folder)
     if not metadata:
         raise SystemExit(f"Missing or invalid metadata.json in {folder}")
-    summary_path = folder / "summary.txt"
+    summary_path = folder / SUMMARY_FILENAME
     if args.summary_file:
         shutil.copyfile(args.summary_file.expanduser().resolve(), summary_path)
-    if not summary_path.exists() or summary_path.stat().st_size == 0:
-        raise SystemExit(f"Missing or empty summary.txt in {folder}")
+    active_summary = summary_file_path(folder)
+    if not active_summary.exists() or active_summary.stat().st_size == 0:
+        raise SystemExit(f"Missing or empty {SUMMARY_FILENAME} in {folder}")
     report_path = write_report(folder, metadata)
     deleted = delete_video_files(folder, metadata)
     workspace = folder.parent.parent if folder.parent.name == "processed" else default_workspace()
@@ -370,7 +373,7 @@ def build_parser() -> argparse.ArgumentParser:
     process_parser.add_argument("--open", action="store_true")
     process_parser.set_defaults(func=process_url)
 
-    finalize_parser = sub.add_parser("finalize", help="Render final report.html after summary.txt is written.")
+    finalize_parser = sub.add_parser("finalize", help="Render final report.html after summary.md is written.")
     finalize_parser.add_argument("folder", type=Path)
     finalize_parser.add_argument("--summary-file", type=Path)
     finalize_parser.add_argument("--open", action="store_true")
