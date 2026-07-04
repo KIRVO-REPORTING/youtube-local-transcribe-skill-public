@@ -237,7 +237,7 @@ def build_report_html(metadata: dict[str, Any], summary: str, transcript: str) -
 
 def write_report(folder: Path, metadata: dict[str, Any]) -> Path:
     transcript_path = folder / "transcript.txt"
-    summary_path = summary_file_path(folder)
+    summary_path = migrate_summary_file(folder)
     transcript = transcript_path.read_text(encoding="utf-8-sig") if transcript_path.exists() else ""
     summary = summary_path.read_text(encoding="utf-8-sig") if summary_path.exists() else ""
     report = folder / "report.html"
@@ -252,6 +252,15 @@ def summary_file_path(folder: Path) -> Path:
     legacy = folder / LEGACY_SUMMARY_FILENAME
     if legacy.exists():
         return legacy
+    return preferred
+
+
+def migrate_summary_file(folder: Path) -> Path:
+    preferred = folder / SUMMARY_FILENAME
+    legacy = folder / LEGACY_SUMMARY_FILENAME
+    if preferred.exists() or not legacy.exists():
+        return summary_file_path(folder)
+    legacy.replace(preferred)
     return preferred
 
 
@@ -286,7 +295,7 @@ def read_metadata(folder: Path) -> dict[str, Any] | None:
 
 
 def summary_preview(folder: Path, limit: int = 220) -> str:
-    path = summary_file_path(folder)
+    path = migrate_summary_file(folder)
     if not path.exists():
         return ""
     text = re.sub(r"\s+", " ", path.read_text(encoding="utf-8-sig")).strip()

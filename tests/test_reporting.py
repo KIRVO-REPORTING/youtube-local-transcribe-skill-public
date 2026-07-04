@@ -58,6 +58,8 @@ Key Points
 
             self.assertIn("legacy summary", report.read_text(encoding="utf-8"))
             self.assertEqual("legacy summary", summary_preview(folder))
+            self.assertTrue((folder / "summary.md").exists())
+            self.assertFalse((folder / "summary.txt").exists())
 
 
 if __name__ == "__main__":

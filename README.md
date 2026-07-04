@@ -14,7 +14,7 @@ This repository contains:
 - Detect Apple Silicon, NVIDIA CUDA, CPU RAM, and ffmpeg availability.
 - Download the hardware-recommended Whisper model during initial setup.
 - Store setup state in `<workspace>/config.json` and models in `<workspace>/models`.
-- Generate per-video `metadata.json`, `transcript.txt`, `summary.txt`, and `report.html`.
+- Generate per-video `metadata.json`, `transcript.txt`, `summary.md`, and `report.html`.
 - Build and serve a local searchable dashboard of processed reports.
 - Keep downloaded video files out of final report folders after finalization.
 
@@ -101,13 +101,13 @@ Each processed folder contains:
 - `metadata.json`
 - `transcript.txt`
 - `report.html`
-- `summary.txt` after a summary is written and finalized
+- `summary.md` after a summary is written and finalized
 
 When local Whisper is needed, `ytlt process` uses the configured model path from `<workspace>/config.json` unless `--model` is supplied.
 
 ## Finalize A Report
 
-After writing a plain-text summary to `<video-folder>/summary.txt`, run:
+After writing a Markdown summary to `<video-folder>/summary.md`, run:
 
 ```bash
 ytlt finalize "<video-folder>"
