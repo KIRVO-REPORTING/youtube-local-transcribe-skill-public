@@ -10,6 +10,8 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 
 VIDEO_EXTENSIONS = {".mp4", ".mkv", ".webm", ".mov", ".m4v"}
+SUMMARY_FILENAME = "summary.md"
+LEGACY_SUMMARY_FILENAME = "summary.txt"
 TIMESTAMP_RE = re.compile(
     r"\[(?P<start>\d{1,2}:\d{2}(?::\d{2})?)(?:-(?P<end>\d{1,2}:\d{2}(?::\d{2})?))?\]"
 )
@@ -125,7 +127,7 @@ def make_video_folder(output_root: Path, metadata: dict[str, Any]) -> Path:
 
 def render_summary(text: str, source_url: str | None = None) -> str:
     if not text.strip():
-        return '<p class="muted">Summary pending. Write summary.txt and run ytlt finalize.</p>'
+        return '<p class="muted">Summary pending. Write summary.md and run ytlt finalize.</p>'
 
     blocks: list[str] = []
     paragraph: list[str] = []
@@ -235,12 +237,22 @@ def build_report_html(metadata: dict[str, Any], summary: str, transcript: str) -
 
 def write_report(folder: Path, metadata: dict[str, Any]) -> Path:
     transcript_path = folder / "transcript.txt"
-    summary_path = folder / "summary.txt"
+    summary_path = summary_file_path(folder)
     transcript = transcript_path.read_text(encoding="utf-8-sig") if transcript_path.exists() else ""
     summary = summary_path.read_text(encoding="utf-8-sig") if summary_path.exists() else ""
     report = folder / "report.html"
     report.write_text(build_report_html(metadata, summary, transcript), encoding="utf-8")
     return report
+
+
+def summary_file_path(folder: Path) -> Path:
+    preferred = folder / SUMMARY_FILENAME
+    if preferred.exists():
+        return preferred
+    legacy = folder / LEGACY_SUMMARY_FILENAME
+    if legacy.exists():
+        return legacy
+    return preferred
 
 
 def delete_video_files(folder: Path, metadata: dict[str, Any]) -> list[str]:
@@ -274,7 +286,7 @@ def read_metadata(folder: Path) -> dict[str, Any] | None:
 
 
 def summary_preview(folder: Path, limit: int = 220) -> str:
-    path = folder / "summary.txt"
+    path = summary_file_path(folder)
     if not path.exists():
         return ""
     text = re.sub(r"\s+", " ", path.read_text(encoding="utf-8-sig")).strip()

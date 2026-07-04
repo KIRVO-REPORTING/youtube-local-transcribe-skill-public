@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import tempfile
 import unittest
+from pathlib import Path
 
-from ytlt.reporting import render_summary
+from ytlt.reporting import render_summary, summary_preview, write_report
 
 
 class ReportingTests(unittest.TestCase):
@@ -33,6 +35,29 @@ Key Points
 
         self.assertIn("watch?v=abc&amp;t=3723", rendered)
         self.assertIn("t=3723", rendered)
+
+    def test_report_prefers_summary_md_over_legacy_txt(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            (folder / "transcript.txt").write_text("transcript\n", encoding="utf-8")
+            (folder / "summary.txt").write_text("legacy summary\n", encoding="utf-8")
+            (folder / "summary.md").write_text("markdown summary\n", encoding="utf-8")
+
+            report = write_report(folder, {"title": "Video", "source_url": "https://example.test/video"})
+
+            self.assertIn("markdown summary", report.read_text(encoding="utf-8"))
+            self.assertEqual("markdown summary", summary_preview(folder))
+
+    def test_report_reads_legacy_summary_txt(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            (folder / "transcript.txt").write_text("transcript\n", encoding="utf-8")
+            (folder / "summary.txt").write_text("legacy summary\n", encoding="utf-8")
+
+            report = write_report(folder, {"title": "Video", "source_url": "https://example.test/video"})
+
+            self.assertIn("legacy summary", report.read_text(encoding="utf-8"))
+            self.assertEqual("legacy summary", summary_preview(folder))
 
 
 if __name__ == "__main__":
