@@ -61,21 +61,21 @@ MODEL_MATRIX: list[dict[str, Any]] = [
     {
         "case": "Apple Silicon with 8-15 GB unified memory",
         "backend": "mlx-whisper",
-        "model": "mlx-community/whisper-small",
+        "model": "mlx-community/whisper-small-mlx",
         "compute": "mlx",
         "rule": "Conservative default; users can opt into turbo for shorter videos.",
     },
     {
         "case": "NVIDIA CUDA with >=10 GB VRAM",
         "backend": "faster-whisper",
-        "model": "Systran/faster-whisper-large-v3-turbo",
+        "model": "large-v3-turbo",
         "compute": "float16",
-        "rule": "Fast GPU profile; use large-v3 as an explicit quality override.",
+        "rule": "Fast GPU profile using faster-whisper's built-in alias.",
     },
     {
         "case": "NVIDIA CUDA with 6-9 GB VRAM",
         "backend": "faster-whisper",
-        "model": "Systran/faster-whisper-large-v3-turbo",
+        "model": "large-v3-turbo",
         "compute": "int8_float16",
         "rule": "Balanced VRAM profile; fallback to medium if out of memory.",
     },
@@ -106,6 +106,13 @@ MODEL_MATRIX: list[dict[str, Any]] = [
         "model": "Systran/faster-whisper-tiny",
         "compute": "int8",
         "rule": "Minimal fallback; do not promise transcript quality.",
+    },
+    {
+        "case": "Intel/AMD integrated GPU, AMD ROCm, or unsupported GPU",
+        "backend": "faster-whisper",
+        "model": "RAM-based CPU fallback",
+        "compute": "cpu / int8",
+        "rule": "Treat as CPU until this package validates a non-CUDA GPU backend.",
     },
 ]
 
@@ -212,7 +219,7 @@ def recommend(spec: MachineSpec) -> InstallProfile:
         return InstallProfile(
             id="apple-silicon-small",
             backend="mlx",
-            model="mlx-community/whisper-small",
+            model="mlx-community/whisper-small-mlx",
             device="mlx",
             compute_type="mlx",
             pip_extras=["mlx"],
@@ -225,12 +232,12 @@ def recommend(spec: MachineSpec) -> InstallProfile:
         vram_gb = best.vram_mb / 1024
         if vram_gb >= 10:
             profile_id = "nvidia-turbo-float16"
-            model = "Systran/faster-whisper-large-v3-turbo"
+            model = "large-v3-turbo"
             compute = "float16"
             reason = f"NVIDIA GPU {best.name} has about {vram_gb:.1f} GB VRAM."
         elif vram_gb >= 6:
             profile_id = "nvidia-turbo-int8-float16"
-            model = "Systran/faster-whisper-large-v3-turbo"
+            model = "large-v3-turbo"
             compute = "int8_float16"
             reason = f"NVIDIA GPU {best.name} has moderate VRAM; use quantized GPU inference."
         else:
@@ -270,8 +277,17 @@ def recommend(spec: MachineSpec) -> InstallProfile:
         compute_type="int8",
         pip_extras=["faster-whisper"],
         reason=reason,
-        notes=notes + ["CPU transcription can be slow; prefer downloadable captions when present."],
+        notes=notes
+        + [
+            "CPU transcription can be slow; prefer downloadable captions when present.",
+            "Intel/AMD integrated GPUs and unsupported discrete GPUs use this CPU path by default.",
+        ],
     )
+
+
+def should_cache_model(profile: InstallProfile) -> bool:
+    """Return whether setup should pre-download a model into the workspace cache."""
+    return bool(profile.model and "/" in profile.model and not profile.model.startswith(("~", "/")))
 
 
 def install_commands(
@@ -294,7 +310,7 @@ def install_commands(
             "print(f'ffmpeg available: {path}')",
         ]
     )
-    if profile.model:
+    if should_cache_model(profile):
         command = [sys.executable, "-m", "ytlt", "download-model", profile.model]
         if model_target:
             command.extend(["--target", str(model_target)])

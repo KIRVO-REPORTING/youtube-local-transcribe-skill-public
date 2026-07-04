@@ -59,18 +59,20 @@ ytlt setup --workspace /path/to/workspace --execute
 
 ## Hardware Model Selection
 
-| Local hardware | Backend | Default model |
-|---|---|---|
-| Apple Silicon, 16 GB+ unified memory | `mlx` | `mlx-community/whisper-large-v3-turbo` |
-| Apple Silicon, 8-15 GB unified memory | `mlx` | `mlx-community/whisper-small` |
-| NVIDIA CUDA, 10 GB+ VRAM | `faster-whisper` | `Systran/faster-whisper-large-v3-turbo` |
-| NVIDIA CUDA, 6-9 GB VRAM | `faster-whisper` | `Systran/faster-whisper-large-v3-turbo` |
-| NVIDIA CUDA, 4-5 GB VRAM | `faster-whisper` | `Systran/faster-whisper-small` |
-| CPU only, 16 GB+ RAM | `faster-whisper` | `Systran/faster-whisper-small` |
-| CPU only, 8-15 GB RAM | `faster-whisper` | `Systran/faster-whisper-base` |
-| CPU only, under 8 GB RAM | `faster-whisper` | `Systran/faster-whisper-tiny` |
+Captions are still the first choice. Local Whisper is only the fallback when captions are missing, unsuitable, or `--force-transcribe` is set.
 
-Captions are still preferred when available, even if a local model has been configured.
+| Local hardware | Backend | Default model | Device / compute |
+|---|---|---|---|
+| Apple Silicon macOS, 16 GB+ unified memory | `mlx` | `mlx-community/whisper-large-v3-turbo` | MLX |
+| Apple Silicon macOS, 8-15 GB unified memory | `mlx` | `mlx-community/whisper-small-mlx` | MLX |
+| Windows/Linux with NVIDIA CUDA, 10 GB+ VRAM | `faster-whisper` | `large-v3-turbo` | `cuda` / `float16` |
+| Windows/Linux with NVIDIA CUDA, 6-9 GB VRAM | `faster-whisper` | `large-v3-turbo` | `cuda` / `int8_float16` |
+| Windows/Linux with NVIDIA CUDA, 4-5 GB VRAM | `faster-whisper` | `Systran/faster-whisper-small` | `cuda` / `int8_float16` |
+| CPU only, Intel/AMD integrated GPU, or unsupported GPU, 16 GB+ RAM | `faster-whisper` | `Systran/faster-whisper-small` | `cpu` / `int8` |
+| CPU only, Intel/AMD integrated GPU, or unsupported GPU, 8-15 GB RAM | `faster-whisper` | `Systran/faster-whisper-base` | `cpu` / `int8` |
+| CPU only, Intel/AMD integrated GPU, or unsupported GPU, under 8 GB RAM | `faster-whisper` | `Systran/faster-whisper-tiny` | `cpu` / `int8` |
+
+Intel/AMD integrated GPUs, AMD ROCm, DirectML, and OpenVINO are treated as CPU paths until this package validates those backends. NVIDIA recommendations use faster-whisper's `large-v3-turbo` alias because the old `Systran/faster-whisper-large-v3-turbo` repository path is not reliably downloadable.
 
 ## Process A Video
 

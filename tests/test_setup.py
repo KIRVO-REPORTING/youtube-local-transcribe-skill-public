@@ -11,7 +11,7 @@ from unittest.mock import patch
 
 from ytlt.cli import process_url
 from ytlt.config import configured_model_path, model_cache_dir, model_cache_path, write_config
-from ytlt.spec import InstallProfile, MachineSpec, install_commands
+from ytlt.spec import InstallProfile, MachineSpec, NvidiaGpu, install_commands, recommend, should_cache_model
 
 
 def _spec(workspace: Path) -> MachineSpec:
@@ -60,6 +60,45 @@ class SetupTests(unittest.TestCase):
             config = json.loads((workspace / "config.json").read_text(encoding="utf-8"))
 
         self.assertEqual(config["ffmpeg"]["path"], "/usr/local/bin/ffmpeg")
+
+    def test_apple_silicon_limited_memory_uses_public_mlx_small_checkpoint(self) -> None:
+        spec = MachineSpec(
+            os="Darwin",
+            arch="arm64",
+            python="3.11.0",
+            ram_gb=8.0,
+            is_apple_silicon=True,
+            nvidia_gpus=[],
+            ffmpeg="/usr/local/bin/ffmpeg",
+            workspace="/tmp/youtube",
+        )
+
+        profile = recommend(spec)
+
+        self.assertEqual(profile.backend, "mlx")
+        self.assertEqual(profile.model, "mlx-community/whisper-small-mlx")
+        self.assertTrue(should_cache_model(profile))
+
+    def test_nvidia_turbo_uses_faster_whisper_alias_without_workspace_download(self) -> None:
+        spec = MachineSpec(
+            os="Windows",
+            arch="AMD64",
+            python="3.11.0",
+            ram_gb=32.0,
+            is_apple_silicon=False,
+            nvidia_gpus=[NvidiaGpu(name="RTX", vram_mb=12288)],
+            ffmpeg="C:/ffmpeg/bin/ffmpeg.exe",
+            workspace="C:/Users/test/Documents/youtube",
+        )
+
+        profile = recommend(spec)
+        commands = install_commands(profile, Path("/repo"), model_target=Path("/models"))
+
+        self.assertEqual(profile.backend, "faster-whisper")
+        self.assertEqual(profile.model, "large-v3-turbo")
+        self.assertFalse(should_cache_model(profile))
+        self.assertFalse(any("download-model" in command for command in commands for command in command))
+        self.assertIn("large-v3-turbo", commands[-1][-1])
 
     def test_configured_model_path_uses_matching_downloaded_model(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:

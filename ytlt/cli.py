@@ -22,7 +22,7 @@ from .reporting import (
     rebuild_index,
     write_report,
 )
-from .spec import MODEL_MATRIX, default_workspace, install_commands, probe, recommend, to_json
+from .spec import MODEL_MATRIX, default_workspace, install_commands, probe, recommend, should_cache_model, to_json
 from .transcribe import download_model, transcribe_video
 
 
@@ -256,7 +256,7 @@ def run_install(args: argparse.Namespace) -> int:
         return 0
     for cmd in commands:
         subprocess.run(cmd, check=True)
-    model_path = model_cache_path(workspace, profile.model) if profile.model else None
+    model_path = model_cache_path(workspace, profile.model) if should_cache_model(profile) and profile.model else None
     configured_spec = probe(workspace)
     written = write_config(workspace, configured_spec, profile, model_path=model_path)
     print(
