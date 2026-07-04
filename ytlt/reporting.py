@@ -6,9 +6,13 @@ import json
 import re
 from pathlib import Path
 from typing import Any
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 
 VIDEO_EXTENSIONS = {".mp4", ".mkv", ".webm", ".mov", ".m4v"}
+TIMESTAMP_RE = re.compile(
+    r"\[(?P<start>\d{1,2}:\d{2}(?::\d{2})?)(?:-(?P<end>\d{1,2}:\d{2}(?::\d{2})?))?\]"
+)
 
 
 def slugify(value: str, max_length: int = 72) -> str:
@@ -44,6 +48,51 @@ def platform_from_url(url: str) -> str:
     return "video"
 
 
+def timestamp_to_seconds(value: str) -> int | None:
+    parts = value.split(":")
+    try:
+        numbers = [int(part) for part in parts]
+    except ValueError:
+        return None
+    if len(numbers) == 2:
+        minutes, seconds = numbers
+        return minutes * 60 + seconds
+    if len(numbers) == 3:
+        hours, minutes, seconds = numbers
+        return hours * 3600 + minutes * 60 + seconds
+    return None
+
+
+def source_url_at_time(source_url: str | None, seconds: int) -> str | None:
+    if not source_url:
+        return None
+    parts = urlsplit(source_url)
+    query = [(key, value) for key, value in parse_qsl(parts.query, keep_blank_values=True) if key != "t"]
+    query.append(("t", str(max(0, seconds))))
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query), parts.fragment))
+
+
+def render_inline(text: str, source_url: str | None = None) -> str:
+    rendered: list[str] = []
+    cursor = 0
+    for match in TIMESTAMP_RE.finditer(text):
+        rendered.append(html.escape(text[cursor : match.start()]))
+        timestamp_text = match.group(0)
+        seconds = timestamp_to_seconds(match.group("start"))
+        timestamp_url = source_url_at_time(source_url, seconds) if seconds is not None else None
+        if timestamp_url:
+            rendered.append(
+                '<a class="timestamp-link" href="'
+                f'{html.escape(timestamp_url, quote=True)}" target="_blank" rel="noopener">'
+                f"{html.escape(timestamp_text)}</a>"
+            )
+        else:
+            rendered.append(html.escape(timestamp_text))
+        cursor = match.end()
+    rendered.append(html.escape(text[cursor:]))
+    return "".join(rendered)
+
+
 def normalize_metadata(info: dict[str, Any], url: str, *, transcript_source: str) -> dict[str, Any]:
     upload_date = parse_upload_date(info.get("upload_date"))
     source_url = info.get("webpage_url") or info.get("original_url") or url
@@ -74,7 +123,7 @@ def make_video_folder(output_root: Path, metadata: dict[str, Any]) -> Path:
     return folder
 
 
-def render_summary(text: str) -> str:
+def render_summary(text: str, source_url: str | None = None) -> str:
     if not text.strip():
         return '<p class="muted">Summary pending. Write summary.txt and run ytlt finalize.</p>'
 
@@ -85,13 +134,13 @@ def render_summary(text: str) -> str:
     def flush_paragraph() -> None:
         nonlocal paragraph
         if paragraph:
-            blocks.append(f"<p>{html.escape(' '.join(paragraph))}</p>")
+            blocks.append(f"<p>{render_inline(' '.join(paragraph), source_url)}</p>")
             paragraph = []
 
     def flush_bullets() -> None:
         nonlocal bullets
         if bullets:
-            items = "\n".join(f"<li>{html.escape(item)}</li>" for item in bullets)
+            items = "\n".join(f"<li>{render_inline(item, source_url)}</li>" for item in bullets)
             blocks.append(f"<ul>\n{items}\n</ul>")
             bullets = []
 
@@ -141,7 +190,7 @@ def build_report_html(metadata: dict[str, Any], summary: str, transcript: str) -
     ]
     metadata_rows = "\n".join(f"<tr><th>{label}</th><td>{value}</td></tr>" for label, value in rows)
     transcript_text = html.escape(transcript.strip())
-    summary_html = render_summary(summary)
+    summary_html = render_summary(summary, str(metadata.get("source_url") or ""))
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -159,6 +208,7 @@ def build_report_html(metadata: dict[str, Any], summary: str, transcript: str) -
     th, td {{ border-bottom: 1px solid #e6ebf1; padding: 8px 10px; text-align: left; vertical-align: top; }}
     th {{ width: 160px; color: var(--muted); font-weight: 650; }}
     a {{ color: #0b63ce; }}
+    .timestamp-link {{ font-variant-numeric: tabular-nums; font-weight: 650; text-decoration-thickness: 1px; }}
     code {{ background: #eef2f7; border-radius: 4px; padding: 1px 5px; }}
     pre {{ white-space: pre-wrap; word-wrap: break-word; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 18px; }}
     .muted {{ color: var(--muted); }}

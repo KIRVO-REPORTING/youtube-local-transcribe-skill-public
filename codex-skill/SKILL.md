@@ -55,14 +55,16 @@ One-paragraph answer-first summary.
 
 Key Points
 
-- Point 1
-- Point 2
-- Point 3
+- [mm:ss-mm:ss] Point 1
+- [mm:ss-mm:ss] Point 2
+- [mm:ss-mm:ss] Point 3
 
 Notes
 
 - Caveats about subtitle quality, audio quality, uncertain terms, or incomplete transcript.
 ```
+
+For video reports, key point bullets must start with a bracketed timestamp or time range such as `[01:24-02:44]`, using the transcript's actual timing. Use `[hh:mm:ss-hh:mm:ss]` for videos longer than one hour. The report renderer converts bracketed timestamps into clickable source-video links that seek to the start time, so keep the timestamp at the beginning of each key point.
 
 Finalize:
 
