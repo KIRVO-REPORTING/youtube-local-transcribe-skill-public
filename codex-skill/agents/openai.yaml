@@ -1,6 +1,6 @@
 interface:
   display_name: "Video Report Builder"
-  short_description: "Build timestamp-linked video reports locally"
-  default_prompt: "Use $youtube-local-transcribe for this video link: prefer captions, fall back to local Whisper, write timestamped key points, finalize report.html, and update the dashboard."
+  short_description: "Build clean Notion video report rows"
+  default_prompt: "Use $youtube-local-transcribe for this video link: prefer captions, fall back to local Whisper, write timestamped key points, finalize the local archive, then directly publish the current clean Notion database row report whose Name opens the report content."
 policy:
   allow_implicit_invocation: true

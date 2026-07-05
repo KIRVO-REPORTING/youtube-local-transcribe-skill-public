@@ -1,0 +1,21 @@
+{
+  "generated_at": "2026-07-03T16:30:09.387129+00:00",
+  "workspace": "/Users/ff/Documents/电商搜索/youtube_reports",
+  "reports": [
+    {
+      "folder": "2026-07-03_bilibili_BV12kTp6tENs_anthropic估值暴涨背后-普通人有什么ai时代的红利",
+      "title": "Anthropic估值暴涨背后，普通人有什么AI时代的红利？",
+      "channel": "小Lin说",
+      "platform": "bilibili",
+      "source_url": "https://www.bilibili.com/video/BV12kTp6tENs/?spm_id_from=333.337.search-card.all.click&vd_source=e9fa2aadf57837ab269cd53900dc2e65",
+      "published_at": "2026-07-03T09:30:00+00:00",
+      "processed_at": "2026-07-03T16:26:49.058232+00:00",
+      "duration_seconds": 2109.96,
+      "transcript_source": "local_whisper",
+      "summary_preview": "Summary 这期访谈围绕 Anthropic、OpenAI 等 AI 公司估值上升，讨论 AI Agent 尤其是 Coding Agent 为什么被资本和企业看重，以及它对普通用户可能带来的机会。受访者马静认为，AI 正从简单问答走向可执行任务、可推理解决复杂问题，最终会连接现实世界；Coding Agent 的价值在于像“超级程序员”一样把自然语言需求转成可运行应用，能显著提升程序员、金融分析师、医疗等专业场景的效率。视频后半段...",
+      "report_exists": true,
+      "transcript_exists": true,
+      "report_path": "/Users/ff/Documents/电商搜索/youtube_reports/processed/2026-07-03_bilibili_BV12kTp6tENs_anthropic估值暴涨背后-普通人有什么ai时代的红利/report.html"
+    }
+  ]
+}

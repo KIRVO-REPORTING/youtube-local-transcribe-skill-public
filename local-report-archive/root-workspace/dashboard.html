@@ -1,0 +1,497 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Video Reports</title>
+  <link rel="icon" href="data:,">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #232529;
+      --muted: #6b6f76;
+      --faint: #9da3ad;
+      --line: #e3e5e8;
+      --line-strong: #d0d4da;
+      --bg: #f7f7f5;
+      --paper: #ffffff;
+      --hover: #f1f1ef;
+      --blue: #2563eb;
+      --green-bg: #edf7ed;
+      --green-ink: #2f6f44;
+      --orange-bg: #fbf0df;
+      --orange-ink: #9a5a18;
+      --purple-bg: #f2effa;
+      --purple-ink: #694e9e;
+      --gray-bg: #eeeeec;
+      --gray-ink: #555b62;
+      --red-bg: #faecec;
+      --red-ink: #9b3434;
+    }
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      letter-spacing: 0;
+    }
+    a { color: inherit; }
+    .shell {
+      width: min(100%, 1480px);
+      margin: 0 auto;
+      padding: 28px 28px 42px;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin: 0;
+      font-size: 30px;
+      line-height: 1.2;
+      font-weight: 720;
+      letter-spacing: 0;
+    }
+    .workspace {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 7px;
+      overflow-wrap: anywhere;
+    }
+    .generated {
+      color: var(--muted);
+      font-size: 12px;
+      text-align: right;
+      white-space: nowrap;
+      padding-top: 8px;
+    }
+    .viewbar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--line);
+      overflow-x: auto;
+    }
+    .view-tab {
+      appearance: none;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font: inherit;
+      font-size: 14px;
+      padding: 9px 10px 8px;
+      white-space: nowrap;
+    }
+    .view-tab[aria-pressed="true"] {
+      color: var(--ink);
+      border-bottom-color: var(--ink);
+      font-weight: 650;
+    }
+    .toolbar {
+      display: grid;
+      grid-template-columns: minmax(260px, 1fr) 160px 160px 170px;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    input, select {
+      min-width: 0;
+      width: 100%;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--paper);
+      color: var(--ink);
+      font: inherit;
+      font-size: 13px;
+      padding: 6px 9px;
+    }
+    input:focus, select:focus {
+      outline: 2px solid rgba(37, 99, 235, .18);
+      border-color: #8fb2ff;
+    }
+    .database {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .table-wrap {
+      overflow: auto;
+      max-height: calc(100vh - 210px);
+    }
+    table {
+      width: 100%;
+      min-width: 1240px;
+      border-collapse: separate;
+      border-spacing: 0;
+      table-layout: fixed;
+      font-size: 13px;
+    }
+    thead th {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      height: 34px;
+      background: var(--paper);
+      border-bottom: 1px solid var(--line-strong);
+      border-right: 1px solid var(--line);
+      color: var(--muted);
+      font-weight: 600;
+      text-align: left;
+      padding: 0;
+      white-space: nowrap;
+    }
+    thead th:last-child, tbody td:last-child { border-right: 0; }
+    th button {
+      width: 100%;
+      height: 100%;
+      appearance: none;
+      border: 0;
+      background: transparent;
+      color: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 0 10px;
+      font: inherit;
+      text-align: left;
+    }
+    th button:hover { background: var(--hover); }
+    tbody tr { background: var(--paper); }
+    tbody tr:hover { background: #fbfbfa; }
+    tbody td {
+      height: 42px;
+      border-bottom: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+      padding: 7px 10px;
+      vertical-align: middle;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    tbody tr:last-child td { border-bottom: 0; }
+    .col-name { width: 330px; }
+    .col-status { width: 120px; }
+    .col-platform { width: 118px; }
+    .col-source { width: 145px; }
+    .col-channel { width: 180px; }
+    .col-date { width: 132px; }
+    .col-duration { width: 92px; }
+    .col-processed { width: 132px; }
+    .col-summary { width: 360px; }
+    .title-link {
+      display: block;
+      color: var(--ink);
+      text-decoration: none;
+      font-weight: 560;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .title-link:hover { color: var(--blue); text-decoration: underline; text-underline-offset: 2px; }
+    .muted { color: var(--muted); }
+    .summary-cell {
+      color: #4d535b;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      max-width: 100%;
+      border-radius: 4px;
+      padding: 2px 7px;
+      font-size: 12px;
+      line-height: 18px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .status-ready { background: var(--green-bg); color: var(--green-ink); }
+    .status-incomplete { background: var(--red-bg); color: var(--red-ink); }
+    .platform-youtube { background: var(--red-bg); color: var(--red-ink); }
+    .platform-bilibili { background: var(--purple-bg); color: var(--purple-ink); }
+    .platform-video { background: var(--gray-bg); color: var(--gray-ink); }
+    .source-manual_subtitle, .source-auto_subtitle { background: var(--green-bg); color: var(--green-ink); }
+    .source-local_whisper, .source-unknown { background: var(--orange-bg); color: var(--orange-ink); }
+    .footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      min-height: 38px;
+      color: var(--muted);
+      font-size: 12px;
+      padding: 9px 11px;
+      border-top: 1px solid var(--line);
+      background: #fcfcfb;
+    }
+    .empty {
+      color: var(--muted);
+      padding: 28px 10px;
+      text-align: center;
+    }
+    @media (max-width: 820px) {
+      .shell { padding: 20px 14px 32px; }
+      header { display: block; }
+      .generated { text-align: left; white-space: normal; }
+      h1 { font-size: 26px; }
+      .toolbar { grid-template-columns: 1fr; }
+      .table-wrap { max-height: none; }
+    }
+  </style>
+</head>
+<body>
+<main class="shell">
+  <header>
+    <div>
+      <h1>Video Reports</h1>
+      <div class="workspace">1 reports | /Users/ff/Documents/电商搜索</div>
+    </div>
+    <div class="generated">Updated 2026-07-05T03:21:22.604575+00:00</div>
+  </header>
+  <nav class="viewbar" aria-label="Database views">
+    <button class="view-tab" type="button" data-view="all" aria-pressed="true">All</button>
+    <button class="view-tab" type="button" data-view="recent" aria-pressed="false">Recent</button>
+    <button class="view-tab" type="button" data-view="captions" aria-pressed="false">Captions</button>
+    <button class="view-tab" type="button" data-view="whisper" aria-pressed="false">Whisper</button>
+    <button class="view-tab" type="button" data-view="incomplete" aria-pressed="false">Incomplete</button>
+  </nav>
+  <div class="toolbar">
+    <input id="q" type="search" placeholder="Search reports">
+    <select id="platform"></select>
+    <select id="source"></select>
+    <select id="sort"></select>
+  </div>
+  <section class="database" aria-label="Video report database">
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-name"><button type="button" data-sort="title">Name <span data-arrow="title"></span></button></th>
+            <th class="col-status"><button type="button" data-sort="status">Status <span data-arrow="status"></span></button></th>
+            <th class="col-platform"><button type="button" data-sort="platform">Platform <span data-arrow="platform"></span></button></th>
+            <th class="col-source"><button type="button" data-sort="source">Source <span data-arrow="source"></span></button></th>
+            <th class="col-channel"><button type="button" data-sort="channel">Channel <span data-arrow="channel"></span></button></th>
+            <th class="col-date"><button type="button" data-sort="published">Published <span data-arrow="published"></span></button></th>
+            <th class="col-duration"><button type="button" data-sort="duration">Length <span data-arrow="duration"></span></button></th>
+            <th class="col-processed"><button type="button" data-sort="processed">Processed <span data-arrow="processed"></span></button></th>
+            <th class="col-summary"><button type="button" data-sort="summary">Summary <span data-arrow="summary"></span></button></th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+      <div class="empty" id="empty" hidden>No matching reports.</div>
+    </div>
+    <div class="footer">
+      <span id="result-count"></span>
+      <span id="visible-view"></span>
+    </div>
+  </section>
+<script>
+const reports = [{"folder": "2026-07-04_youtube_aZcYS8DZ4YI_10万美元投资挑战-ai基建跌出黄金坑-准备开仓一只股票", "title": "【10万美元投资挑战】AI基建跌出黄金坑？准备开仓一只股票", "channel": "财经观察站", "platform": "youtube", "source_url": "https://www.youtube.com/watch?v=aZcYS8DZ4YI", "published_at": "2026-07-04", "processed_at": "2026-07-05T03:03:44.845281+00:00", "duration_seconds": 745, "transcript_source": "manual_subtitle", "summary_preview": "Summary 本视频认为，AI基建股本周的大跌更像是市场对算力利用率、ROI和科技巨头资本开支的阶段性重新定价，而不是行业已经见顶的确认信号。作者把关键观察点放在即将到来的Q2财报季：只有看到科技巨头系统性下调AI资本开支，才会改变其对AI基建周期的判断；在此之前，他倾向于把下跌视为技术性回调。个股上，作者解释了AAOI的上行逻辑和高风险属性，并表示近期更考虑先在LITE的700到750美元区间建立观察仓。 Key Points -...", "report_exists": true, "transcript_exists": true, "report_path": "/Users/ff/Documents/电商搜索/processed/2026-07-04_youtube_aZcYS8DZ4YI_10万美元投资挑战-ai基建跌出黄金坑-准备开仓一只股票/report.html"}];
+const rows = document.getElementById('rows');
+const empty = document.getElementById('empty');
+const resultCount = document.getElementById('result-count');
+const q = document.getElementById('q');
+const platform = document.getElementById('platform');
+const source = document.getElementById('source');
+const sortSelect = document.getElementById('sort');
+const tabs = Array.from(document.querySelectorAll('.view-tab'));
+const visibleView = document.getElementById('visible-view');
+let state = {
+  view: 'all',
+  sort: 'processed',
+  direction: 'desc'
+};
+
+function esc(value) {
+  return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+
+function reportHref(item) {
+  return `processed/${encodeURIComponent(item.folder)}/report.html`;
+}
+
+function unique(values) {
+  return Array.from(new Set(values.filter(Boolean))).sort((a, b) => String(a).localeCompare(String(b)));
+}
+
+function labelSource(value) {
+  return {
+    manual_subtitle: 'Manual captions',
+    auto_subtitle: 'Auto captions',
+    local_whisper: 'Local Whisper',
+    unknown: 'Unknown'
+  }[value || 'unknown'] || value;
+}
+
+function status(item) {
+  return item.report_exists && item.transcript_exists ? 'Ready' : 'Incomplete';
+}
+
+function sourceKey(item) {
+  return item.transcript_source || 'unknown';
+}
+
+function platformKey(item) {
+  return item.platform || 'video';
+}
+
+function shortDate(value) {
+  if (!value) return '';
+  const text = String(value);
+  return text.length >= 10 ? text.slice(0, 10) : text;
+}
+
+function durationLabel(seconds) {
+  const total = Number(seconds);
+  if (!Number.isFinite(total) || total <= 0) return '';
+  const rounded = Math.round(total);
+  const h = Math.floor(rounded / 3600);
+  const m = Math.floor((rounded % 3600) / 60);
+  const s = rounded % 60;
+  if (h) return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  return `${m}:${String(s).padStart(2, '0')}`;
+}
+
+function sortValue(item, key) {
+  if (key === 'status') return status(item);
+  if (key === 'source') return labelSource(sourceKey(item));
+  if (key === 'published') return item.published_at || '';
+  if (key === 'processed') return item.processed_at || '';
+  if (key === 'duration') return Number(item.duration_seconds || 0);
+  if (key === 'summary') return item.summary_preview || '';
+  if (key === 'platform') return platformKey(item);
+  return item[key] || '';
+}
+
+function populateFilters() {
+  const platforms = unique(reports.map(platformKey));
+  const sources = unique(reports.map(sourceKey));
+  platform.innerHTML = '<option value="">All platforms</option>' +
+    platforms.map(value => `<option value="${esc(value)}">${esc(value)}</option>`).join('');
+  source.innerHTML = '<option value="">All sources</option>' +
+    sources.map(value => `<option value="${esc(value)}">${esc(labelSource(value))}</option>`).join('');
+  sortSelect.innerHTML = [
+    ['processed:desc', 'Newest processed'],
+    ['published:desc', 'Newest published'],
+    ['title:asc', 'Name A-Z'],
+    ['status:asc', 'Status'],
+    ['platform:asc', 'Platform'],
+    ['source:asc', 'Source'],
+    ['duration:desc', 'Longest'],
+    ['channel:asc', 'Channel A-Z']
+  ].map(([value, label]) => `<option value="${value}">${label}</option>`).join('');
+}
+
+function matchesView(item) {
+  if (state.view === 'recent') {
+    const processed = Date.parse(item.processed_at || '');
+    return Number.isFinite(processed) && Date.now() - processed <= 1000 * 60 * 60 * 24 * 14;
+  }
+  if (state.view === 'captions') return ['manual_subtitle', 'auto_subtitle'].includes(sourceKey(item));
+  if (state.view === 'whisper') return sourceKey(item) === 'local_whisper' || sourceKey(item) === 'unknown';
+  if (state.view === 'incomplete') return status(item) === 'Incomplete';
+  return true;
+}
+
+function filteredReports() {
+  const needle = q.value.trim().toLowerCase();
+  const platformValue = platform.value;
+  const sourceValue = source.value;
+  return reports.filter(item => {
+    const haystack = [item.title, item.channel, item.summary_preview, item.platform, labelSource(sourceKey(item))]
+      .join(' ')
+      .toLowerCase();
+    return matchesView(item)
+      && (!needle || haystack.includes(needle))
+      && (!platformValue || platformKey(item) === platformValue)
+      && (!sourceValue || sourceKey(item) === sourceValue);
+  }).sort((a, b) => {
+    const av = sortValue(a, state.sort);
+    const bv = sortValue(b, state.sort);
+    const result = typeof av === 'number' && typeof bv === 'number'
+      ? av - bv
+      : String(av).localeCompare(String(bv), undefined, {numeric: true, sensitivity: 'base'});
+    return state.direction === 'asc' ? result : -result;
+  });
+}
+
+function renderArrows() {
+  document.querySelectorAll('[data-arrow]').forEach(el => {
+    el.textContent = el.dataset.arrow === state.sort ? (state.direction === 'asc' ? '^' : 'v') : '';
+  });
+}
+
+function render() {
+  const items = filteredReports();
+  rows.innerHTML = items.map(item => {
+    const statusValue = status(item);
+    const sourceValue = sourceKey(item);
+    const platformValue = platformKey(item);
+    return `
+      <tr>
+        <td><a class="title-link" href="${reportHref(item)}">${esc(item.title || item.folder)}</a></td>
+        <td><span class="pill status-${statusValue.toLowerCase()}">${statusValue}</span></td>
+        <td><span class="pill platform-${esc(platformValue)}">${esc(platformValue)}</span></td>
+        <td><span class="pill source-${esc(sourceValue)}">${esc(labelSource(sourceValue))}</span></td>
+        <td title="${esc(item.channel || '')}">${esc(item.channel || '')}</td>
+        <td class="muted">${esc(shortDate(item.published_at))}</td>
+        <td class="muted">${esc(durationLabel(item.duration_seconds))}</td>
+        <td class="muted">${esc(shortDate(item.processed_at))}</td>
+        <td><div class="summary-cell" title="${esc(item.summary_preview || '')}">${esc(item.summary_preview || 'Summary pending.')}</div></td>
+      </tr>
+    `;
+  }).join('');
+  resultCount.textContent = `${items.length} of ${reports.length} reports`;
+  visibleView.textContent = state.view.charAt(0).toUpperCase() + state.view.slice(1);
+  empty.hidden = items.length !== 0;
+  renderArrows();
+}
+
+q.addEventListener('input', render);
+platform.addEventListener('input', render);
+source.addEventListener('input', render);
+sortSelect.addEventListener('input', () => {
+  const [sort, direction] = sortSelect.value.split(':');
+  state.sort = sort;
+  state.direction = direction;
+  render();
+});
+tabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    state.view = tab.dataset.view;
+    tabs.forEach(item => item.setAttribute('aria-pressed', String(item === tab)));
+    render();
+  });
+});
+document.querySelectorAll('th button[data-sort]').forEach(button => {
+  button.addEventListener('click', () => {
+    const sort = button.dataset.sort;
+    if (state.sort === sort) {
+      state.direction = state.direction === 'asc' ? 'desc' : 'asc';
+    } else {
+      state.sort = sort;
+      state.direction = ['title', 'channel', 'platform', 'source', 'status', 'summary'].includes(sort) ? 'asc' : 'desc';
+    }
+    sortSelect.value = `${state.sort}:${state.direction}`;
+    render();
+  });
+});
+
+populateFilters();
+render();
+</script>
+</main>
+</body>
+</html>

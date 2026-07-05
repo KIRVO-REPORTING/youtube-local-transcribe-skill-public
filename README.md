@@ -1,153 +1,179 @@
 # youtube-local-transcribe
 
-Caption-first local transcription workflow for YouTube, Bilibili, TED, and other `yt-dlp` supported video URLs.
+Caption First | Local Whisper Fallback | Searchable HTML Reports
 
-This repository contains:
+Turn YouTube, Bilibili, TED, and other `yt-dlp` supported video URLs into local transcripts, summaries, and browser-readable reports. It tries captions first, uses local Whisper only when needed, and keeps your processed reports in a local dashboard.
 
-- `ytlt`: a Python CLI for machine probing, hardware-aware setup, caption download, local Whisper fallback transcription, HTML report generation, and dashboard serving.
-- `codex-skill`: a Codex skill wrapper that tells Codex how to run the CLI and write grounded summaries from generated transcripts.
-
-## Features
-
-- Prefer manual or automatic captions before running local Whisper.
-- Support plain subtitle files and HLS subtitle playlists such as segmented `.m3u8` VTT captions.
-- Detect Apple Silicon, NVIDIA CUDA, CPU RAM, and ffmpeg availability.
-- Download the hardware-recommended Whisper model during initial setup.
-- Store setup state in `<workspace>/config.json` and models in `<workspace>/models`.
-- Generate per-video `metadata.json`, `transcript.txt`, `summary.md`, and `report.html`.
-- Build and serve a local searchable dashboard of processed reports.
-- Keep downloaded video files out of final report folders after finalization.
-
-## Requirements
-
-- Python 3.9 or newer. Python 3.10+ is recommended because recent `yt-dlp` versions deprecate Python 3.9.
-- Network access for `yt-dlp`, captions, and optional Hugging Face model downloads.
-- Enough disk space for Whisper models when local transcription is needed.
-
-The package depends on `yt-dlp` and `imageio-ffmpeg` by default. Setup also verifies that an ffmpeg binary can be resolved from the system, `YTLT_FFMPEG`, workspace config, or `imageio-ffmpeg`.
-
-## Install And Setup
-
-From the repository root:
+## Quick Install - Copy & Run
 
 ```bash
+git clone https://github.com/KIRVO-REPORTING/youtube-local-transcribe-skill-public.git
+cd youtube-local-transcribe-skill-public
 python -m pip install -e .
-ytlt probe
-ytlt setup --dry-run
+```
+
+Start with any video that has captions:
+
+```bash
+ytlt process "VIDEO_URL" --language zh --open
+```
+
+Need local transcription when captions are missing? Run setup once:
+
+```bash
 ytlt setup --execute
 ```
 
-`ytlt setup --execute`:
+Setup detects your machine, chooses the right backend, verifies ffmpeg, and downloads the recommended Whisper model into your local workspace.
 
-1. Probes the local machine.
-2. Installs the matching backend extra.
-3. Verifies ffmpeg availability.
-4. Downloads the recommended Whisper model into `<workspace>/models`.
-5. Writes `<workspace>/config.json`.
+Only want caption download and reports? You can skip setup until a video needs local Whisper.
 
-The default workspace is:
+## Works With
+
+| Tool | How to use it |
+|---|---|
+| Terminal | Run `ytlt process "VIDEO_URL"` directly. |
+| Codex | Install the `codex-skill` folder as `youtube-local-transcribe`. |
+| Claude Code / Cursor | Ask the AI to install this repo, then call `ytlt` for video URLs. |
+
+Default workspace:
 
 ```text
 ~/Documents/youtube
 ```
 
-Use another workspace with:
+Use another workspace:
 
 ```bash
-ytlt setup --workspace /path/to/workspace --execute
+ytlt process "VIDEO_URL" --workspace /path/to/workspace
 ```
 
-## Hardware Model Selection
+## What It Can Do
 
-Captions are still the first choice. Local Whisper is only the fallback when captions are missing, unsuitable, or `--force-transcribe` is set.
+| Workflow | Command |
+|---|---|
+| Download captions and build a report | `ytlt process "VIDEO_URL" --language en --open` |
+| Use browser cookies for private or region-limited videos | `ytlt process "VIDEO_URL" --cookies-from-browser chrome` |
+| Force local Whisper transcription | `ytlt process "VIDEO_URL" --force-transcribe` |
+| Skip local transcription if captions are missing | `ytlt process "VIDEO_URL" --no-transcribe-fallback` |
+| Publish a report into Notion | `ytlt finalize "/path/to/video-folder" --publish-notion` |
+| Rebuild the report index | `ytlt rebuild-index` |
+| Open the local dashboard | `ytlt serve --open` |
 
-| Local hardware | Backend | Default model | Device / compute |
-|---|---|---|---|
-| Apple Silicon macOS, 16 GB+ unified memory | `mlx` | `mlx-community/whisper-large-v3-turbo` | MLX |
-| Apple Silicon macOS, 8-15 GB unified memory | `mlx` | `mlx-community/whisper-small-mlx` | MLX |
-| Windows/Linux with NVIDIA CUDA, 10 GB+ VRAM | `faster-whisper` | `large-v3-turbo` | `cuda` / `float16` |
-| Windows/Linux with NVIDIA CUDA, 6-9 GB VRAM | `faster-whisper` | `large-v3-turbo` | `cuda` / `int8_float16` |
-| Windows/Linux with NVIDIA CUDA, 4-5 GB VRAM | `faster-whisper` | `Systran/faster-whisper-small` | `cuda` / `int8_float16` |
-| CPU only, Intel/AMD integrated GPU, or unsupported GPU, 16 GB+ RAM | `faster-whisper` | `Systran/faster-whisper-small` | `cpu` / `int8` |
-| CPU only, Intel/AMD integrated GPU, or unsupported GPU, 8-15 GB RAM | `faster-whisper` | `Systran/faster-whisper-base` | `cpu` / `int8` |
-| CPU only, Intel/AMD integrated GPU, or unsupported GPU, under 8 GB RAM | `faster-whisper` | `Systran/faster-whisper-tiny` | `cpu` / `int8` |
-
-Intel/AMD integrated GPUs, AMD ROCm, DirectML, and OpenVINO are treated as CPU paths until this package validates those backends. NVIDIA recommendations use faster-whisper's `large-v3-turbo` alias because the old `Systran/faster-whisper-large-v3-turbo` repository path is not reliably downloadable.
-
-## Process A Video
-
-```bash
-ytlt process "VIDEO_URL" --language zh
-```
-
-Useful options:
-
-```bash
-ytlt process "VIDEO_URL" --language en
-ytlt process "VIDEO_URL" --cookies-from-browser chrome
-ytlt process "VIDEO_URL" --force-transcribe
-ytlt process "VIDEO_URL" --no-transcribe-fallback
-ytlt process "VIDEO_URL" --open
-```
-
-The processor creates one folder per video under:
+Each processed video gets its own folder under:
 
 ```text
 <workspace>/processed/
 ```
 
-Each processed folder contains:
+The folder contains:
 
 - `metadata.json`
 - `transcript.txt`
 - `report.html`
-- `summary.md` after a summary is written and finalized
+- `summary.md` after you write or generate a summary
 
-When local Whisper is needed, `ytlt process` uses the configured model path from `<workspace>/config.json` unless `--model` is supplied.
+## Publish To Notion
 
-## Finalize A Report
-
-After writing a Markdown summary to `<video-folder>/summary.md`, run:
+Create a Notion integration token, share the target page or data source with that integration, then set:
 
 ```bash
-ytlt finalize "<video-folder>"
+export NOTION_TOKEN="secret_..."
+export NOTION_DATA_SOURCE_ID="..."
 ```
 
-Finalization re-renders `report.html`, deletes retained `video.*` media files from that folder, and rebuilds the dashboard index.
+Use exactly one target:
 
-## Dashboard
+- `NOTION_DATA_SOURCE_ID` for a Notion database/data source dashboard.
+- `NOTION_PARENT_PAGE_ID` to create report pages under a normal Notion page.
+- `NOTION_DATABASE_ID` to resolve the database's first data source automatically.
 
-Rebuild the index:
+Publish while processing:
 
 ```bash
-ytlt rebuild-index
+ytlt process "VIDEO_URL" --language zh --publish-notion
 ```
 
-Serve the dashboard locally:
+Publish after writing `summary.md`:
 
 ```bash
-ytlt serve --open
+ytlt finalize "/path/to/processed/video-folder" --publish-notion
 ```
 
-The server binds to `127.0.0.1` by default.
+Publish an existing processed folder without re-rendering:
+
+```bash
+ytlt publish-notion "/path/to/processed/video-folder"
+```
+
+When a report is published, `metadata.json` records `notion_page_id`, `notion_url`, and `notion_synced_at` so later runs update the same Notion page instead of creating duplicates.
+When publishing to a Notion database, the database row opened from `Name` is the report content page; no separate detail-page URL is required.
+
+## Examples
+
+### You
+
+Transcribe this video and open the report:
+
+```bash
+ytlt process "https://www.youtube.com/watch?v=VIDEO_ID" --language zh --open
+```
+
+### ytlt
+
+```json
+{
+  "transcript_source": "manual_subtitle",
+  "transcript": ".../processed/.../transcript.txt",
+  "report": ".../processed/.../report.html",
+  "dashboard": ".../dashboard.html"
+}
+```
+
+### You
+
+Summarize the transcript, then finalize the report:
+
+```bash
+ytlt finalize "/path/to/processed/video-folder" --open --publish-notion
+```
+
+### ytlt
+
+```json
+{
+  "report": "/path/to/processed/video-folder/report.html",
+  "deleted_video_files": [],
+  "notion": {
+    "notion_page_id": "...",
+    "notion_url": "https://www.notion.so/...",
+    "notion_synced_at": "..."
+  }
+}
+```
 
 ## Codex Skill Install
 
-Copy `codex-skill` into your Codex skills directory:
+From a cloned copy of this repo:
 
 ```bash
-mkdir -p "$HOME/.codex/skills"
-rm -rf "$HOME/.codex/skills/youtube-local-transcribe"
-cp -R codex-skill "$HOME/.codex/skills/youtube-local-transcribe"
+mkdir -p "$HOME/.codex/skills/youtube-local-transcribe"
+rsync -a --delete codex-skill/ "$HOME/.codex/skills/youtube-local-transcribe/"
 ```
 
 Restart Codex after replacing an installed skill so the new `SKILL.md` metadata is loaded.
 
-## Development
+Then send Codex a video URL or ask:
 
-Install locally:
+```text
+Use youtube-local-transcribe to process this video and create a summary report: VIDEO_URL
+```
+
+## Local Development
 
 ```bash
+git clone https://github.com/KIRVO-REPORTING/youtube-local-transcribe-skill-public.git
+cd youtube-local-transcribe-skill-public
 python -m pip install -e .
 ```
 
@@ -157,26 +183,16 @@ Run tests:
 python -m unittest discover -s tests
 ```
 
-Run a setup dry run:
-
-```bash
-ytlt setup --dry-run
-```
-
-Run a lightweight caption-first processing test:
+Try a caption-first smoke test:
 
 ```bash
 ytlt process "https://www.ted.com/talks/sir_ken_robinson_do_schools_kill_creativity" --language en --no-transcribe-fallback
 ```
 
-## Repository Layout
+## Notes
 
-```text
-ytlt/                  Python CLI package
-codex-skill/           Codex skill wrapper
-tests/                 Unit tests
-pyproject.toml         Package metadata
-README.md              Project documentation
-```
-
-Generated workspaces, downloaded media, models, virtual environments, and build metadata are ignored by `.gitignore`.
+- Python 3.9+ is required. Python 3.10+ is recommended.
+- Captions are always preferred before local Whisper.
+- `ytlt setup --execute` is only needed for local Whisper fallback.
+- Hardware model selection lives in `codex-skill/references/model-selection.md`.
+- Generated workspaces, downloaded media, models, virtual environments, and build metadata are ignored by `.gitignore`.

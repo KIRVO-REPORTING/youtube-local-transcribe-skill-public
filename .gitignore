@@ -17,6 +17,8 @@ processed/
 .test-workspace/
 youtube/
 models/
+!local-report-archive/**/processed/
+!local-report-archive/**/processed/**
 *.mp4
 *.mkv
 *.webm

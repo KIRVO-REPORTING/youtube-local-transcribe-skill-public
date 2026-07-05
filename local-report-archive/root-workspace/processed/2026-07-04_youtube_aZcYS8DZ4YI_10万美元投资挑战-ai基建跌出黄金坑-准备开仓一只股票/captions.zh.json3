@@ -1,0 +1,2155 @@
+{
+  "wireMagic": "pb3",
+  "pens": [ {
+  
+  } ],
+  "wsWinStyles": [ {
+  
+  } ],
+  "wpWinPositions": [ {
+  
+  } ],
+  "events": [ {
+    "tStartMs": 0,
+    "dDurationMs": 1000,
+    "segs": [ {
+      "utf8": "大家好,歡迎回來"
+    } ]
+  }, {
+    "tStartMs": 1000,
+    "dDurationMs": 1840,
+    "segs": [ {
+      "utf8": "這周AI基建股"
+    } ]
+  }, {
+    "tStartMs": 2840,
+    "dDurationMs": 1900,
+    "segs": [ {
+      "utf8": "包括數據中心、光通"
+    } ]
+  }, {
+    "tStartMs": 4740,
+    "dDurationMs": 2600,
+    "segs": [ {
+      "utf8": "還有內存等板塊都出現了大跌"
+    } ]
+  }, {
+    "tStartMs": 7820,
+    "dDurationMs": 1760,
+    "segs": [ {
+      "utf8": "今天我想做一個解析"
+    } ]
+  }, {
+    "tStartMs": 9580,
+    "dDurationMs": 2660,
+    "segs": [ {
+      "utf8": "就是這波下跌到底是倒車接人"
+    } ]
+  }, {
+    "tStartMs": 12240,
+    "dDurationMs": 1620,
+    "segs": [ {
+      "utf8": "還是見頂的信號"
+    } ]
+  }, {
+    "tStartMs": 13860,
+    "dDurationMs": 2760,
+    "segs": [ {
+      "utf8": "同時視頻的後面我也會聊一聊"
+    } ]
+  }, {
+    "tStartMs": 16620,
+    "dDurationMs": 4000,
+    "segs": [ {
+      "utf8": "我對於AAOI以及光通板塊的操作計劃"
+    } ]
+  }, {
+    "tStartMs": 20620,
+    "dDurationMs": 1040,
+    "segs": [ {
+      "utf8": "那主題之前的老規矩"
+    } ]
+  }, {
+    "tStartMs": 21660,
+    "dDurationMs": 1600,
+    "segs": [ {
+      "utf8": "給大家匯報我的頻道"
+    } ]
+  }, {
+    "tStartMs": 23260,
+    "dDurationMs": 2100,
+    "segs": [ {
+      "utf8": "美股實盤主賬戶的進展"
+    } ]
+  }, {
+    "tStartMs": 25360,
+    "dDurationMs": 1780,
+    "segs": [ {
+      "utf8": "這個賬戶本金10萬美元"
+    } ]
+  }, {
+    "tStartMs": 27140,
+    "dDurationMs": 2140,
+    "segs": [ {
+      "utf8": "開始於23年的10月份"
+    } ]
+  }, {
+    "tStartMs": 29280,
+    "dDurationMs": 1560,
+    "segs": [ {
+      "utf8": "中間沒有補充過資金"
+    } ]
+  }, {
+    "tStartMs": 30840,
+    "dDurationMs": 1760,
+    "segs": [ {
+      "utf8": "截止到這週末"
+    } ]
+  }, {
+    "tStartMs": 32600,
+    "dDurationMs": 3380,
+    "segs": [ {
+      "utf8": "賬戶的總價值是來到了29.9萬美元"
+    } ]
+  }, {
+    "tStartMs": 35980,
+    "dDurationMs": 2860,
+    "segs": [ {
+      "utf8": "在個股方面過去這一週是沒有新的操作"
+    } ]
+  }, {
+    "tStartMs": 38840,
+    "dDurationMs": 2340,
+    "segs": [ {
+      "utf8": "在期權上我是新賣出"
+    } ]
+  }, {
+    "tStartMs": 41180,
+    "dDurationMs": 2700,
+    "segs": [ {
+      "utf8": "按計劃新賣出了一個Nebius的"
+    } ]
+  }, {
+    "tStartMs": 43880,
+    "dDurationMs": 1120,
+    "segs": [ {
+      "utf8": "一個月以後"
+    } ]
+  }, {
+    "tStartMs": 45000,
+    "dDurationMs": 3000,
+    "segs": [ {
+      "utf8": "在150和350的covered strangle"
+    } ]
+  }, {
+    "tStartMs": 48000,
+    "dDurationMs": 2140,
+    "segs": [ {
+      "utf8": "權利金是1100美元"
+    } ]
+  }, {
+    "tStartMs": 50140,
+    "dDurationMs": 1820,
+    "segs": [ {
+      "utf8": "好的,我的所有的操作"
+    } ]
+  }, {
+    "tStartMs": 51960,
+    "dDurationMs": 2640,
+    "segs": [ {
+      "utf8": "都對我的YouTube會員展開實時通知"
+    } ]
+  }, {
+    "tStartMs": 54600,
+    "dDurationMs": 1520,
+    "segs": [ {
+      "utf8": "歡迎大家加入進來"
+    } ]
+  }, {
+    "tStartMs": 56120,
+    "dDurationMs": 1200,
+    "segs": [ {
+      "utf8": "好,那麼回到主題"
+    } ]
+  }, {
+    "tStartMs": 57320,
+    "dDurationMs": 2400,
+    "segs": [ {
+      "utf8": "這周AI基建股的大跌"
+    } ]
+  }, {
+    "tStartMs": 59720,
+    "dDurationMs": 3600,
+    "segs": [ {
+      "utf8": "導火索是來自於週三的彭博社的一篇報道"
+    } ]
+  }, {
+    "tStartMs": 63320,
+    "dDurationMs": 1600,
+    "segs": [ {
+      "utf8": "報道的大意是說"
+    } ]
+  }, {
+    "tStartMs": 64920,
+    "dDurationMs": 3720,
+    "segs": [ {
+      "utf8": "Meta正在籌備一個全新的雲業務"
+    } ]
+  }, {
+    "tStartMs": 68640,
+    "dDurationMs": 2740,
+    "segs": [ {
+      "utf8": "這個項目的名稱叫做Meta Compute"
+    } ]
+  }, {
+    "tStartMs": 71380,
+    "dDurationMs": 4080,
+    "segs": [ {
+      "utf8": "用來出售或者是出租它的AI的算力"
+    } ]
+  }, {
+    "tStartMs": 75460,
+    "dDurationMs": 3340,
+    "segs": [ {
+      "utf8": "根據報道Meta正在考慮兩種模式"
+    } ]
+  }, {
+    "tStartMs": 78800,
+    "dDurationMs": 2460,
+    "segs": [ {
+      "utf8": "第一就是讓開發者訪問"
+    } ]
+  }, {
+    "tStartMs": 81260,
+    "dDurationMs": 2960,
+    "segs": [ {
+      "utf8": "運行在Meta的服務器上的AI模型"
+    } ]
+  }, {
+    "tStartMs": 84220,
+    "dDurationMs": 2180,
+    "segs": [ {
+      "utf8": "第二就是出售"
+    } ]
+  }, {
+    "tStartMs": 86400,
+    "dDurationMs": 1780,
+    "segs": [ {
+      "utf8": "或者出租原始的算力"
+    } ]
+  }, {
+    "tStartMs": 88620,
+    "dDurationMs": 3340,
+    "segs": [ {
+      "utf8": "也就是類似於像coreweave的這種GPU雲"
+    } ]
+  }, {
+    "tStartMs": 91960,
+    "dDurationMs": 2380,
+    "segs": [ {
+      "utf8": "或者是裸金屬的這種業務"
+    } ]
+  }, {
+    "tStartMs": 94340,
+    "dDurationMs": 3400,
+    "segs": [ {
+      "utf8": "那Meta官方沒有正式確認這條消息"
+    } ]
+  }, {
+    "tStartMs": 97740,
+    "dDurationMs": 2420,
+    "segs": [ {
+      "utf8": "但市場的第一反應也很直接"
+    } ]
+  }, {
+    "tStartMs": 100160,
+    "dDurationMs": 2180,
+    "segs": [ {
+      "utf8": "就是是不是Meta它的算力"
+    } ]
+  }, {
+    "tStartMs": 102340,
+    "dDurationMs": 1560,
+    "segs": [ {
+      "utf8": "AI算力已經過剩了呢"
+    } ]
+  }, {
+    "tStartMs": 103900,
+    "dDurationMs": 1440,
+    "segs": [ {
+      "utf8": "如果說連Meta"
+    } ]
+  }, {
+    "tStartMs": 105340,
+    "dDurationMs": 2440,
+    "segs": [ {
+      "utf8": "它都開始賣多餘的算力"
+    } ]
+  }, {
+    "tStartMs": 107780,
+    "dDurationMs": 1600,
+    "segs": [ {
+      "utf8": "那是不是AI的基建"
+    } ]
+  }, {
+    "tStartMs": 109380,
+    "dDurationMs": 1740,
+    "segs": [ {
+      "utf8": "整體上已經過度投資了呢"
+    } ]
+  }, {
+    "tStartMs": 111120,
+    "dDurationMs": 1200,
+    "segs": [ {
+      "utf8": "所以這條新聞一出來"
+    } ]
+  }, {
+    "tStartMs": 112320,
+    "dDurationMs": 1020,
+    "segs": [ {
+      "utf8": "數據中心"
+    } ]
+  }, {
+    "tStartMs": 113340,
+    "dDurationMs": 2860,
+    "segs": [ {
+      "utf8": "光模塊內存等AI的基建股"
+    } ]
+  }, {
+    "tStartMs": 116200,
+    "dDurationMs": 1120,
+    "segs": [ {
+      "utf8": "都一併被砸"
+    } ]
+  }, {
+    "tStartMs": 117320,
+    "dDurationMs": 1100,
+    "segs": [ {
+      "utf8": "但我覺得這裡"
+    } ]
+  }, {
+    "tStartMs": 118420,
+    "dDurationMs": 1860,
+    "segs": [ {
+      "utf8": "我們還是要回到官方的說法"
+    } ]
+  }, {
+    "tStartMs": 120280,
+    "dDurationMs": 2700,
+    "segs": [ {
+      "utf8": "Meta的CFO叫做Susan Li"
+    } ]
+  }, {
+    "tStartMs": 122980,
+    "dDurationMs": 1840,
+    "segs": [ {
+      "utf8": "她在Q1的，就幾個月前"
+    } ]
+  }, {
+    "tStartMs": 124820,
+    "dDurationMs": 580,
+    "segs": [ {
+      "utf8": "兩個月之前"
+    } ]
+  }, {
+    "tStartMs": 125400,
+    "dDurationMs": 2440,
+    "segs": [ {
+      "utf8": "Q1的財報會上就說過"
+    } ]
+  }, {
+    "tStartMs": 127840,
+    "dDurationMs": 1120,
+    "segs": [ {
+      "utf8": "一句很重要的話"
+    } ]
+  }, {
+    "tStartMs": 128960,
+    "dDurationMs": 580,
+    "segs": [ {
+      "utf8": "就是Meta"
+    } ]
+  }, {
+    "tStartMs": 129540,
+    "dDurationMs": 2240,
+    "segs": [ {
+      "utf8": "它在過去一直是低估"
+    } ]
+  }, {
+    "tStartMs": 131780,
+    "dDurationMs": 2220,
+    "segs": [ {
+      "utf8": "它自己的算力的需求"
+    } ]
+  }, {
+    "tStartMs": 134000,
+    "dDurationMs": 1240,
+    "segs": [ {
+      "utf8": "所以它們現在繼續的"
+    } ]
+  }, {
+    "tStartMs": 135240,
+    "dDurationMs": 1460,
+    "segs": [ {
+      "utf8": "在大規模的投資"
+    } ]
+  }, {
+    "tStartMs": 136700,
+    "dDurationMs": 2040,
+    "segs": [ {
+      "utf8": "AI的算力和數據中心"
+    } ]
+  }, {
+    "tStartMs": 138740,
+    "dDurationMs": 680,
+    "segs": [ {
+      "utf8": "與此同時"
+    } ]
+  }, {
+    "tStartMs": 139420,
+    "dDurationMs": 1460,
+    "segs": [ {
+      "utf8": "扎克伯格在股東會上"
+    } ]
+  }, {
+    "tStartMs": 140880,
+    "dDurationMs": 1320,
+    "segs": [ {
+      "utf8": "也明確說過"
+    } ]
+  }, {
+    "tStartMs": 142200,
+    "dDurationMs": 2680,
+    "segs": [ {
+      "utf8": "雲業務是definitely on the table"
+    } ]
+  }, {
+    "tStartMs": 144880,
+    "dDurationMs": 820,
+    "segs": [ {
+      "utf8": "他還說"
+    } ]
+  }, {
+    "tStartMs": 145700,
+    "dDurationMs": 2600,
+    "segs": [ {
+      "utf8": "幾乎每週都有外部的公司來"
+    } ]
+  }, {
+    "tStartMs": 148300,
+    "dDurationMs": 1740,
+    "segs": [ {
+      "utf8": "問Meta能不能提供"
+    } ]
+  }, {
+    "tStartMs": 150040,
+    "dDurationMs": 1080,
+    "segs": [ {
+      "utf8": "API服務"
+    } ]
+  }, {
+    "tStartMs": 151120,
+    "dDurationMs": 1600,
+    "segs": [ {
+      "utf8": "或者是直接把算力賣"
+    } ]
+  }, {
+    "tStartMs": 152720,
+    "dDurationMs": 880,
+    "segs": [ {
+      "utf8": "或者出租給他們"
+    } ]
+  }, {
+    "tStartMs": 153600,
+    "dDurationMs": 1180,
+    "segs": [ {
+      "utf8": "但它後面還有一句話"
+    } ]
+  }, {
+    "tStartMs": 154780,
+    "dDurationMs": 620,
+    "segs": [ {
+      "utf8": "也很關鍵"
+    } ]
+  }, {
+    "tStartMs": 155400,
+    "dDurationMs": 2040,
+    "segs": [ {
+      "utf8": "就是Meta目前還沒有這麼做"
+    } ]
+  }, {
+    "tStartMs": 157440,
+    "dDurationMs": 1540,
+    "segs": [ {
+      "utf8": "是因為它認為自己內部"
+    } ]
+  }, {
+    "tStartMs": 158980,
+    "dDurationMs": 2000,
+    "segs": [ {
+      "utf8": "仍然需要這些算力"
+    } ]
+  }, {
+    "tStartMs": 160980,
+    "dDurationMs": 1000,
+    "segs": [ {
+      "utf8": "只有在未來"
+    } ]
+  }, {
+    "tStartMs": 161980,
+    "dDurationMs": 1320,
+    "segs": [ {
+      "utf8": "發現這裡算力"
+    } ]
+  }, {
+    "tStartMs": 163300,
+    "dDurationMs": 1600,
+    "segs": [ {
+      "utf8": "可能overbuilt的時候"
+    } ]
+  }, {
+    "tStartMs": 164900,
+    "dDurationMs": 1480,
+    "segs": [ {
+      "utf8": "也就是見多了的時候"
+    } ]
+  }, {
+    "tStartMs": 166380,
+    "dDurationMs": 2340,
+    "segs": [ {
+      "utf8": "出租算力才可能成為一個選項"
+    } ]
+  }, {
+    "tStartMs": 168720,
+    "dDurationMs": 2360,
+    "segs": [ {
+      "utf8": "所以我的解讀其實是兩層"
+    } ]
+  }, {
+    "tStartMs": 171080,
+    "dDurationMs": 1540,
+    "segs": [ {
+      "utf8": "第一就是Meta"
+    } ]
+  }, {
+    "tStartMs": 172620,
+    "dDurationMs": 2320,
+    "segs": [ {
+      "utf8": "它不是現在已經全面的算力過剩"
+    } ]
+  }, {
+    "tStartMs": 174940,
+    "dDurationMs": 1560,
+    "segs": [ {
+      "utf8": "而是它在為未來"
+    } ]
+  }, {
+    "tStartMs": 176500,
+    "dDurationMs": 2020,
+    "segs": [ {
+      "utf8": "可能出現的階段性的"
+    } ]
+  }, {
+    "tStartMs": 178520,
+    "dDurationMs": 1820,
+    "segs": [ {
+      "utf8": "算力的賦予做準備"
+    } ]
+  }, {
+    "tStartMs": 180900,
+    "dDurationMs": 640,
+    "segs": [ {
+      "utf8": "算力出租"
+    } ]
+  }, {
+    "tStartMs": 181540,
+    "dDurationMs": 1460,
+    "segs": [ {
+      "utf8": "並不是說你明天想賣"
+    } ]
+  }, {
+    "tStartMs": 183000,
+    "dDurationMs": 740,
+    "segs": [ {
+      "utf8": "就能開始賣的"
+    } ]
+  }, {
+    "tStartMs": 184300,
+    "dDurationMs": 2320,
+    "segs": [ {
+      "utf8": "它需要各種準備工作"
+    } ]
+  }, {
+    "tStartMs": 186620,
+    "dDurationMs": 1360,
+    "segs": [ {
+      "utf8": "包括像計費系統"
+    } ]
+  }, {
+    "tStartMs": 187980,
+    "dDurationMs": 840,
+    "segs": [ {
+      "utf8": "安全隔離"
+    } ]
+  }, {
+    "tStartMs": 188820,
+    "dDurationMs": 820,
+    "segs": [ {
+      "utf8": "合規"
+    } ]
+  }, {
+    "tStartMs": 189640,
+    "dDurationMs": 1140,
+    "segs": [ {
+      "utf8": "客戶支持"
+    } ]
+  }, {
+    "tStartMs": 190780,
+    "dDurationMs": 1820,
+    "segs": [ {
+      "utf8": "以及集群調度等等方面"
+    } ]
+  }, {
+    "tStartMs": 192600,
+    "dDurationMs": 900,
+    "segs": [ {
+      "utf8": "都需要準備"
+    } ]
+  }, {
+    "tStartMs": 193500,
+    "dDurationMs": 2220,
+    "segs": [ {
+      "utf8": "所以它的提前籌備是合理的"
+    } ]
+  }, {
+    "tStartMs": 195720,
+    "dDurationMs": 2200,
+    "segs": [ {
+      "utf8": "並不意味著它馬上就要開始賣"
+    } ]
+  }, {
+    "tStartMs": 197920,
+    "dDurationMs": 1340,
+    "segs": [ {
+      "utf8": "第二就是這條新聞"
+    } ]
+  }, {
+    "tStartMs": 199260,
+    "dDurationMs": 1000,
+    "segs": [ {
+      "utf8": "確實說明了"
+    } ]
+  }, {
+    "tStartMs": 200260,
+    "dDurationMs": 4420,
+    "segs": [ {
+      "utf8": "市場開始從AI算力永遠不夠的敘事"
+    } ]
+  }, {
+    "tStartMs": 204680,
+    "dDurationMs": 2680,
+    "segs": [ {
+      "utf8": "進入到算力需要考慮利用率"
+    } ]
+  }, {
+    "tStartMs": 207360,
+    "dDurationMs": 3000,
+    "segs": [ {
+      "utf8": "和ROI的驗證這種階段"
+    } ]
+  }, {
+    "tStartMs": 210360,
+    "dDurationMs": 3620,
+    "segs": [ {
+      "utf8": "也就是說AI基建的邏輯還沒有結束"
+    } ]
+  }, {
+    "tStartMs": 213980,
+    "dDurationMs": 3300,
+    "segs": [ {
+      "utf8": "但市場會對它變得更加的挑剔"
+    } ]
+  }, {
+    "tStartMs": 217680,
+    "dDurationMs": 1500,
+    "segs": [ {
+      "utf8": "所以回到開頭的問題"
+    } ]
+  }, {
+    "tStartMs": 219780,
+    "dDurationMs": 1940,
+    "segs": [ {
+      "utf8": "這次大跌到底是倒車接人"
+    } ]
+  }, {
+    "tStartMs": 221720,
+    "dDurationMs": 1960,
+    "segs": [ {
+      "utf8": "還是見頂的信號"
+    } ]
+  }, {
+    "tStartMs": 223680,
+    "dDurationMs": 3240,
+    "segs": [ {
+      "utf8": "真正重要的並不是這一條媒體的報道"
+    } ]
+  }, {
+    "tStartMs": 226920,
+    "dDurationMs": 960,
+    "segs": [ {
+      "utf8": "而是科技巨頭"
+    } ]
+  }, {
+    "tStartMs": 227880,
+    "dDurationMs": 1320,
+    "segs": [ {
+      "utf8": "它的實在的動作"
+    } ]
+  }, {
+    "tStartMs": 229200,
+    "dDurationMs": 2720,
+    "segs": [ {
+      "utf8": "就是它是否會開始系統性的"
+    } ]
+  }, {
+    "tStartMs": 231920,
+    "dDurationMs": 2060,
+    "segs": [ {
+      "utf8": "去下調它AI資本的開支"
+    } ]
+  }, {
+    "tStartMs": 233980,
+    "dDurationMs": 1760,
+    "segs": [ {
+      "utf8": "這是我一直在跟大家所強調的"
+    } ]
+  }, {
+    "tStartMs": 235740,
+    "dDurationMs": 1600,
+    "segs": [ {
+      "utf8": "下一個重要的節點"
+    } ]
+  }, {
+    "tStartMs": 237340,
+    "dDurationMs": 2260,
+    "segs": [ {
+      "utf8": "就是下一次Q2的財報季"
+    } ]
+  }, {
+    "tStartMs": 239600,
+    "dDurationMs": 1360,
+    "segs": [ {
+      "utf8": "也很快就要來了"
+    } ]
+  }, {
+    "tStartMs": 240960,
+    "dDurationMs": 740,
+    "segs": [ {
+      "utf8": "不到一個月"
+    } ]
+  }, {
+    "tStartMs": 242240,
+    "dDurationMs": 2520,
+    "segs": [ {
+      "utf8": "在看到科技巨頭進行系統性的削減"
+    } ]
+  }, {
+    "tStartMs": 244760,
+    "dDurationMs": 2260,
+    "segs": [ {
+      "utf8": "AI投資之前"
+    } ]
+  }, {
+    "tStartMs": 247560,
+    "dDurationMs": 2940,
+    "segs": [ {
+      "utf8": "我仍然把這次的大跌理解成一個"
+    } ]
+  }, {
+    "tStartMs": 250500,
+    "dDurationMs": 1280,
+    "segs": [ {
+      "utf8": "技術性的回調"
+    } ]
+  }, {
+    "tStartMs": 251780,
+    "dDurationMs": 1640,
+    "segs": [ {
+      "utf8": "或者階段性的倒車接人"
+    } ]
+  }, {
+    "tStartMs": 253420,
+    "dDurationMs": 1600,
+    "segs": [ {
+      "utf8": "而不是行業的見頂"
+    } ]
+  }, {
+    "tStartMs": 255560,
+    "dDurationMs": 740,
+    "segs": [ {
+      "utf8": "說到科技巨頭"
+    } ]
+  }, {
+    "tStartMs": 256300,
+    "dDurationMs": 2220,
+    "segs": [ {
+      "utf8": "這裡我想給大家再提醒一點"
+    } ]
+  }, {
+    "tStartMs": 258520,
+    "dDurationMs": 3380,
+    "segs": [ {
+      "utf8": "很多人說現在這些科技巨頭"
+    } ]
+  }, {
+    "tStartMs": 261900,
+    "dDurationMs": 1620,
+    "segs": [ {
+      "utf8": "它的PE不高"
+    } ]
+  }, {
+    "tStartMs": 263520,
+    "dDurationMs": 1060,
+    "segs": [ {
+      "utf8": "PEG也不高"
+    } ]
+  }, {
+    "tStartMs": 264580,
+    "dDurationMs": 1980,
+    "segs": [ {
+      "utf8": "所以科技巨頭目前是買入的機會"
+    } ]
+  }, {
+    "tStartMs": 266560,
+    "dDurationMs": 2340,
+    "segs": [ {
+      "utf8": "我覺得對於這個判斷還是要小心"
+    } ]
+  }, {
+    "tStartMs": 269420,
+    "dDurationMs": 1300,
+    "segs": [ {
+      "utf8": "現在這些公司"
+    } ]
+  }, {
+    "tStartMs": 270720,
+    "dDurationMs": 2860,
+    "segs": [ {
+      "utf8": "它目前正處在一個前所未有的"
+    } ]
+  }, {
+    "tStartMs": 273580,
+    "dDurationMs": 1440,
+    "segs": [ {
+      "utf8": "這種資本開支的週期"
+    } ]
+  }, {
+    "tStartMs": 275020,
+    "dDurationMs": 2320,
+    "segs": [ {
+      "utf8": "所以他們現在把大量的現金流"
+    } ]
+  }, {
+    "tStartMs": 277340,
+    "dDurationMs": 1700,
+    "segs": [ {
+      "utf8": "投進了AI的基建之中"
+    } ]
+  }, {
+    "tStartMs": 279040,
+    "dDurationMs": 1740,
+    "segs": [ {
+      "utf8": "GPU 內存 數據中心 電力等等"
+    } ]
+  }, {
+    "tStartMs": 280780,
+    "dDurationMs": 1240,
+    "segs": [ {
+      "utf8": "這些支出"
+    } ]
+  }, {
+    "tStartMs": 282020,
+    "dDurationMs": 1820,
+    "segs": [ {
+      "utf8": "它是在當下發生的"
+    } ]
+  }, {
+    "tStartMs": 283840,
+    "dDurationMs": 1260,
+    "segs": [ {
+      "utf8": "錢是目前花下去的"
+    } ]
+  }, {
+    "tStartMs": 285100,
+    "dDurationMs": 2620,
+    "segs": [ {
+      "utf8": "但是它對於利潤表的衝擊"
+    } ]
+  }, {
+    "tStartMs": 287720,
+    "dDurationMs": 1700,
+    "segs": [ {
+      "utf8": "是要在未來的幾年"
+    } ]
+  }, {
+    "tStartMs": 289420,
+    "dDurationMs": 1160,
+    "segs": [ {
+      "utf8": "逐步的去體現"
+    } ]
+  }, {
+    "tStartMs": 290580,
+    "dDurationMs": 1920,
+    "segs": [ {
+      "utf8": "如果大家看我統計的表格"
+    } ]
+  }, {
+    "tStartMs": 292500,
+    "dDurationMs": 1520,
+    "segs": [ {
+      "utf8": "如果只看PE的話"
+    } ]
+  }, {
+    "tStartMs": 294020,
+    "dDurationMs": 1000,
+    "segs": [ {
+      "utf8": "其實很多科技巨頭"
+    } ]
+  }, {
+    "tStartMs": 295020,
+    "dDurationMs": 1220,
+    "segs": [ {
+      "utf8": "它看起來並不貴"
+    } ]
+  }, {
+    "tStartMs": 296240,
+    "dDurationMs": 1540,
+    "segs": [ {
+      "utf8": "比如說微軟當前的PE"
+    } ]
+  }, {
+    "tStartMs": 297780,
+    "dDurationMs": 1140,
+    "segs": [ {
+      "utf8": "大概是23倍"
+    } ]
+  }, {
+    "tStartMs": 298920,
+    "dDurationMs": 1900,
+    "segs": [ {
+      "utf8": "明顯低於過去5年的平均水平"
+    } ]
+  }, {
+    "tStartMs": 300820,
+    "dDurationMs": 2380,
+    "segs": [ {
+      "utf8": "Meta當前的PE大約20倍"
+    } ]
+  }, {
+    "tStartMs": 303200,
+    "dDurationMs": 2260,
+    "segs": [ {
+      "utf8": "也略低於5年平均水平"
+    } ]
+  }, {
+    "tStartMs": 305460,
+    "dDurationMs": 2280,
+    "segs": [ {
+      "utf8": "但問題是如果大家一旦切換到"
+    } ]
+  }, {
+    "tStartMs": 307740,
+    "dDurationMs": 1800,
+    "segs": [ {
+      "utf8": "自由現金流倍數的估值"
+    } ]
+  }, {
+    "tStartMs": 309540,
+    "dDurationMs": 1840,
+    "segs": [ {
+      "utf8": "其實劃分就有明顯的變化"
+    } ]
+  }, {
+    "tStartMs": 311380,
+    "dDurationMs": 1860,
+    "segs": [ {
+      "utf8": "比如說Meta當前價格"
+    } ]
+  }, {
+    "tStartMs": 313240,
+    "dDurationMs": 1260,
+    "segs": [ {
+      "utf8": "與自由現金流的比值"
+    } ]
+  }, {
+    "tStartMs": 314500,
+    "dDurationMs": 2180,
+    "segs": [ {
+      "utf8": "已經明顯的高於過去5年的均值"
+    } ]
+  }, {
+    "tStartMs": 316680,
+    "dDurationMs": 2320,
+    "segs": [ {
+      "utf8": "Google的價格與自由現金流的比值"
+    } ]
+  }, {
+    "tStartMs": 319000,
+    "dDurationMs": 1840,
+    "segs": [ {
+      "utf8": "更是大幅高於歷史的水平"
+    } ]
+  }, {
+    "tStartMs": 321280,
+    "dDurationMs": 3120,
+    "segs": [ {
+      "utf8": "而Amazon它因為AI和數據中心的資本"
+    } ]
+  }, {
+    "tStartMs": 324400,
+    "dDurationMs": 640,
+    "segs": [ {
+      "utf8": "開支太大"
+    } ]
+  }, {
+    "tStartMs": 325040,
+    "dDurationMs": 1400,
+    "segs": [ {
+      "utf8": "它其實自由現金流"
+    } ]
+  }, {
+    "tStartMs": 326440,
+    "dDurationMs": 1580,
+    "segs": [ {
+      "utf8": "TTM已經轉負了"
+    } ]
+  }, {
+    "tStartMs": 328020,
+    "dDurationMs": 1880,
+    "segs": [ {
+      "utf8": "所以過去的這幾個月"
+    } ]
+  }, {
+    "tStartMs": 329900,
+    "dDurationMs": 1200,
+    "segs": [ {
+      "utf8": "或者兩三個季度"
+    } ]
+  }, {
+    "tStartMs": 331100,
+    "dDurationMs": 1780,
+    "segs": [ {
+      "utf8": "市場在壓制科技巨頭"
+    } ]
+  }, {
+    "tStartMs": 332880,
+    "dDurationMs": 1360,
+    "segs": [ {
+      "utf8": "很大一部分不是因為"
+    } ]
+  }, {
+    "tStartMs": 334240,
+    "dDurationMs": 1560,
+    "segs": [ {
+      "utf8": "大家不懂得PE"
+    } ]
+  }, {
+    "tStartMs": 335800,
+    "dDurationMs": 1500,
+    "segs": [ {
+      "utf8": "而是因為投資者"
+    } ]
+  }, {
+    "tStartMs": 337300,
+    "dDurationMs": 2600,
+    "segs": [ {
+      "utf8": "目前它開始用更多的維度"
+    } ]
+  }, {
+    "tStartMs": 339900,
+    "dDurationMs": 1320,
+    "segs": [ {
+      "utf8": "開始重新去評估"
+    } ]
+  }, {
+    "tStartMs": 341220,
+    "dDurationMs": 1780,
+    "segs": [ {
+      "utf8": "這些AI的CAPEX"
+    } ]
+  }, {
+    "tStartMs": 343000,
+    "dDurationMs": 1520,
+    "segs": [ {
+      "utf8": "到底什麼時候能帶來"
+    } ]
+  }, {
+    "tStartMs": 344520,
+    "dDurationMs": 1940,
+    "segs": [ {
+      "utf8": "真正的自由現金流"
+    } ]
+  }, {
+    "tStartMs": 346680,
+    "dDurationMs": 1800,
+    "segs": [ {
+      "utf8": "等市場什麼時候能夠確認"
+    } ]
+  }, {
+    "tStartMs": 348480,
+    "dDurationMs": 2120,
+    "segs": [ {
+      "utf8": "AI投入能夠帶來超額的"
+    } ]
+  }, {
+    "tStartMs": 350600,
+    "dDurationMs": 1500,
+    "segs": [ {
+      "utf8": "收入和利潤的增長"
+    } ]
+  }, {
+    "tStartMs": 352100,
+    "dDurationMs": 1280,
+    "segs": [ {
+      "utf8": "這些科技巨頭"
+    } ]
+  }, {
+    "tStartMs": 353380,
+    "dDurationMs": 2280,
+    "segs": [ {
+      "utf8": "它的估值才有可能更上一層"
+    } ]
+  }, {
+    "tStartMs": 355660,
+    "dDurationMs": 1840,
+    "segs": [ {
+      "utf8": "最後我們來說一說AAOI"
+    } ]
+  }, {
+    "tStartMs": 357500,
+    "dDurationMs": 2840,
+    "segs": [ {
+      "utf8": "我在之前它跌到160美元的時候"
+    } ]
+  }, {
+    "tStartMs": 360340,
+    "dDurationMs": 2220,
+    "segs": [ {
+      "utf8": "賣出了120的Put"
+    } ]
+  }, {
+    "tStartMs": 362560,
+    "dDurationMs": 880,
+    "segs": [ {
+      "utf8": "意思就是說"
+    } ]
+  }, {
+    "tStartMs": 363440,
+    "dDurationMs": 1560,
+    "segs": [ {
+      "utf8": "如果它的股價跌破了120"
+    } ]
+  }, {
+    "tStartMs": 365000,
+    "dDurationMs": 2520,
+    "segs": [ {
+      "utf8": "我就有義務在120美元"
+    } ]
+  }, {
+    "tStartMs": 367520,
+    "dDurationMs": 2360,
+    "segs": [ {
+      "utf8": "買入100股的AAOI的股票"
+    } ]
+  }, {
+    "tStartMs": 369880,
+    "dDurationMs": 2840,
+    "segs": [ {
+      "utf8": "沒想到這個跌來的是如此的之快"
+    } ]
+  }, {
+    "tStartMs": 372720,
+    "dDurationMs": 2860,
+    "segs": [ {
+      "utf8": "有些會員朋友有跟我一起去操作的"
+    } ]
+  }, {
+    "tStartMs": 375580,
+    "dDurationMs": 2860,
+    "segs": [ {
+      "utf8": "現在光通的板塊跌得很快"
+    } ]
+  }, {
+    "tStartMs": 378440,
+    "dDurationMs": 1800,
+    "segs": [ {
+      "utf8": "所以它的Sell Put"
+    } ]
+  }, {
+    "tStartMs": 380240,
+    "dDurationMs": 1320,
+    "segs": [ {
+      "utf8": "就很快出現了浮虧"
+    } ]
+  }, {
+    "tStartMs": 381560,
+    "dDurationMs": 2120,
+    "segs": [ {
+      "utf8": "所以心裡有一些恐慌"
+    } ]
+  }, {
+    "tStartMs": 383680,
+    "dDurationMs": 2460,
+    "segs": [ {
+      "utf8": "我覺得大家也不用過度的去恐慌"
+    } ]
+  }, {
+    "tStartMs": 386140,
+    "dDurationMs": 2660,
+    "segs": [ {
+      "utf8": "120美元其實本來是我賣Put"
+    } ]
+  }, {
+    "tStartMs": 388800,
+    "dDurationMs": 2180,
+    "segs": [ {
+      "utf8": "提前想好接貨的位置"
+    } ]
+  }, {
+    "tStartMs": 390980,
+    "dDurationMs": 1540,
+    "segs": [ {
+      "utf8": "所以如果被行權"
+    } ]
+  }, {
+    "tStartMs": 392520,
+    "dDurationMs": 2480,
+    "segs": [ {
+      "utf8": "我大概率會先把它接下來"
+    } ]
+  }, {
+    "tStartMs": 395000,
+    "dDurationMs": 2120,
+    "segs": [ {
+      "utf8": "但前提是我們要知道"
+    } ]
+  }, {
+    "tStartMs": 397120,
+    "dDurationMs": 1620,
+    "segs": [ {
+      "utf8": "自己是買的什麼公司"
+    } ]
+  }, {
+    "tStartMs": 398740,
+    "dDurationMs": 2520,
+    "segs": [ {
+      "utf8": "以及買入這家公司的邏輯是什麼"
+    } ]
+  }, {
+    "tStartMs": 401260,
+    "dDurationMs": 1280,
+    "segs": [ {
+      "utf8": "AAOI的投資邏輯"
+    } ]
+  }, {
+    "tStartMs": 402540,
+    "dDurationMs": 1140,
+    "segs": [ {
+      "utf8": "核心邏輯"
+    } ]
+  }, {
+    "tStartMs": 403680,
+    "dDurationMs": 2080,
+    "segs": [ {
+      "utf8": "我總結成以下的幾條"
+    } ]
+  }, {
+    "tStartMs": 405760,
+    "dDurationMs": 1540,
+    "segs": [ {
+      "utf8": "第一就是光模塊"
+    } ]
+  }, {
+    "tStartMs": 407300,
+    "dDurationMs": 1920,
+    "segs": [ {
+      "utf8": "它的供給瓶頸是真實的"
+    } ]
+  }, {
+    "tStartMs": 409220,
+    "dDurationMs": 2800,
+    "segs": [ {
+      "utf8": "AI數據中心它所需要的高速光模塊"
+    } ]
+  }, {
+    "tStartMs": 412020,
+    "dDurationMs": 2120,
+    "segs": [ {
+      "utf8": "包括800G到1.6T規格"
+    } ]
+  }, {
+    "tStartMs": 414140,
+    "dDurationMs": 2760,
+    "segs": [ {
+      "utf8": "它的短缺預計要持續幾年"
+    } ]
+  }, {
+    "tStartMs": 416900,
+    "dDurationMs": 980,
+    "segs": [ {
+      "utf8": "就是供不應求"
+    } ]
+  }, {
+    "tStartMs": 417880,
+    "dDurationMs": 1820,
+    "segs": [ {
+      "utf8": "1.6T甚至可能要持續到"
+    } ]
+  }, {
+    "tStartMs": 419700,
+    "dDurationMs": 1440,
+    "segs": [ {
+      "utf8": "2029年的短缺"
+    } ]
+  }, {
+    "tStartMs": 421140,
+    "dDurationMs": 1560,
+    "segs": [ {
+      "utf8": "光模塊產業鏈"
+    } ]
+  }, {
+    "tStartMs": 422700,
+    "dDurationMs": 2260,
+    "segs": [ {
+      "utf8": "它其實有幾個重要的環節"
+    } ]
+  }, {
+    "tStartMs": 425440,
+    "dDurationMs": 2240,
+    "segs": [ {
+      "utf8": "我這個產業鏈越往上游走"
+    } ]
+  }, {
+    "tStartMs": 427680,
+    "dDurationMs": 1760,
+    "segs": [ {
+      "utf8": "就是往原材料上面走"
+    } ]
+  }, {
+    "tStartMs": 429440,
+    "dDurationMs": 2040,
+    "segs": [ {
+      "utf8": "它的供應商越少"
+    } ]
+  }, {
+    "tStartMs": 431480,
+    "dDurationMs": 1480,
+    "segs": [ {
+      "utf8": "擴產越緩慢"
+    } ]
+  }, {
+    "tStartMs": 432960,
+    "dDurationMs": 1920,
+    "segs": [ {
+      "utf8": "技術壁壘也就越高"
+    } ]
+  }, {
+    "tStartMs": 434880,
+    "dDurationMs": 3160,
+    "segs": [ {
+      "utf8": "第二就是AAOI它是少數幾家"
+    } ]
+  }, {
+    "tStartMs": 438040,
+    "dDurationMs": 2720,
+    "segs": [ {
+      "utf8": "能夠自制激光芯片的公司之一"
+    } ]
+  }, {
+    "tStartMs": 440760,
+    "dDurationMs": 3540,
+    "segs": [ {
+      "utf8": "英偉達它通過戰略投資LITE和COHR"
+    } ]
+  }, {
+    "tStartMs": 444300,
+    "dDurationMs": 1600,
+    "segs": [ {
+      "utf8": "並且鎖定了兩家公司"
+    } ]
+  }, {
+    "tStartMs": 445900,
+    "dDurationMs": 2280,
+    "segs": [ {
+      "utf8": "在未來幾年的非獨家的"
+    } ]
+  }, {
+    "tStartMs": 448180,
+    "dDurationMs": 1960,
+    "segs": [ {
+      "utf8": "EML激光芯片的產能"
+    } ]
+  }, {
+    "tStartMs": 450140,
+    "dDurationMs": 3680,
+    "segs": [ {
+      "utf8": "等於說在卡住上游的"
+    } ]
+  }, {
+    "tStartMs": 453820,
+    "dDurationMs": 1360,
+    "segs": [ {
+      "utf8": "瓶頸環節的供應"
+    } ]
+  }, {
+    "tStartMs": 455760,
+    "dDurationMs": 920,
+    "segs": [ {
+      "utf8": "其他的一些客戶"
+    } ]
+  }, {
+    "tStartMs": 456680,
+    "dDurationMs": 1460,
+    "segs": [ {
+      "utf8": "比如說各大雲廠商"
+    } ]
+  }, {
+    "tStartMs": 458140,
+    "dDurationMs": 3420,
+    "segs": [ {
+      "utf8": "它就無法完全依賴"
+    } ]
+  }, {
+    "tStartMs": 461560,
+    "dDurationMs": 1680,
+    "segs": [ {
+      "utf8": "英偉達綁定的供應鏈"
+    } ]
+  }, {
+    "tStartMs": 463240,
+    "dDurationMs": 840,
+    "segs": [ {
+      "utf8": "還是有風險的"
+    } ]
+  }, {
+    "tStartMs": 464080,
+    "dDurationMs": 1520,
+    "segs": [ {
+      "utf8": "因為這裡面存在著競爭"
+    } ]
+  }, {
+    "tStartMs": 465600,
+    "dDurationMs": 2480,
+    "segs": [ {
+      "utf8": "所以他們必須有這個需求"
+    } ]
+  }, {
+    "tStartMs": 468080,
+    "dDurationMs": 2560,
+    "segs": [ {
+      "utf8": "有這個必要性去尋找獨立的"
+    } ]
+  }, {
+    "tStartMs": 471080,
+    "dDurationMs": 1360,
+    "segs": [ {
+      "utf8": "光芯片的供應商"
+    } ]
+  }, {
+    "tStartMs": 472820,
+    "dDurationMs": 2100,
+    "segs": [ {
+      "utf8": "AAOI就是一個獨立的供應源"
+    } ]
+  }, {
+    "tStartMs": 474920,
+    "dDurationMs": 3280,
+    "segs": [ {
+      "utf8": "它能夠服務於英偉達體系之外的"
+    } ]
+  }, {
+    "tStartMs": 478200,
+    "dDurationMs": 1040,
+    "segs": [ {
+      "utf8": "龐大的客戶需求"
+    } ]
+  }, {
+    "tStartMs": 479840,
+    "dDurationMs": 2040,
+    "segs": [ {
+      "utf8": "第三就是大客戶的認證"
+    } ]
+  }, {
+    "tStartMs": 482240,
+    "dDurationMs": 1360,
+    "segs": [ {
+      "utf8": "是真實的護身河"
+    } ]
+  }, {
+    "tStartMs": 483600,
+    "dDurationMs": 4260,
+    "segs": [ {
+      "utf8": "因為AAOI目前已經跟亞馬遜和微軟展開合作"
+    } ]
+  }, {
+    "tStartMs": 487860,
+    "dDurationMs": 3180,
+    "segs": [ {
+      "utf8": "也獲得了兩家公司的量產的認證"
+    } ]
+  }, {
+    "tStartMs": 491040,
+    "dDurationMs": 3360,
+    "segs": [ {
+      "utf8": "這種認證會為後續其他的新的合同合作"
+    } ]
+  }, {
+    "tStartMs": 494400,
+    "dDurationMs": 720,
+    "segs": [ {
+      "utf8": "打開通路"
+    } ]
+  }, {
+    "tStartMs": 495120,
+    "dDurationMs": 3380,
+    "segs": [ {
+      "utf8": "第四就是它美國本土製造的政治順風"
+    } ]
+  }, {
+    "tStartMs": 498500,
+    "dDurationMs": 4860,
+    "segs": [ {
+      "utf8": "AAOI正在休斯頓修建一個大型的生產設施"
+    } ]
+  }, {
+    "tStartMs": 503800,
+    "dDurationMs": 1380,
+    "segs": [ {
+      "utf8": "它來進行擴產"
+    } ]
+  }, {
+    "tStartMs": 505180,
+    "dDurationMs": 1560,
+    "segs": [ {
+      "utf8": "它契合美國科技巨頭"
+    } ]
+  }, {
+    "tStartMs": 506740,
+    "dDurationMs": 4540,
+    "segs": [ {
+      "utf8": "目前要優先採購美國本土製造產能的這種趨勢"
+    } ]
+  }, {
+    "tStartMs": 511280,
+    "dDurationMs": 2080,
+    "segs": [ {
+      "utf8": "如果說2027年"
+    } ]
+  }, {
+    "tStartMs": 513360,
+    "dDurationMs": 2200,
+    "segs": [ {
+      "utf8": "它的產量預期能夠迅速實現的話"
+    } ]
+  }, {
+    "tStartMs": 515560,
+    "dDurationMs": 1340,
+    "segs": [ {
+      "utf8": "在基準情形下"
+    } ]
+  }, {
+    "tStartMs": 516900,
+    "dDurationMs": 2660,
+    "segs": [ {
+      "utf8": "它的前瞻市銷率目前也只有3.8倍"
+    } ]
+  }, {
+    "tStartMs": 519560,
+    "dDurationMs": 1920,
+    "segs": [ {
+      "utf8": "前瞻市盈率目前只有25倍"
+    } ]
+  }, {
+    "tStartMs": 521480,
+    "dDurationMs": 2780,
+    "segs": [ {
+      "utf8": "估值看起來還是比較的有吸引力的"
+    } ]
+  }, {
+    "tStartMs": 524260,
+    "dDurationMs": 3240,
+    "segs": [ {
+      "utf8": "尤其考慮到它目前快速增長的產能的趨勢"
+    } ]
+  }, {
+    "tStartMs": 527500,
+    "dDurationMs": 3560,
+    "segs": [ {
+      "utf8": "但投資邏輯也有幾個不可忽視的風險點"
+    } ]
+  }, {
+    "tStartMs": 531060,
+    "dDurationMs": 1260,
+    "segs": [ {
+      "utf8": "要必須給大家說清楚"
+    } ]
+  }, {
+    "tStartMs": 532320,
+    "dDurationMs": 1380,
+    "segs": [ {
+      "utf8": "第一就是執行風險"
+    } ]
+  }, {
+    "tStartMs": 533700,
+    "dDurationMs": 2480,
+    "segs": [ {
+      "utf8": "這個估值剛才說過三倍市銷"
+    } ]
+  }, {
+    "tStartMs": 536180,
+    "dDurationMs": 780,
+    "segs": [ {
+      "utf8": "25倍市盈"
+    } ]
+  }, {
+    "tStartMs": 536960,
+    "dDurationMs": 2980,
+    "segs": [ {
+      "utf8": "其實是建立在它的產能能夠"
+    } ]
+  }, {
+    "tStartMs": 539940,
+    "dDurationMs": 2900,
+    "segs": [ {
+      "utf8": "按時順利的擴張的假設之上"
+    } ]
+  }, {
+    "tStartMs": 542840,
+    "dDurationMs": 2400,
+    "segs": [ {
+      "utf8": "但大家可以看到這張表格"
+    } ]
+  }, {
+    "tStartMs": 545240,
+    "dDurationMs": 3320,
+    "segs": [ {
+      "utf8": "其實目前AAOI是正處在一個"
+    } ]
+  }, {
+    "tStartMs": 548560,
+    "dDurationMs": 3520,
+    "segs": [ {
+      "utf8": "產能爆發的一個略微早期的階段"
+    } ]
+  }, {
+    "tStartMs": 552080,
+    "dDurationMs": 2140,
+    "segs": [ {
+      "utf8": "比如說它26年QE季度"
+    } ]
+  }, {
+    "tStartMs": 554220,
+    "dDurationMs": 1680,
+    "segs": [ {
+      "utf8": "只有1.5億美元的收入"
+    } ]
+  }, {
+    "tStartMs": 555900,
+    "dDurationMs": 2160,
+    "segs": [ {
+      "utf8": "但26年全年竟然達到10億"
+    } ]
+  }, {
+    "tStartMs": 558060,
+    "dDurationMs": 3980,
+    "segs": [ {
+      "utf8": "27年的全年的預期能夠達到26億美元"
+    } ]
+  }, {
+    "tStartMs": 562040,
+    "dDurationMs": 3600,
+    "segs": [ {
+      "utf8": "這個都是150%的年度的增長了"
+    } ]
+  }, {
+    "tStartMs": 565640,
+    "dDurationMs": 2500,
+    "segs": [ {
+      "utf8": "所以這種規模的這種擴張需求"
+    } ]
+  }, {
+    "tStartMs": 568140,
+    "dDurationMs": 2780,
+    "segs": [ {
+      "utf8": "其實也使得它執行的風險加大"
+    } ]
+  }, {
+    "tStartMs": 570920,
+    "dDurationMs": 2420,
+    "segs": [ {
+      "utf8": "而任何這種生產的延誤"
+    } ]
+  }, {
+    "tStartMs": 573340,
+    "dDurationMs": 1820,
+    "segs": [ {
+      "utf8": "都有可能會打擊它的股價"
+    } ]
+  }, {
+    "tStartMs": 575160,
+    "dDurationMs": 2840,
+    "segs": [ {
+      "utf8": "第二就是沒有長期供應的協議"
+    } ]
+  }, {
+    "tStartMs": 578000,
+    "dDurationMs": 1760,
+    "segs": [ {
+      "utf8": "目前AAOI的大客戶"
+    } ]
+  }, {
+    "tStartMs": 579760,
+    "dDurationMs": 1260,
+    "segs": [ {
+      "utf8": "比如微軟亞馬遜"
+    } ]
+  }, {
+    "tStartMs": 581020,
+    "dDurationMs": 2900,
+    "segs": [ {
+      "utf8": "並沒有鎖定它長期的採購"
+    } ]
+  }, {
+    "tStartMs": 583920,
+    "dDurationMs": 3520,
+    "segs": [ {
+      "utf8": "也就是說一旦未來需求出現階段性的疲軟"
+    } ]
+  }, {
+    "tStartMs": 587440,
+    "dDurationMs": 3420,
+    "segs": [ {
+      "utf8": "巨大的投資立刻就會變成它的負擔"
+    } ]
+  }, {
+    "tStartMs": 590860,
+    "dDurationMs": 1380,
+    "segs": [ {
+      "utf8": "這個並不是假設"
+    } ]
+  }, {
+    "tStartMs": 592240,
+    "dDurationMs": 3660,
+    "segs": [ {
+      "utf8": "而是以前AAOI和亞馬遜之前就發生過這種情況"
+    } ]
+  }, {
+    "tStartMs": 595900,
+    "dDurationMs": 2420,
+    "segs": [ {
+      "utf8": "像大規模採購突然放緩"
+    } ]
+  }, {
+    "tStartMs": 598320,
+    "dDurationMs": 2760,
+    "segs": [ {
+      "utf8": "導致AAOI的庫存積壓股價重挫"
+    } ]
+  }, {
+    "tStartMs": 601080,
+    "dDurationMs": 2120,
+    "segs": [ {
+      "utf8": "這個之前前幾年就發生過"
+    } ]
+  }, {
+    "tStartMs": 603640,
+    "dDurationMs": 2220,
+    "segs": [ {
+      "utf8": "所以市場的記憶還是存在的"
+    } ]
+  }, {
+    "tStartMs": 605860,
+    "dDurationMs": 3360,
+    "segs": [ {
+      "utf8": "第三就是重資產與低毛利的這種脆弱性"
+    } ]
+  }, {
+    "tStartMs": 609220,
+    "dDurationMs": 2900,
+    "segs": [ {
+      "utf8": "AAOI它的毛利率目前也只有30%左右"
+    } ]
+  }, {
+    "tStartMs": 612120,
+    "dDurationMs": 2060,
+    "segs": [ {
+      "utf8": "後續可能會提升到35%"
+    } ]
+  }, {
+    "tStartMs": 614180,
+    "dDurationMs": 1920,
+    "segs": [ {
+      "utf8": "這個毛利率本身尺平並不高"
+    } ]
+  }, {
+    "tStartMs": 616100,
+    "dDurationMs": 2280,
+    "segs": [ {
+      "utf8": "一旦說它的產能利用率下降"
+    } ]
+  }, {
+    "tStartMs": 618380,
+    "dDurationMs": 1960,
+    "segs": [ {
+      "utf8": "固定成本無法被攤薄"
+    } ]
+  }, {
+    "tStartMs": 620340,
+    "dDurationMs": 1620,
+    "segs": [ {
+      "utf8": "它的虧損來的就會非常的快"
+    } ]
+  }, {
+    "tStartMs": 621960,
+    "dDurationMs": 2140,
+    "segs": [ {
+      "utf8": "與此同時重資產模式"
+    } ]
+  }, {
+    "tStartMs": 624100,
+    "dDurationMs": 2180,
+    "segs": [ {
+      "utf8": "意味著它要持續的進行融資的需求"
+    } ]
+  }, {
+    "tStartMs": 626280,
+    "dDurationMs": 2960,
+    "segs": [ {
+      "utf8": "股權稀釋的風險始終是存在的"
+    } ]
+  }, {
+    "tStartMs": 629240,
+    "dDurationMs": 3340,
+    "segs": [ {
+      "utf8": "你比如說它目前今年已經通過ATM"
+    } ]
+  }, {
+    "tStartMs": 632580,
+    "dDurationMs": 1540,
+    "segs": [ {
+      "utf8": "完成了5億美元的融資"
+    } ]
+  }, {
+    "tStartMs": 634120,
+    "dDurationMs": 2300,
+    "segs": [ {
+      "utf8": "後續它又提交了6億美元"
+    } ]
+  }, {
+    "tStartMs": 636420,
+    "dDurationMs": 2920,
+    "segs": [ {
+      "utf8": "最高的ATM的發行額度"
+    } ]
+  }, {
+    "tStartMs": 639340,
+    "dDurationMs": 3040,
+    "segs": [ {
+      "utf8": "也就是說它全年潛在的ATM融資額"
+    } ]
+  }, {
+    "tStartMs": 642380,
+    "dDurationMs": 1260,
+    "segs": [ {
+      "utf8": "高達近11億美元"
+    } ]
+  }, {
+    "tStartMs": 643640,
+    "dDurationMs": 2340,
+    "segs": [ {
+      "utf8": "而它目前的市值也只有100億"
+    } ]
+  }, {
+    "tStartMs": 645980,
+    "dDurationMs": 2280,
+    "segs": [ {
+      "utf8": "所以潛在的稀釋比例並不小"
+    } ]
+  }, {
+    "tStartMs": 648260,
+    "dDurationMs": 2160,
+    "segs": [ {
+      "utf8": "它一方面要支持目前公司"
+    } ]
+  }, {
+    "tStartMs": 650420,
+    "dDurationMs": 2220,
+    "segs": [ {
+      "utf8": "這種巨大的擴產的動作"
+    } ]
+  }, {
+    "tStartMs": 652640,
+    "dDurationMs": 2440,
+    "segs": [ {
+      "utf8": "另一方面它也會在股價上"
+    } ]
+  }, {
+    "tStartMs": 655080,
+    "dDurationMs": 2220,
+    "segs": [ {
+      "utf8": "持續的在股價上漲的過程中"
+    } ]
+  }, {
+    "tStartMs": 657300,
+    "dDurationMs": 1140,
+    "segs": [ {
+      "utf8": "給它以壓力"
+    } ]
+  }, {
+    "tStartMs": 658440,
+    "dDurationMs": 3480,
+    "segs": [ {
+      "utf8": "對比於LITE和COHR這個行業的巨頭來說"
+    } ]
+  }, {
+    "tStartMs": 661920,
+    "dDurationMs": 2760,
+    "segs": [ {
+      "utf8": "AAOI抗週期的能力是要弱許多的"
+    } ]
+  }, {
+    "tStartMs": 665120,
+    "dDurationMs": 1260,
+    "segs": [ {
+      "utf8": "所以總結來說"
+    } ]
+  }, {
+    "tStartMs": 666380,
+    "dDurationMs": 2360,
+    "segs": [ {
+      "utf8": "買AAOI這家公司買的是在"
+    } ]
+  }, {
+    "tStartMs": 668740,
+    "dDurationMs": 2300,
+    "segs": [ {
+      "utf8": "AI光互聯需求增長"
+    } ]
+  }, {
+    "tStartMs": 671040,
+    "dDurationMs": 2300,
+    "segs": [ {
+      "utf8": "上游激光器和客戶認證"
+    } ]
+  }, {
+    "tStartMs": 673340,
+    "dDurationMs": 1720,
+    "segs": [ {
+      "utf8": "產能偏緊的背景下"
+    } ]
+  }, {
+    "tStartMs": 675060,
+    "dDurationMs": 3780,
+    "segs": [ {
+      "utf8": "一傢俱備著自制激光芯片能力"
+    } ]
+  }, {
+    "tStartMs": 678840,
+    "dDurationMs": 2300,
+    "segs": [ {
+      "utf8": "美國本土的製造敘事"
+    } ]
+  }, {
+    "tStartMs": 681140,
+    "dDurationMs": 2540,
+    "segs": [ {
+      "utf8": "並且已經進入大客戶製造體系的"
+    } ]
+  }, {
+    "tStartMs": 683680,
+    "dDurationMs": 1820,
+    "segs": [ {
+      "utf8": "小市值彈性標的"
+    } ]
+  }, {
+    "tStartMs": 685500,
+    "dDurationMs": 1560,
+    "segs": [ {
+      "utf8": "最大的風險就是"
+    } ]
+  }, {
+    "tStartMs": 687060,
+    "dDurationMs": 1560,
+    "segs": [ {
+      "utf8": "市場把潛在的需求"
+    } ]
+  }, {
+    "tStartMs": 688620,
+    "dDurationMs": 2880,
+    "segs": [ {
+      "utf8": "就提前當成了確定的訂單（和收入）"
+    } ]
+  }, {
+    "tStartMs": 691500,
+    "dDurationMs": 2620,
+    "segs": [ {
+      "utf8": "而忽視了它其中存在的這種執行的風險"
+    } ]
+  }, {
+    "tStartMs": 694120,
+    "dDurationMs": 3220,
+    "segs": [ {
+      "utf8": "如果說你對於AI光互聯持續看好的話"
+    } ]
+  }, {
+    "tStartMs": 697340,
+    "dDurationMs": 2040,
+    "segs": [ {
+      "utf8": "但你的風險偏好又偏低"
+    } ]
+  }, {
+    "tStartMs": 699380,
+    "dDurationMs": 3080,
+    "segs": [ {
+      "utf8": "LITE和COHR其實是更穩健的選擇"
+    } ]
+  }, {
+    "tStartMs": 702460,
+    "dDurationMs": 1080,
+    "segs": [ {
+      "utf8": "它們規模更大"
+    } ]
+  }, {
+    "tStartMs": 703540,
+    "dDurationMs": 2620,
+    "segs": [ {
+      "utf8": "有英偉達長期供應協議的背書"
+    } ]
+  }, {
+    "tStartMs": 706160,
+    "dDurationMs": 1200,
+    "segs": [ {
+      "utf8": "所以它更穩當"
+    } ]
+  }, {
+    "tStartMs": 707360,
+    "dDurationMs": 3380,
+    "segs": [ {
+      "utf8": "我的計劃是我在近期的大跌中"
+    } ]
+  }, {
+    "tStartMs": 710740,
+    "dDurationMs": 2480,
+    "segs": [ {
+      "utf8": "我考慮在700到750的區間"
+    } ]
+  }, {
+    "tStartMs": 713220,
+    "dDurationMs": 1220,
+    "segs": [ {
+      "utf8": "先開倉"
+    } ]
+  }, {
+    "tStartMs": 714440,
+    "dDurationMs": 1040,
+    "segs": [ {
+      "utf8": "觀察倉"
+    } ]
+  }, {
+    "tStartMs": 715480,
+    "dDurationMs": 520,
+    "segs": [ {
+      "utf8": "LITE"
+    } ]
+  }, {
+    "tStartMs": 716000,
+    "dDurationMs": 1720,
+    "segs": [ {
+      "utf8": "如果後續它持續下跌的話"
+    } ]
+  }, {
+    "tStartMs": 717720,
+    "dDurationMs": 1480,
+    "segs": [ {
+      "utf8": "我會繼續的慢慢的去加倉"
+    } ]
+  }, {
+    "tStartMs": 719200,
+    "dDurationMs": 2820,
+    "segs": [ {
+      "utf8": "那AI這邊如果說Sell put被行權的話"
+    } ]
+  }, {
+    "tStartMs": 722020,
+    "dDurationMs": 1820,
+    "segs": [ {
+      "utf8": "我應該會先拿住正股"
+    } ]
+  }, {
+    "tStartMs": 723840,
+    "dDurationMs": 2500,
+    "segs": [ {
+      "utf8": "然後找機會減掉一部分的倉位"
+    } ]
+  }, {
+    "tStartMs": 726340,
+    "dDurationMs": 3820,
+    "segs": [ {
+      "utf8": "把倉位的比重控制在一個合理的範圍之內"
+    } ]
+  }, {
+    "tStartMs": 730160,
+    "dDurationMs": 1080,
+    "segs": [ {
+      "utf8": "這叫風險的控制"
+    } ]
+  }, {
+    "tStartMs": 731240,
+    "dDurationMs": 3180,
+    "segs": [ {
+      "utf8": "不知道大家對於這次的光通和內存的大跌"
+    } ]
+  }, {
+    "tStartMs": 734420,
+    "dDurationMs": 1080,
+    "segs": [ {
+      "utf8": "怎麼看有什麼計劃"
+    } ]
+  }, {
+    "tStartMs": 735500,
+    "dDurationMs": 3100,
+    "segs": [ {
+      "utf8": "歡迎在評論區裡留下你的觀點"
+    } ]
+  }, {
+    "tStartMs": 738600,
+    "dDurationMs": 560,
+    "segs": [ {
+      "utf8": "好"
+    } ]
+  }, {
+    "tStartMs": 739160,
+    "dDurationMs": 1120,
+    "segs": [ {
+      "utf8": "本期視頻就先聊到這"
+    } ]
+  }, {
+    "tStartMs": 740280,
+    "dDurationMs": 2000,
+    "segs": [ {
+      "utf8": "別忘了點贊、評論、轉發、訂閱"
+    } ]
+  }, {
+    "tStartMs": 742280,
+    "dDurationMs": 840,
+    "segs": [ {
+      "utf8": "我們下期視頻"
+    } ]
+  }, {
+    "tStartMs": 744160,
+    "dDurationMs": 360,
+    "segs": [ {
+      "utf8": "拜拜"
+    } ]
+  } ]
+}

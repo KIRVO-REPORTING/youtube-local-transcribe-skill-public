@@ -14,6 +14,7 @@ from typing import Any
 from .captions import choose_caption_track, download_caption, write_transcript_from_caption
 from .config import configured_model_path, config_path, model_cache_dir, model_cache_path, write_config
 from .ffmpeg import resolve_ffmpeg_path
+from .notion import NotionError, NotionPublishConfig, publish_report_to_notion
 from .reporting import (
     SUMMARY_FILENAME,
     delete_video_files,
@@ -41,6 +42,40 @@ def _import_yt_dlp():
     except ImportError as exc:
         raise SystemExit("yt-dlp is required. Install with: python -m pip install yt-dlp") from exc
     return yt_dlp
+
+
+def _add_notion_options(parser: argparse.ArgumentParser, *, include_publish_flag: bool = True) -> None:
+    if include_publish_flag:
+        parser.add_argument("--publish-notion", action="store_true", help="Publish or update the report in Notion.")
+    parser.add_argument("--notion-token", help="Defaults to NOTION_TOKEN or NOTION_API_KEY.")
+    parser.add_argument("--notion-parent-page-id", help="Create report pages under this Notion page.")
+    parser.add_argument("--notion-data-source-id", help="Create report rows in this Notion data source.")
+    parser.add_argument("--notion-database-id", help="Resolve the first data source from this Notion database.")
+    parser.add_argument("--notion-version", help="Defaults to NOTION_VERSION or 2026-03-11.")
+
+
+def _notion_config(args: argparse.Namespace) -> NotionPublishConfig:
+    try:
+        return NotionPublishConfig.from_values(
+            token=args.notion_token,
+            parent_page_id=args.notion_parent_page_id,
+            data_source_id=args.notion_data_source_id,
+            database_id=args.notion_database_id,
+            api_version=args.notion_version,
+        )
+    except NotionError as exc:
+        raise SystemExit(str(exc)) from exc
+
+
+def _workspace_for_folder(folder: Path) -> Path:
+    return folder.parent.parent if folder.parent.name == "processed" else default_workspace()
+
+
+def _publish_folder_to_notion(folder: Path, workspace: Path, args: argparse.Namespace) -> dict[str, Any]:
+    try:
+        return publish_report_to_notion(folder, _notion_config(args), workspace=workspace)
+    except NotionError as exc:
+        raise SystemExit(str(exc)) from exc
 
 
 def extract_info(url: str, *, cookies_from_browser: str | None = None, cookies: Path | None = None) -> dict[str, Any]:
@@ -190,6 +225,8 @@ def process_url(args: argparse.Namespace) -> int:
         "dashboard": str(workspace / "dashboard.html"),
         "report_count": len(index.get("reports", [])),
     }
+    if getattr(args, "publish_notion", False):
+        payload["notion"] = _publish_folder_to_notion(folder, workspace, args)
     print(json.dumps(payload, ensure_ascii=False, indent=2))
     if args.open:
         webbrowser.open(report_path.resolve().as_uri())
@@ -209,12 +246,22 @@ def finalize(args: argparse.Namespace) -> int:
         raise SystemExit(f"Missing or empty {SUMMARY_FILENAME} in {folder}")
     report_path = write_report(folder, metadata)
     deleted = delete_video_files(folder, metadata)
-    workspace = folder.parent.parent if folder.parent.name == "processed" else default_workspace()
+    workspace = _workspace_for_folder(folder)
     rebuild_index(workspace)
     payload = {"report": str(report_path), "deleted_video_files": deleted}
+    if getattr(args, "publish_notion", False):
+        payload["notion"] = _publish_folder_to_notion(folder, workspace, args)
     print(json.dumps(payload, ensure_ascii=False, indent=2))
     if args.open:
         webbrowser.open(report_path.resolve().as_uri())
+    return 0
+
+
+def run_publish_notion(args: argparse.Namespace) -> int:
+    folder = args.folder.expanduser().resolve()
+    workspace = Path(args.workspace).expanduser().resolve() if args.workspace else _workspace_for_folder(folder)
+    result = _publish_folder_to_notion(folder, workspace, args)
+    print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0
 
 
@@ -371,13 +418,21 @@ def build_parser() -> argparse.ArgumentParser:
     process_parser.add_argument("--referer")
     process_parser.add_argument("--delete-video", action=argparse.BooleanOptionalAction, default=True)
     process_parser.add_argument("--open", action="store_true")
+    _add_notion_options(process_parser)
     process_parser.set_defaults(func=process_url)
 
     finalize_parser = sub.add_parser("finalize", help="Render final report.html after summary.md is written.")
     finalize_parser.add_argument("folder", type=Path)
     finalize_parser.add_argument("--summary-file", type=Path)
     finalize_parser.add_argument("--open", action="store_true")
+    _add_notion_options(finalize_parser)
     finalize_parser.set_defaults(func=finalize)
+
+    notion_parser = sub.add_parser("publish-notion", help="Publish or update an existing processed report in Notion.")
+    notion_parser.add_argument("folder", type=Path)
+    notion_parser.add_argument("--workspace")
+    _add_notion_options(notion_parser, include_publish_flag=False)
+    notion_parser.set_defaults(func=run_publish_notion)
 
     rebuild_parser = sub.add_parser("rebuild-index", help="Rebuild index.json and dashboard.html from past reports.")
     rebuild_parser.add_argument("--workspace")
