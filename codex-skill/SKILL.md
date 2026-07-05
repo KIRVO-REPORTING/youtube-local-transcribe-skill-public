@@ -1,6 +1,6 @@
 ---
 name: youtube-local-transcribe
-description: Caption-first local video archiving, transcription, summarization, report generation, clean Notion database publishing, and dashboard workflow for YouTube, youtu.be, Bilibili, b23.tv, BV, av, ep, ss, and other yt-dlp supported video URLs. Use when the user sends a bare video link or asks to download subtitles, transcribe locally, summarize a video, create notes, generate an HTML report, publish to Notion, create a Notion report database, sync local reports, open a local browser report, inspect past video reports, or serve a local report dashboard.
+description: Caption-first local video archiving, transcription, summarization, report generation, clean Notion database publishing, dashboard workflow, concise final answers, and video-topic thread titles for YouTube, youtu.be, Bilibili, b23.tv, BV, av, ep, ss, and other yt-dlp supported video URLs. Use when the user sends a bare video link or asks to download subtitles, transcribe locally, summarize a video, create notes, generate an HTML report, publish to Notion, create a Notion report database, sync local reports, open a local browser report, inspect past video reports, or serve a local report dashboard.
 ---
 
 # YouTube Local Transcribe
@@ -12,12 +12,15 @@ Use this workflow for bare video URLs and explicit video transcription, summary,
 When the user asks for a report, Notion sync, or the current clean report output, produce the current artifact directly:
 
 1. Process the video with `ytlt process`, preferring captions and falling back to local Whisper only when needed.
-2. Read `metadata.json` and `transcript.txt`; write `summary.md` with timestamped key points.
+2. Read `metadata.json` and `transcript.txt`; write `summary.md` with timestamped segment conclusions, points, and evidence.
 3. Run `ytlt finalize "<video-folder>"` to refresh the local `report.html` and dashboard index.
 4. Publish or update the Notion database row report. The Notion row opened from `Name` is the report content page.
-5. Return the Notion report row URL as the primary output, plus the database URL and local `report.html` path.
+5. Rename the current Codex thread to a concise video-topic title when a thread-title tool is available and the current thread id can be resolved.
+6. Return the Notion report row URL as the primary output, plus the database URL and local `report.html` path.
 
 Do not stop at only a local HTML report or dashboard when the user asked for Notion, sync, or the current artifact. Local files remain the backing archive; Notion is the reader-facing deliverable.
+
+Keep user-facing progress and final responses focused on the video result. Avoid dumping download, transcode, caption conversion, test, command, codec, cleanup, or file-by-file process logs unless the user asks for that detail or the workflow fails.
 
 The current Notion artifact is:
 
@@ -25,8 +28,8 @@ The current Notion artifact is:
 - Database named `本地视频报告数据库`.
 - One row per report. Opening `Name` shows the report body itself.
 - No duplicate detail page, no `Report Page` property, and no `Status` property.
-- Row body sections: `摘要`, `关键点`, `备注`, `来源与本地文件`.
-- Timestamp key points are clickable source-video links that seek to the start second.
+- Row body sections: `摘要`, `分段结论`, `备注`, `来源与本地文件`.
+- Timestamped segment headings are clickable source-video links that seek to the start second.
 
 ## Setup Check
 
@@ -66,27 +69,32 @@ The JSON output includes the folder and report paths. Read `metadata.json` and `
 
 ## Write The Summary
 
-Write a grounded Markdown summary to `<video-folder>/summary.md`. Use the user's language unless the user requests another language.
+Write a grounded Markdown summary to `<video-folder>/summary.md`. Use the user's language unless the user requests another language. Prefer a segmented, answer-first structure over a flat list of bullets.
 
 Use this structure:
 
 ```text
 Summary
 
-One-paragraph answer-first summary.
+One-paragraph answer-first summary naming the video's core conclusion.
 
-Key Points
+Segment Conclusions
 
-- [mm:ss-mm:ss] Point 1
-- [mm:ss-mm:ss] Point 2
-- [mm:ss-mm:ss] Point 3
+[mm:ss-mm:ss] Segment conclusion
+- Point: Concrete point from this segment.
+- Evidence: Transcript-backed reason, example, claim, or data.
+- Implication: Why this segment matters, when useful.
+
+[mm:ss-mm:ss] Segment conclusion
+- Point: Concrete point from this segment.
+- Evidence: Transcript-backed reason, example, claim, or data.
 
 Notes
 
 - Caveats about subtitle quality, audio quality, uncertain terms, or incomplete transcript.
 ```
 
-For video reports, key point bullets must start with a bracketed timestamp or time range such as `[01:24-02:44]`, using the transcript's actual timing. Use `[hh:mm:ss-hh:mm:ss]` for videos longer than one hour. The report renderer and CLI Notion publisher convert bracketed timestamps into clickable source-video links that seek to the start time, so keep the timestamp at the beginning of each key point. When writing report content through the Notion connector Markdown path, avoid colons in the linked label because Notion can split the link; use an inline link like `[01m24s-02m44s](https://www.youtube.com/watch?v=VIDEO_ID&t=84)` instead of leaving it as plain text.
+For video reports, each segment heading must start with a bracketed timestamp or time range such as `[01:24-02:44]`, using the transcript's actual timing. Use `[hh:mm:ss-hh:mm:ss]` for videos longer than one hour. The report renderer and CLI Notion publisher convert bracketed timestamps into clickable source-video links that seek to the start time, so keep the timestamp at the beginning of each segment heading. When writing report content through the Notion connector Markdown path, avoid colons in the linked label because Notion can split the link; use an inline link like `[01m24s-02m44s](https://www.youtube.com/watch?v=VIDEO_ID&t=84)` instead of leaving it as plain text.
 
 Finalize:
 
@@ -133,7 +141,7 @@ When Notion publishing succeeds, the JSON output includes `notion.notion_url`. I
 
 When running in Codex with a connected Notion app but no `NOTION_TOKEN`, use the Notion connector after `ytlt finalize`. Use the clean Notion database layout below. Do not claim the CLI wrote to Notion unless `--publish-notion` was used.
 
-In final responses, lead with the Notion row URL. Include the local report path only as the backing archive.
+In final responses, lead with the video title and Notion row URL. Include the local report path only as the backing archive.
 
 ### Clean Notion Database Layout
 
@@ -165,7 +173,7 @@ Create database views:
 - `Whisper`: filter `Transcript Source = local_whisper`.
 - `Recent`: recent reports without status filtering.
 
-For each report, create one database row as the only Notion report page. Put the report content directly inside that row page so opening `Name` shows metadata, source link, summary, key points, notes, and local report path. Keep full transcripts local unless the user explicitly asks to copy them into Notion.
+For each report, create one database row as the only Notion report page. Put the report content directly inside that row page so opening `Name` shows metadata, source link, summary, segment conclusions, notes, and local report path. Keep full transcripts local unless the user explicitly asks to copy them into Notion.
 
 Use this row body structure:
 
@@ -173,8 +181,11 @@ Use this row body structure:
 ## 摘要
 One answer-first summary paragraph.
 
-## 关键点
-- [01m24s-02m44s](SOURCE_URL_WITH_t=84) Timestamped point.
+## 分段结论
+[01m24s-02m44s](SOURCE_URL_WITH_t=84) Segment conclusion.
+- Point: Concrete point from this segment.
+- Evidence: Transcript-backed reason, example, claim, or data.
+- Implication: Why this segment matters, when useful.
 
 ## 备注
 - Caveats about subtitles, transcription, uncertain terms, or source claims.
@@ -199,6 +210,35 @@ After syncing, write the following fields back to each relevant `metadata.json` 
 - `notion_page_id`, `notion_url` pointing to the same database row page
 - `notion_synced_at`
 - `notion_sync_method`
+
+## Thread Title And Final Response
+
+After reading `metadata.json`, derive the user-facing title from the source video's real title. If it is too long, trim it to a concise topic title of about 45-60 characters. Do not name the thread with generic workflow words such as `transcribe`, `caption`, `download`, or `youtube-local-transcribe`.
+
+When a Codex thread-management tool is available and the current thread id can be resolved, rename the current thread to that concise video-topic title before the final response. If the thread id cannot be resolved, continue without blocking the report.
+
+Final responses should use this shape:
+
+```text
+已完成：VIDEO_TITLE
+
+Notion 报告：NOTION_ROW_URL
+本地报告：/absolute/path/to/report.html
+
+摘要：One concise answer-first paragraph.
+
+分段结论
+- [mm:ss-mm:ss] Segment conclusion
+  Point: ...
+  Evidence: ...
+- [mm:ss-mm:ss] Segment conclusion
+  Point: ...
+  Evidence: ...
+
+备注：Only include caveats or failures that affect trust in the result.
+```
+
+Keep this response compact. Include conversion/process details only when they change the outcome, explain a failure, or the user explicitly asks for them.
 
 ## Dashboard
 
