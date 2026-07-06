@@ -31,6 +31,8 @@ class FakeNotionClient:
                 "Name": {"type": "title"},
                 "Source URL": {"type": "url"},
                 "Platform": {"type": "select"},
+                "Processed": {"type": "date"},
+                "Processing Seconds": {"type": "number"},
                 "Summary": {"type": "rich_text"},
                 "Local Report": {"type": "rich_text"},
             },
@@ -76,6 +78,8 @@ class NotionPublishingTests(unittest.TestCase):
             self.assertEqual(client.created[0]["parent"]["data_source_id"], "data-source-123")
             self.assertIn("Name", client.created[0]["properties"])
             self.assertEqual(client.created[0]["properties"]["Source URL"]["url"], "https://example.test/watch?v=abc")
+            self.assertEqual(client.created[0]["properties"]["Processed"]["date"]["start"], "2026-07-05T00:00:00+00:00")
+            self.assertEqual(client.created[0]["properties"]["Processing Seconds"]["number"], 12.345)
             self.assertIn("Local Report", client.created[0]["properties"])
             self.assertNotIn("Status", client.created[0]["properties"])
             self.assertFalse(client.cleared)
@@ -119,6 +123,32 @@ class NotionPublishingTests(unittest.TestCase):
             self.assertIn('"content": "[01:24-02:44]"', rendered)
             self.assertIn('"url": "https://example.test/watch?v=abc&t=84"', rendered)
 
+    def test_nested_key_points_become_nested_notion_bullets(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            self._write_report_files(
+                folder,
+                summary=(
+                    "Summary\n\nShort summary.\n\nKey Points\n\n"
+                    "- [01:24-02:44] Main conclusion.\n"
+                    "  - [01:30-01:40] Supporting detail.\n"
+                ),
+            )
+            client = FakeNotionClient()
+
+            publish_report_to_notion(
+                folder,
+                NotionPublishConfig(token="secret", data_source_id="data-source-123"),
+                client=client,  # type: ignore[arg-type]
+            )
+
+            children = client.appended[0]["children"]
+            rendered = json.dumps(children, ensure_ascii=False)
+            self.assertIn('"type": "bulleted_list_item"', rendered)
+            self.assertIn('"children"', rendered)
+            self.assertIn('"content": "[01:30-01:40]"', rendered)
+            self.assertIn('"url": "https://example.test/watch?v=abc&t=90"', rendered)
+
     def test_foldable_segments_become_notion_toggles(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             folder = Path(tmp)
@@ -148,6 +178,25 @@ class NotionPublishingTests(unittest.TestCase):
             self.assertIn('"url": "https://example.test/watch?v=abc&t=84"', rendered)
             self.assertIn("Natural-language detail without rigid labels.", rendered)
 
+    def test_transcript_is_last_notion_toggle(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            self._write_report_files(folder)
+            client = FakeNotionClient()
+
+            publish_report_to_notion(
+                folder,
+                NotionPublishConfig(token="secret", data_source_id="data-source-123"),
+                client=client,  # type: ignore[arg-type]
+            )
+
+            transcript = client.appended[0]["children"][-1]
+            rendered = json.dumps(transcript, ensure_ascii=False)
+            self.assertEqual(transcript["type"], "toggle")
+            self.assertIn('"content": "Transcript"', rendered)
+            self.assertIn('"type": "code"', rendered)
+            self.assertIn("Transcript text.", rendered)
+
     def _write_report_files(
         self,
         folder: Path,
@@ -163,6 +212,7 @@ class NotionPublishingTests(unittest.TestCase):
             "duration_seconds": 120,
             "published_at": "2026-07-01",
             "processed_at": "2026-07-05T00:00:00+00:00",
+            "processing_seconds": 12.345,
             "transcript_source": "manual_subtitle",
             "transcript_file": "transcript.txt",
         }

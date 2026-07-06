@@ -16,6 +16,7 @@ from .reporting import (
     DETAILS_OPEN_RE,
     SUMMARY_TAG_RE,
     TIMESTAMP_RE,
+    _bullet_line,
     is_summary_section_heading,
     read_metadata,
     source_url_at_time,
@@ -221,14 +222,15 @@ def report_blocks(folder: Path, metadata: dict[str, Any], *, workspace: Path | N
         _bullet("Duration", _duration_label(metadata.get("duration_seconds"))),
         _bullet("Transcript source", metadata.get("transcript_source")),
         _bullet("Processed", metadata.get("processed_at")),
-        _bullet("Local report", str(local_report)),
     ]
+    if metadata.get("processing_seconds") not in (None, ""):
+        blocks.append(_bullet("Processing seconds", metadata.get("processing_seconds")))
+    blocks.append(_bullet("Local report", str(local_report)))
     if workspace:
         blocks.append(_bullet("Workspace", str(workspace)))
 
     blocks.extend(_summary_blocks(summary, source_url))
-    blocks.append(_heading("Transcript", level=2))
-    blocks.extend(_code_blocks(transcript.strip() or "Transcript pending."))
+    blocks.append(_transcript_toggle(transcript, source_url))
     return blocks
 
 
@@ -268,8 +270,19 @@ def _page_properties(schema: dict[str, Any], metadata: dict[str, Any], folder: P
     _maybe_set_property(properties, properties_schema, ["Platform"], metadata.get("platform"))
     _maybe_set_property(properties, properties_schema, ["Channel"], metadata.get("channel"))
     _maybe_set_property(properties, properties_schema, ["Published", "Publish Date"], metadata.get("published_at"))
-    _maybe_set_property(properties, properties_schema, ["Processed", "Processed At"], metadata.get("processed_at"))
+    _maybe_set_property(
+        properties,
+        properties_schema,
+        ["Processed", "Processed At", "Processing Time"],
+        metadata.get("processed_at"),
+    )
     _maybe_set_property(properties, properties_schema, ["Duration Seconds", "Duration"], metadata.get("duration_seconds"))
+    _maybe_set_property(
+        properties,
+        properties_schema,
+        ["Processing Seconds", "Processing Time Seconds", "Processing Duration Seconds"],
+        metadata.get("processing_seconds"),
+    )
     _maybe_set_property(properties, properties_schema, ["Transcript Source", "Source Type"], metadata.get("transcript_source"))
     _maybe_set_property(properties, properties_schema, ["Folder", "Report Folder"], folder.name)
     _maybe_set_property(properties, properties_schema, ["Local Report", "Report Path"], str((folder / "report.html").resolve()))
@@ -347,6 +360,7 @@ def _summary_blocks(summary: str, source_url: str) -> list[dict[str, Any]]:
 def _summary_blocks_from_lines(lines: list[str], source_url: str) -> list[dict[str, Any]]:
     blocks: list[dict[str, Any]] = []
     paragraph: list[str] = []
+    bullets: list[tuple[str, list[str]]] = []
 
     def flush_paragraph() -> None:
         nonlocal paragraph
@@ -354,36 +368,56 @@ def _summary_blocks_from_lines(lines: list[str], source_url: str) -> list[dict[s
             blocks.extend(_paragraph_blocks(" ".join(paragraph), source_url=source_url))
             paragraph = []
 
+    def flush_bullets() -> None:
+        nonlocal bullets
+        if bullets:
+            blocks.extend(_bulleted_item(item, source_url, children) for item, children in bullets)
+            bullets = []
+
     index = 0
     while index < len(lines):
         raw_line = lines[index]
         line = raw_line.strip()
         if not line:
             flush_paragraph()
+            flush_bullets()
+            index += 1
+            continue
+        bullet = _bullet_line(raw_line)
+        if bullet:
+            flush_paragraph()
+            level, text = bullet
+            if level > 0 and bullets:
+                bullets[-1][1].append(text)
+            else:
+                bullets.append((text, []))
             index += 1
             continue
         if DETAILS_OPEN_RE.match(line):
             flush_paragraph()
+            flush_bullets()
             toggle, index = _toggle_block_from_details(lines, index, source_url)
             blocks.append(toggle)
             continue
         if is_summary_section_heading(line):
             flush_paragraph()
+            flush_bullets()
             blocks.append(_heading(line, level=2))
         elif line.startswith("### "):
             flush_paragraph()
+            flush_bullets()
             blocks.append(_heading(line[4:].strip(), level=3))
         elif line.startswith("## "):
             flush_paragraph()
+            flush_bullets()
             blocks.append(_heading(line[3:].strip(), level=2))
-        elif line.startswith("- "):
-            flush_paragraph()
-            blocks.append(_rich_block("bulleted_list_item", _timestamp_rich_text(line[2:].strip(), source_url)))
         else:
+            flush_bullets()
             paragraph.append(line)
         index += 1
 
     flush_paragraph()
+    flush_bullets()
     return blocks
 
 
@@ -455,6 +489,27 @@ def _toggle(text: str, children: list[dict[str, Any]], *, source_url: str) -> di
             "children": children,
         },
     }
+
+
+def _bulleted_item(text: str, source_url: str, children: list[str] | None = None) -> dict[str, Any]:
+    block = _rich_block("bulleted_list_item", _timestamp_rich_text(text, source_url))
+    if children:
+        block["bulleted_list_item"]["children"] = [
+            _bulleted_item(child, source_url) for child in children
+        ]
+    return block
+
+
+def _transcript_toggle(transcript: str, source_url: str) -> dict[str, Any]:
+    code_blocks = _code_blocks(transcript.strip() or "Transcript pending.")
+    if len(code_blocks) <= MAX_CHILDREN_PER_APPEND:
+        children = code_blocks
+    else:
+        children = [
+            _toggle(f"Transcript part {index}", batch, source_url=source_url)
+            for index, batch in enumerate(_batched(code_blocks, MAX_CHILDREN_PER_APPEND), start=1)
+        ]
+    return _toggle("Transcript", children, source_url=source_url)
 
 
 def _paragraph(text: str) -> dict[str, Any]:

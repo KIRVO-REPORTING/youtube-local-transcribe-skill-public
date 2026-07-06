@@ -12,7 +12,7 @@ Use this workflow for bare video URLs and explicit video transcription, summary,
 For bare video links, report requests, Notion sync requests, or the current clean report output, produce the current artifact directly:
 
 1. Process the video with `ytlt process`, preferring captions and falling back to local Whisper only when needed.
-2. Read `metadata.json` and `transcript.txt`; write `summary.md` with an answer-first overview and timestamped segment summaries grounded in the transcript.
+2. Read `metadata.json` and `transcript.txt`; write `summary.md` with an answer-first overview and timestamped Key Points grounded in the transcript.
 3. Run `ytlt finalize "<video-folder>"` to refresh the local `report.html` and dashboard index.
 4. Publish or update the Notion database row report by default. The Notion row opened from `Name` is the report content page.
 5. Rename the current Codex thread to a concise video-topic title when a thread-title tool is available and the current thread id can be resolved.
@@ -28,8 +28,8 @@ The current Notion artifact is:
 - Database named `本地视频报告数据库`.
 - One row per report. Opening `Name` shows the report body itself.
 - No duplicate detail page, no `Report Page` property, and no `Status` property.
-- Row body sections: `摘要`, `分段结论`, `备注`, `来源与本地文件`.
-- Timestamped segment headings are clickable source-video links that seek to the start second.
+- Row body sections: `Summary`, `Key Points`, `Notes`, source/local metadata, and a final folded `Transcript` block.
+- Timestamped Key Points are clickable source-video links that seek to the start second.
 
 ## Setup Check
 
@@ -69,9 +69,9 @@ The JSON output includes the folder and report paths. Read `metadata.json` and `
 
 ## Write The Summary
 
-Write a grounded Markdown summary to `<video-folder>/summary.md`. Use the user's language unless the user requests another language. Prefer a segmented, answer-first structure with foldable segment details over a flat list of bullets.
+Write a grounded Markdown summary to `<video-folder>/summary.md`. Use the user's language unless the user requests another language. Prefer an answer-first structure with timestamped Key Points and optional one-level nested supporting bullets.
 
-Do not force every segment into `Point` / `Evidence` / `Implication` labels. Each segment should use a foldable block whose collapsed title is the timestamp range plus the segment conclusion. Put supporting details inside the folded body using natural prose, short bullets, or brief caveats. Include transcript-backed specifics, examples, claims, or caveats where they materially help, but avoid mechanical labels unless the user explicitly asks for them.
+Do not force every point into `Point` / `Evidence` / `Implication` labels. Use top-level bullets for the video's major conclusions, claims, risks, decisions, or methods. Use nested bullets only when a point needs transcript-backed support, examples, numbers, caveats, or subclaims. Do not add nested bullets just to satisfy the shape.
 
 Use this structure:
 
@@ -80,29 +80,23 @@ Summary
 
 One-paragraph answer-first summary naming the video's core conclusion.
 
-Segment Conclusions
+Key Points
 
-<details>
-<summary>[mm:ss-mm:ss] Segment conclusion</summary>
+- [mm:ss-mm:ss] Point 1.
+  - [mm:ss-mm:ss] Supporting detail, example, subclaim, number, or caveat.
+  - [mm:ss-mm:ss] Another supporting detail when it materially helps.
 
-Short paragraph or 2-4 concise bullets explaining the takeaway, the key supporting detail, and why it matters when useful.
-</details>
-
-<details>
-<summary>[mm:ss-mm:ss] Segment conclusion</summary>
-
-- Concise takeaway from this segment.
-- Concrete transcript-backed detail, example, claim, or caveat.
-</details>
+- [mm:ss-mm:ss] Point 2.
+- [mm:ss-mm:ss] Point 3.
 
 Notes
 
 - Caveats about subtitle quality, audio quality, uncertain terms, or incomplete transcript.
 ```
 
-For video reports, each `<summary>` line must start with a bracketed timestamp or time range such as `[01:24-02:44]`, using the transcript's actual timing. Use `[hh:mm:ss-hh:mm:ss]` for videos longer than one hour. The report renderer and CLI Notion publisher convert bracketed timestamps into clickable source-video links that seek to the start time, so keep the timestamp at the beginning of each folded segment summary. When writing report content through the Notion connector Markdown path, avoid colons in the linked label because Notion can split the link; use an inline link like `[01m24s-02m44s](https://www.youtube.com/watch?v=VIDEO_ID&t=84)` instead of leaving it as plain text.
+For video reports, each Key Point bullet and nested supporting bullet should start with a bracketed timestamp or time range such as `[01:24-02:44]`, using the transcript's actual timing. Use `[hh:mm:ss-hh:mm:ss]` for videos longer than one hour. The report renderer and CLI Notion publisher convert bracketed timestamps into clickable source-video links that seek to the start time, so keep the timestamp at the beginning of each bullet. When writing report content through the Notion connector Markdown path, avoid colons in the linked label because Notion can split the link; use an inline link like `[01m24s-02m44s](https://www.youtube.com/watch?v=VIDEO_ID&t=84)` instead of leaving it as plain text.
 
-For long videos, consider parallel drafting after reading the full transcript once. Treat a video as long when it is roughly over 45 minutes, has a very large transcript, or naturally breaks into many segments. Split the transcript into contiguous timestamp ranges and, when subagents or parallel work are available, draft each range independently into candidate `<details>` blocks. Each parallel draft must receive only the metadata, its transcript slice, neighboring boundary context when needed, and the output structure above. The main agent must then merge the drafts into one coherent `summary.md`, remove repetition, normalize segment titles, verify timestamp ranges against the transcript, and keep the final response focused on the report rather than the coordination process.
+For long videos, consider parallel drafting after reading the full transcript once. Treat a video as long when it is roughly over 45 minutes, has a very large transcript, or naturally breaks into many segments. Split the transcript into contiguous timestamp ranges and, when subagents or parallel work are available, draft each range independently into candidate Key Points. Each parallel draft must receive only the metadata, its transcript slice, neighboring boundary context when needed, and the output structure above. The main agent must then merge the drafts into one coherent `summary.md`, remove repetition, normalize point wording, verify timestamp ranges against the transcript, and keep the final response focused on the report rather than the coordination process.
 
 Finalize:
 
@@ -163,6 +157,7 @@ Create or reuse a database named `本地视频报告数据库` under the parent 
 - `Source URL` URL
 - `Published` date
 - `Processed` date
+- `Processing Seconds` number
 - `Duration Seconds` number
 - `Summary` rich text
 - `Local Report` rich text
@@ -175,31 +170,33 @@ Create database views:
 - `Whisper`: filter `Transcript Source = local_whisper`.
 - `Recent`: recent reports without status filtering.
 
-For each report, create one database row as the only Notion report page. Put the report content directly inside that row page so opening `Name` shows metadata, source link, summary, segment conclusions, notes, and local report path. Keep full transcripts local unless the user explicitly asks to copy them into Notion.
+For each report, create one database row as the only Notion report page. Put the report content directly inside that row page so opening `Name` shows metadata, source link, summary, Key Points, notes, local report path, and the full transcript. The full transcript should be included by default as the final folded `Transcript` block, not as always-expanded page text.
 
 Use this row body structure:
 
 ```text
-## 摘要
+## Summary
 One answer-first summary paragraph.
 
-## 分段结论
-<details>
-<summary>[01m24s-02m44s](SOURCE_URL_WITH_t=84) Segment conclusion</summary>
+## Key Points
+- [01m24s-02m44s](SOURCE_URL_WITH_t=84) Main conclusion.
+  - [01m30s-01m40s](SOURCE_URL_WITH_t=90) Concrete transcript-backed detail, example, number, or caveat.
 
-Short paragraph or 2-4 concise bullets explaining the segment's takeaway with concrete transcript-backed details. Do not force `Point` / `Evidence` / `Implication` labels unless the user asks for that format.
-</details>
-
-## 备注
+## Notes
 - Caveats about subtitles, transcription, uncertain terms, or source claims.
 
-## 来源与本地文件
+## Source And Local Files
 - Source: SOURCE_URL
 - Platform: youtube | bilibili | video
 - Channel: CHANNEL
 - Published: DATE
 - Transcript Source: manual_subtitle | auto_subtitle | local_whisper
+- Processing Seconds: PROCESSING_SECONDS
 - Local Report: /absolute/path/to/report.html
+
+<toggle title="Transcript">
+Full transcript text.
+</toggle>
 ```
 
 Before syncing existing local reports, scan for folders containing both `metadata.json` and `report.html`; also read `index.json` when present. Deduplicate by `source_url`, then `platform + id`, then folder path. Skip evaluation and `.test-workspace` artifacts unless the user asks for every local report or explicitly includes tests.
@@ -223,28 +220,20 @@ When a Codex thread-management tool is available and the current thread id can b
 Final responses should use this shape:
 
 ```text
-已完成：VIDEO_TITLE
+Completed: VIDEO_TITLE
 
-Notion 报告：NOTION_ROW_URL
-本地报告：/absolute/path/to/report.html
+Notion report: NOTION_ROW_URL
+Local report: /absolute/path/to/report.html
 
-摘要：One concise answer-first paragraph.
+Summary: One concise answer-first paragraph.
 
-分段结论
+Key Points
 
-<details>
-<summary>[mm:ss-mm:ss] Segment conclusion</summary>
+- [mm:ss-mm:ss] Main point.
+  - [mm:ss-mm:ss] Optional supporting detail or caveat.
+- [mm:ss-mm:ss] Second main point.
 
-Concise natural-language details, examples, or caveats from this segment.
-</details>
-
-<details>
-<summary>[mm:ss-mm:ss] Segment conclusion</summary>
-
-Concise natural-language details, examples, or caveats from this segment.
-</details>
-
-备注：Only include caveats or failures that affect trust in the result.
+Notes: Only include caveats or failures that affect trust in the result. Do not include the full transcript in the chat response; it is included in Notion as the final folded Transcript block.
 ```
 
 Keep this response compact. Include conversion/process details only when they change the outcome, explain a failure, or the user explicitly asks for them.

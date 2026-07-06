@@ -152,7 +152,7 @@ def render_summary(text: str, source_url: str | None = None) -> str:
 def _render_summary_lines(lines: list[str], source_url: str | None = None) -> str:
     blocks: list[str] = []
     paragraph: list[str] = []
-    bullets: list[str] = []
+    bullets: list[tuple[str, list[str]]] = []
 
     def flush_paragraph() -> None:
         nonlocal paragraph
@@ -163,8 +163,18 @@ def _render_summary_lines(lines: list[str], source_url: str | None = None) -> st
     def flush_bullets() -> None:
         nonlocal bullets
         if bullets:
-            items = "\n".join(f"<li>{render_inline(item, source_url)}</li>" for item in bullets)
-            blocks.append(f"<ul>\n{items}\n</ul>")
+            items: list[str] = []
+            for item, children in bullets:
+                rendered_item = render_inline(item, source_url)
+                if children:
+                    child_items = "\n".join(
+                        f"<li>{render_inline(child, source_url)}</li>" for child in children
+                    )
+                    items.append(f"<li>{rendered_item}\n<ul>\n{child_items}\n</ul>\n</li>")
+                else:
+                    items.append(f"<li>{rendered_item}</li>")
+            joined_items = "\n".join(items)
+            blocks.append(f"<ul>\n{joined_items}\n</ul>")
             bullets = []
 
     index = 0
@@ -174,6 +184,16 @@ def _render_summary_lines(lines: list[str], source_url: str | None = None) -> st
         if not line:
             flush_paragraph()
             flush_bullets()
+            index += 1
+            continue
+        bullet = _bullet_line(raw_line)
+        if bullet:
+            flush_paragraph()
+            level, text = bullet
+            if level > 0 and bullets:
+                bullets[-1][1].append(text)
+            else:
+                bullets.append((text, []))
             index += 1
             continue
         if DETAILS_OPEN_RE.match(line):
@@ -194,9 +214,6 @@ def _render_summary_lines(lines: list[str], source_url: str | None = None) -> st
             flush_paragraph()
             flush_bullets()
             blocks.append(f"<h2>{html.escape(line[3:].strip())}</h2>")
-        elif line.startswith("- "):
-            flush_paragraph()
-            bullets.append(line[2:].strip())
         else:
             flush_bullets()
             paragraph.append(line)
@@ -205,6 +222,15 @@ def _render_summary_lines(lines: list[str], source_url: str | None = None) -> st
     flush_paragraph()
     flush_bullets()
     return "\n".join(blocks)
+
+
+def _bullet_line(raw_line: str) -> tuple[int, str] | None:
+    expanded = raw_line.expandtabs(2)
+    stripped = expanded.lstrip(" ")
+    if not stripped.startswith("- "):
+        return None
+    indent = len(expanded) - len(stripped)
+    return (1 if indent >= 2 else 0, stripped[2:].strip())
 
 
 def _render_details_block(
@@ -258,6 +284,8 @@ def build_report_html(metadata: dict[str, Any], summary: str, transcript: str) -
         ("Transcript source", html.escape(str(metadata.get("transcript_source") or "Unknown"))),
         ("Transcript file", f"<code>{html.escape(str(metadata.get('transcript_file', 'transcript.txt')))}</code>"),
     ]
+    if metadata.get("processing_seconds") not in (None, ""):
+        rows.insert(-2, ("Processing time", f"{html.escape(str(metadata.get('processing_seconds')))} seconds"))
     metadata_rows = "\n".join(f"<tr><th>{label}</th><td>{value}</td></tr>" for label, value in rows)
     transcript_text = html.escape(transcript.strip())
     summary_html = render_summary(summary, str(metadata.get("source_url") or ""))

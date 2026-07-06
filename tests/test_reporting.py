@@ -36,6 +36,27 @@ Key Points
         self.assertIn("watch?v=abc&amp;t=3723", rendered)
         self.assertIn("t=3723", rendered)
 
+    def test_nested_key_points_render_as_nested_bullets(self) -> None:
+        summary = """Summary
+
+Short summary.
+
+Key Points
+
+- [01:24-02:44] Main conclusion.
+  - [01:30-01:40] Supporting detail.
+  - [01:41-01:50] Supporting caveat.
+
+- [02:45-03:10] Second conclusion.
+"""
+
+        rendered = render_summary(summary, "https://www.youtube.com/watch?v=abc")
+
+        self.assertGreaterEqual(rendered.count("<ul>"), 2)
+        self.assertIn("watch?v=abc&amp;t=84", rendered)
+        self.assertIn("watch?v=abc&amp;t=90", rendered)
+        self.assertIn("Supporting caveat.", rendered)
+
     def test_foldable_segment_details_render_as_details(self) -> None:
         summary = """Summary
 

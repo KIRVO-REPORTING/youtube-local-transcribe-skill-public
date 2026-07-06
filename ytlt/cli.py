@@ -6,6 +6,7 @@ import json
 import shutil
 import subprocess
 import sys
+import time
 import webbrowser
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 from pathlib import Path
@@ -139,6 +140,7 @@ def download_video(
 
 
 def process_url(args: argparse.Namespace) -> int:
+    processing_started = time.perf_counter()
     workspace = _workspace(args.workspace)
     output_root = Path(args.output_root).expanduser().resolve() if args.output_root else workspace / "processed"
     output_root.mkdir(parents=True, exist_ok=True)
@@ -208,6 +210,7 @@ def process_url(args: argparse.Namespace) -> int:
         metadata["ffmpeg"] = ffmpeg_path
 
     metadata["transcript_file"] = transcript_path.name
+    metadata["processing_seconds"] = round(time.perf_counter() - processing_started, 3)
     metadata_path = folder / "metadata.json"
     metadata_path.write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     report_path = write_report(folder, metadata)
