@@ -83,7 +83,10 @@ def _transcribe_with_faster_whisper(
     try:
         from faster_whisper import WhisperModel
     except ImportError as exc:
-        raise RuntimeError("Install faster-whisper with: python -m pip install -e '.[faster-whisper]'") from exc
+        raise RuntimeError(
+            "faster-whisper is not installed. Run ytlt configure --model-choice recommended --execute, "
+            "or run ./install.sh first if the project is not installed yet."
+        ) from exc
 
     whisper = WhisperModel(model, device=device, compute_type=compute_type)
     segments_iter, info = whisper.transcribe(str(video_path), language=language, beam_size=5)
@@ -128,7 +131,10 @@ def _transcribe_with_mlx(
     try:
         import mlx_whisper
     except ImportError as exc:
-        raise RuntimeError("Install mlx-whisper with: python -m pip install -e '.[mlx]'") from exc
+        raise RuntimeError(
+            "mlx-whisper is not installed. Run ytlt configure --model-choice recommended --execute, "
+            "or run ./install.sh first if the project is not installed yet."
+        ) from exc
 
     kwargs = {"path_or_hf_repo": model}
     if language:

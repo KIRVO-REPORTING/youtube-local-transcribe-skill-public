@@ -34,7 +34,7 @@ Caption first. Local Whisper when needed. Searchable local reports. Optional Not
 把下面这一行复制给 Codex 或 Claude Code，它就可以按这个项目的方式安装和配置：
 
 ```text
-请安装并配置 youtube-local-transcribe public 分支：克隆 https://github.com/KIRVO-REPORTING/youtube-local-transcribe-skill-public 的 public 分支，进入仓库后运行 python -m pip install -e .；如果当前工具是 Codex，请把 codex-skill 安装到 ~/.codex/skills/youtube-local-transcribe；然后运行 ytlt configure，让用户选择常用语言、硬件推荐的 Whisper fallback 模型或不安装模型，以及默认输出环境 local/notion/obsidian；最后用 ytlt process "VIDEO_URL" 处理视频。
+请安装并配置 youtube-local-transcribe：克隆 https://github.com/KIRVO-REPORTING/youtube-local-transcribe-skill-public，进入仓库后在 macOS/Linux 运行 ./install.sh，Windows PowerShell 运行 powershell -ExecutionPolicy Bypass -File .\install.ps1；如果脚本提示没有 Python，请先按脚本给出的系统指令安装 Python 3.9+ 后重跑；如果当前工具是 Codex，请把 codex-skill 安装到 ~/.codex/skills/youtube-local-transcribe；然后运行 ytlt configure，让用户选择常用语言、硬件推荐的 Whisper fallback 模型或不安装模型，以及默认输出环境 local/notion/obsidian；最后用 ytlt process "VIDEO_URL" 处理视频。
 ```
 
 ### 工作流程简介
@@ -49,13 +49,25 @@ Caption first. Local Whisper when needed. Searchable local reports. Optional Not
 
 ### 快速安装
 
+推荐使用仓库自带的 bootstrap 脚本。它会先检测 Python 3.9+、pip 和 venv；如果缺失，会给出 macOS、Linux 或 Windows 的安装指令。检测通过后，它会创建 `.venv`、安装基础依赖，并提示是否启动 `ytlt configure`。
+
+macOS / Linux:
+
 ```bash
-git clone --branch public --single-branch https://github.com/KIRVO-REPORTING/youtube-local-transcribe-skill-public.git
+git clone https://github.com/KIRVO-REPORTING/youtube-local-transcribe-skill-public.git
 cd youtube-local-transcribe-skill-public
-python -m pip install -e .
+./install.sh
 ```
 
-安装后先运行交互式配置：
+Windows PowerShell:
+
+```powershell
+git clone https://github.com/KIRVO-REPORTING/youtube-local-transcribe-skill-public.git
+cd youtube-local-transcribe-skill-public
+powershell -ExecutionPolicy Bypass -File .\install.ps1
+```
+
+如果安装脚本没有自动启动配置，手动运行：
 
 ```bash
 ytlt configure
@@ -76,7 +88,27 @@ ytlt configure --language zh --model-choice recommended --environment obsidian -
 ytlt configure --language zh --model-choice none --environment local
 ```
 
-`--execute` 会安装推荐后端、确认 ffmpeg、按硬件条件下载或配置推荐模型，并写入 workspace 配置。`ytlt setup --execute` 仍然可用，但 public 分支推荐先用 `ytlt configure`，因为它同时保存语言和输出环境偏好。
+`--execute` 会安装推荐后端、确认 ffmpeg、按硬件条件下载或配置推荐模型，并写入 workspace 配置。`ytlt setup --execute` 仍然可用，但推荐先用 `ytlt configure`，因为它同时保存语言和输出环境偏好。
+
+如果你已经有 Python 3.9+，也可以手动安装到虚拟环境：
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install -e .
+ytlt configure
+```
+
+Windows PowerShell 手动安装：
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install -e .
+ytlt configure
+```
 
 处理一个视频：
 
@@ -225,6 +257,9 @@ Obsidian 发布会在 vault 中创建或更新一篇 Markdown 报告，并维护
 ### 本地开发
 
 ```bash
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install --upgrade pip setuptools wheel
 python -m pip install -e .
 python -m unittest discover -s tests
 ```
@@ -239,7 +274,7 @@ ytlt process "https://www.ted.com/talks/sir_ken_robinson_do_schools_kill_creativ
 
 - 需要 Python 3.9 或更新版本，推荐 Python 3.10+。
 - 字幕永远优先于本地 Whisper。
-- public 分支推荐 `ytlt configure`；`ytlt setup --execute` 只配置模型，不保存语言和输出环境偏好。
+- 推荐 `ytlt configure`；`ytlt setup --execute` 只配置模型，不保存语言和输出环境偏好。
 - 选择不安装 Whisper 模型不推荐；有字幕的视频仍可处理，但无字幕视频无法本地 fallback。
 - 硬件模型选择规则见 `codex-skill/references/model-selection.md`。
 - workspace、下载媒体、模型、虚拟环境和构建产物会被 `.gitignore` 排除。
@@ -266,7 +301,7 @@ This project makes the workflow repeatable: captions first, local transcription 
 Copy this single line into Codex or Claude Code:
 
 ```text
-Install and configure the public branch of youtube-local-transcribe: clone the public branch from https://github.com/KIRVO-REPORTING/youtube-local-transcribe-skill-public, run python -m pip install -e . from the repo, install codex-skill to ~/.codex/skills/youtube-local-transcribe if this is Codex, then run ytlt configure so the user can choose their usual language, the hardware-recommended Whisper fallback model or no model, and the default output environment local/notion/obsidian; finally process a video with ytlt process "VIDEO_URL".
+Install and configure youtube-local-transcribe: clone https://github.com/KIRVO-REPORTING/youtube-local-transcribe-skill-public, enter the repo, run ./install.sh on macOS/Linux or powershell -ExecutionPolicy Bypass -File .\install.ps1 in Windows PowerShell; if the script says Python is missing, install Python 3.9+ using the script's OS-specific instructions and re-run it; if this is Codex, install codex-skill to ~/.codex/skills/youtube-local-transcribe; then run ytlt configure so the user can choose their usual language, the hardware-recommended Whisper fallback model or no model, and the default output environment local/notion/obsidian; finally process a video with ytlt process "VIDEO_URL".
 ```
 
 ### Workflow overview
@@ -281,13 +316,25 @@ Install and configure the public branch of youtube-local-transcribe: clone the p
 
 ### Quick install
 
+Use the repository bootstrap script first. It checks for Python 3.9+, pip, and venv support; if something is missing, it prints platform-specific install instructions. After the checks pass, it creates `.venv`, installs the base dependencies, and offers to start `ytlt configure`.
+
+macOS / Linux:
+
 ```bash
-git clone --branch public --single-branch https://github.com/KIRVO-REPORTING/youtube-local-transcribe-skill-public.git
+git clone https://github.com/KIRVO-REPORTING/youtube-local-transcribe-skill-public.git
 cd youtube-local-transcribe-skill-public
-python -m pip install -e .
+./install.sh
 ```
 
-Run the interactive configuration wizard after installing:
+Windows PowerShell:
+
+```powershell
+git clone https://github.com/KIRVO-REPORTING/youtube-local-transcribe-skill-public.git
+cd youtube-local-transcribe-skill-public
+powershell -ExecutionPolicy Bypass -File .\install.ps1
+```
+
+If the installer did not start the wizard automatically, run:
 
 ```bash
 ytlt configure
@@ -308,7 +355,27 @@ ytlt configure --language en --model-choice recommended --environment obsidian -
 ytlt configure --language en --model-choice none --environment local
 ```
 
-`--execute` installs the selected backend, verifies ffmpeg, downloads or configures the recommended model when needed, and writes workspace configuration. `ytlt setup --execute` remains available, but the public branch recommends `ytlt configure` because it also saves language and output-environment preferences.
+`--execute` installs the selected backend, verifies ffmpeg, downloads or configures the recommended model when needed, and writes workspace configuration. `ytlt setup --execute` remains available, but `ytlt configure` is recommended because it also saves language and output-environment preferences.
+
+If Python 3.9+ is already installed and you prefer a manual setup, use a virtual environment:
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install -e .
+ytlt configure
+```
+
+Windows PowerShell manual setup:
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install -e .
+ytlt configure
+```
 
 Process a video:
 
@@ -457,6 +524,9 @@ Obsidian publishing creates or updates a Markdown report note in the vault and m
 ### Local development
 
 ```bash
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install --upgrade pip setuptools wheel
 python -m pip install -e .
 python -m unittest discover -s tests
 ```
@@ -471,7 +541,7 @@ ytlt process "https://www.ted.com/talks/sir_ken_robinson_do_schools_kill_creativ
 
 - Python 3.9+ is required. Python 3.10+ is recommended.
 - Captions are always preferred before local Whisper.
-- The public branch recommends `ytlt configure`; `ytlt setup --execute` only configures the model and does not save language or output-environment preferences.
+- `ytlt configure` is recommended; `ytlt setup --execute` only configures the model and does not save language or output-environment preferences.
 - Choosing no Whisper model is not recommended. Captioned videos still work, but captionless videos cannot fall back to local transcription.
 - Hardware model selection lives in `codex-skill/references/model-selection.md`.
 - Generated workspaces, downloaded media, models, virtual environments, and build metadata are ignored by `.gitignore`.

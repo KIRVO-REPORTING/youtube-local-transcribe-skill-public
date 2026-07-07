@@ -123,7 +123,10 @@ def _import_yt_dlp():
     try:
         import yt_dlp
     except ImportError as exc:
-        raise SystemExit("yt-dlp is required. Install with: python -m pip install yt-dlp") from exc
+        raise SystemExit(
+            "yt-dlp is required. From the repository root, run ./install.sh "
+            "or powershell -ExecutionPolicy Bypass -File .\\install.ps1."
+        ) from exc
     return yt_dlp
 
 

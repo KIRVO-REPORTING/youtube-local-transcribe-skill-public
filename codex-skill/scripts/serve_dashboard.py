@@ -8,7 +8,7 @@ def main() -> int:
     try:
         from ytlt.cli import main as ytlt_main
     except ImportError:
-        print("ytlt is not installed. From the public repository root, run: python -m pip install -e .", file=sys.stderr)
+        print("ytlt is not installed. From the repository root, run ./install.sh or install.ps1.", file=sys.stderr)
         return 2
     return ytlt_main(["serve", *sys.argv[1:]])
 

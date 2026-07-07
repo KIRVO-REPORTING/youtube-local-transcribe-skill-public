@@ -33,10 +33,40 @@ The current Notion artifact is:
 
 ## Setup Check
 
-If `ytlt` is not installed, ask the user to install the public package or run from the repository root:
+If `ytlt` is not installed and this repository is available, install from the repository root with the bootstrap script. The script checks for Python 3.9+, pip, and venv support, creates `.venv`, installs required Python packages, and then offers to run `ytlt configure`.
 
 ```bash
-python -m pip install -e .
+./install.sh
+```
+
+For Windows PowerShell:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\install.ps1
+```
+
+If Python is missing, stop and follow the script's OS-specific Python installation instructions before continuing. Do not ask users to install Python packages manually unless they chose a manual setup path.
+
+For non-interactive agent setup, skip the installer prompt and then run configuration explicitly:
+
+```bash
+YTLT_SKIP_CONFIGURE=1 ./install.sh
+.venv/bin/ytlt probe
+.venv/bin/ytlt configure
+```
+
+For Windows PowerShell non-interactive setup:
+
+```powershell
+$env:YTLT_SKIP_CONFIGURE = "1"
+powershell -ExecutionPolicy Bypass -File .\install.ps1
+.\.venv\Scripts\ytlt.exe probe
+.\.venv\Scripts\ytlt.exe configure
+```
+
+If `ytlt` is already on PATH, run:
+
+```bash
 ytlt probe
 ytlt configure
 ```
