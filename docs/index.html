@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>video-to-notes: YouTube/Bilibili transcript, Whisper fallback, and AI notes CLI</title>
+  <meta name="description" content="video-to-notes is a local-first Python CLI that turns YouTube, Bilibili, TED, and other yt-dlp video URLs into transcripts, timestamped AI summaries, searchable HTML reports, and Notion or Obsidian notes.">
+  <link rel="canonical" href="https://kirvo-reporting.github.io/video-to-notes/">
+  <meta property="og:title" content="video-to-notes: video transcripts and timestamped AI notes">
+  <meta property="og:description" content="Caption-first video transcription CLI with local Whisper fallback, HTML reports, Notion export, Obsidian export, and Codex skill support.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://kirvo-reporting.github.io/video-to-notes/">
+  <meta property="og:image" content="https://kirvo-reporting.github.io/video-to-notes/assets/social-preview.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="video-to-notes: video transcripts and timestamped AI notes">
+  <meta name="twitter:description" content="Local-first video-to-notes CLI for YouTube, Bilibili, Whisper fallback, Notion, Obsidian, and Codex workflows.">
+  <meta name="twitter:image" content="https://kirvo-reporting.github.io/video-to-notes/assets/social-preview.png">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #15202b;
+      --muted: #52616f;
+      --line: #d8e1ea;
+      --accent: #0f766e;
+      --surface: #f6f8fb;
+    }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: #fff;
+      line-height: 1.6;
+    }
+    main {
+      width: min(980px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 56px 0 72px;
+    }
+    h1 {
+      margin: 0 0 16px;
+      font-size: clamp(2.2rem, 6vw, 4.8rem);
+      line-height: 1.02;
+      letter-spacing: 0;
+    }
+    h2 {
+      margin-top: 40px;
+      font-size: 1.45rem;
+    }
+    p {
+      max-width: 760px;
+      font-size: 1.08rem;
+    }
+    .lede {
+      font-size: 1.28rem;
+      color: var(--muted);
+    }
+    a {
+      color: var(--accent);
+    }
+    pre {
+      overflow-x: auto;
+      padding: 18px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+    }
+    ul {
+      padding-left: 1.2rem;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .item {
+      border-top: 1px solid var(--line);
+      padding-top: 14px;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>video-to-notes</h1>
+    <p class="lede"><strong>video-to-notes</strong> is a local-first Python CLI that turns YouTube, Bilibili, TED, and other yt-dlp video URLs into transcripts, timestamped AI summaries, searchable HTML reports, and optional Notion or Obsidian notes.</p>
+
+    <h2>Use cases</h2>
+    <div class="grid">
+      <div class="item">YouTube transcript to notes</div>
+      <div class="item">Bilibili video transcript and summary</div>
+      <div class="item">Local Whisper fallback transcription</div>
+      <div class="item">Timestamped AI summaries</div>
+      <div class="item">Notion and Obsidian video knowledge base</div>
+      <div class="item">Codex skill for video research workflows</div>
+    </div>
+
+    <h2>Quick start</h2>
+    <pre><code>git clone https://github.com/KIRVO-REPORTING/video-to-notes.git
+cd video-to-notes
+./install.sh
+video-to-notes configure
+video-to-notes process "VIDEO_URL"</code></pre>
+
+    <h2>Why caption-first?</h2>
+    <p>Many videos already include usable captions. video-to-notes uses captions first and only runs local Whisper when captions are missing or unsuitable.</p>
+
+    <h2>Links</h2>
+    <ul>
+      <li><a href="https://github.com/KIRVO-REPORTING/video-to-notes">GitHub repository</a></li>
+      <li><a href="./faq.html">FAQ</a></li>
+      <li><a href="./quickstart.html">Quickstart</a></li>
+      <li><a href="./examples.html">Examples</a></li>
+      <li><a href="./comparison.html">Comparison</a></li>
+      <li><a href="./youtube-to-notion.html">YouTube to Notion guide</a></li>
+      <li><a href="./bilibili-to-notes.html">Bilibili to notes guide</a></li>
+      <li><a href="./local-whisper-video-transcription.html">Local Whisper guide</a></li>
+    </ul>
+  </main>
+</body>
+</html>

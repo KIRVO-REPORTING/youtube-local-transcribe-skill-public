@@ -1,11 +1,44 @@
-# video-to-notes
+# video-to-notes: YouTube/Bilibili transcript, Whisper fallback, and AI notes CLI
 
-Caption first. Local Whisper when needed. Searchable local reports. Optional Notion or Obsidian publishing.
+**video-to-notes** is a local-first Python CLI that turns YouTube, Bilibili, TED, and other `yt-dlp` supported video URLs into transcripts, timestamped AI summaries, searchable HTML reports, and optional Notion or Obsidian notes.
 
-`video-to-notes` turns YouTube, Bilibili, TED, and other `yt-dlp` supported video URLs into local transcripts, grounded summaries, browser-readable HTML reports, and optional Notion or Obsidian knowledge-base entries.
+It uses existing captions first and runs local Whisper only when captions are missing, reducing compute cost while keeping transcripts and summaries traceable.
+
+## What you can use it for
+
+- Turn YouTube videos into timestamped notes
+- Turn Bilibili videos into transcripts and summaries
+- Create local Whisper fallback transcripts
+- Build a searchable video research archive
+- Publish video notes to Notion or Obsidian
+- Give Codex or Claude Code a repeatable video-to-report workflow
+
+## Quick start
+
+```bash
+git clone https://github.com/KIRVO-REPORTING/video-to-notes.git
+cd video-to-notes
+./install.sh
+video-to-notes configure
+video-to-notes process "VIDEO_URL"
+```
+
+## Why it is different
+
+| Feature | video-to-notes |
+|---|---|
+| Caption-first workflow | Uses existing captions before local transcription |
+| Local Whisper fallback | Runs local transcription only when needed |
+| Grounded summaries | Keeps transcripts and timestamps available for verification |
+| Knowledge-base output | Publishes to local HTML, Notion, or Obsidian |
+| Agent workflow | Includes a Codex skill for repeatable AI-assisted reports |
 
 - [中文说明](#中文说明)
 - [English](#english)
+- [FAQ](docs/faq.md)
+- [Quickstart](docs/quickstart.md)
+- [Examples](docs/examples.md)
+- [Comparison](docs/comparison.md)
 
 ## 中文说明
 

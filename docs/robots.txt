@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kirvo-reporting.github.io/video-to-notes/sitemap.xml

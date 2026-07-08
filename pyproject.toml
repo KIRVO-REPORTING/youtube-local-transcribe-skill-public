@@ -1,13 +1,46 @@
 [build-system]
-requires = ["setuptools>=68"]
+requires = ["setuptools>=77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "video-to-notes"
 version = "0.1.0"
-description = "Turn video links into transcripts, summaries, reports, and local/Notion/Obsidian notes."
+description = "Local-first video-to-notes CLI: captions, Whisper fallback, timestamped summaries, HTML reports, and Notion/Obsidian export."
 readme = "README.md"
 requires-python = ">=3.9"
+license = "MIT"
+license-files = ["LICENSE"]
+keywords = [
+  "video transcription",
+  "youtube transcript",
+  "bilibili transcript",
+  "whisper",
+  "yt-dlp",
+  "ai notes",
+  "timestamped summaries",
+  "notion",
+  "obsidian",
+  "codex skill",
+  "python cli",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Education",
+  "Intended Audience :: Information Technology",
+  "Operating System :: MacOS",
+  "Operating System :: Microsoft :: Windows",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Topic :: Multimedia :: Video",
+  "Topic :: Text Processing",
+  "Topic :: Utilities",
+]
 dependencies = [
   "yt-dlp>=2025.1.0",
   "imageio-ffmpeg>=0.5.0",
@@ -29,6 +62,12 @@ all = [
   "imageio-ffmpeg>=0.5.0",
   "mlx-whisper>=0.4.0",
 ]
+
+[project.urls]
+Homepage = "https://kirvo-reporting.github.io/video-to-notes/"
+Repository = "https://github.com/KIRVO-REPORTING/video-to-notes"
+Issues = "https://github.com/KIRVO-REPORTING/video-to-notes/issues"
+Changelog = "https://github.com/KIRVO-REPORTING/video-to-notes/releases"
 
 [project.scripts]
 video-to-notes = "ytlt.cli:main"
