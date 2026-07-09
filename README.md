@@ -14,13 +14,15 @@ Caption first. Local Whisper when needed. Searchable local reports. Optional Not
 `video-to-notes` 是一个面向 AI Coding Agent 和命令行用户的视频资料整理工具。它会优先下载视频自带字幕，在没有合适字幕时才使用本地 Whisper 转写，并把每个视频整理成可追溯的本地报告。
 
 <p align="center">
-  <a href="docs/assets/video-to-notes-intro-zh.mp4">
+  <a href="https://kirvo-reporting.github.io/video-to-notes/#zh">
     <img src="docs/assets/video-to-notes-intro-zh-poster.jpg" alt="video-to-notes 中文介绍视频" width="100%">
   </a>
 </p>
 
 <p align="center">
-  <a href="docs/assets/video-to-notes-intro-zh.mp4">观看中文版介绍视频</a>
+  <a href="https://kirvo-reporting.github.io/video-to-notes/#zh">观看中文版介绍视频</a>
+  ·
+  <a href="https://kirvo-reporting.github.io/video-to-notes/assets/video-to-notes-intro-zh.mp4">直接打开 MP4</a>
 </p>
 
 这个仓库包含两部分：
@@ -298,13 +300,15 @@ video-to-notes process "https://www.ted.com/talks/sir_ken_robinson_do_schools_ki
 `video-to-notes` is a video knowledge capture workflow for AI coding agents and command-line users. It prefers existing captions, falls back to local Whisper only when captions are missing or unsuitable, and turns each video into a traceable local report.
 
 <p align="center">
-  <a href="docs/assets/video-to-notes-intro-en.mp4">
+  <a href="https://kirvo-reporting.github.io/video-to-notes/#en">
     <img src="docs/assets/video-to-notes-intro-en-poster.jpg" alt="video-to-notes English intro video" width="100%">
   </a>
 </p>
 
 <p align="center">
-  <a href="docs/assets/video-to-notes-intro-en.mp4">Watch the English intro video</a>
+  <a href="https://kirvo-reporting.github.io/video-to-notes/#en">Watch the English intro video</a>
+  ·
+  <a href="https://kirvo-reporting.github.io/video-to-notes/assets/video-to-notes-intro-en.mp4">Open MP4 directly</a>
 </p>
 
 This repository contains:
