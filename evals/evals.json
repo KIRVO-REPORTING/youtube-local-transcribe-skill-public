@@ -1,0 +1,20 @@
+{
+  "skill_name": "video-to-notes",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Process a YouTube video about Meta AI data centers, CPO optical networking, and memory chips, then publish it to Notion and Obsidian.",
+      "expected_output": "The agent reads the full transcript, creates tags.json with 3-8 evidence-based subject tags, and both Notion Tags and Obsidian tags contain only semantic topics such as AI infrastructure, Meta, optical networking, and memory chips."
+    },
+    {
+      "id": 2,
+      "prompt": "整理这个 Bilibili 视频并同步到 Obsidian。",
+      "expected_output": "The agent generates Chinese content tags from the transcript and does not emit bilibili, video, video-report, video-to-notes, transcript-source, or other provenance/workflow tags."
+    },
+    {
+      "id": 3,
+      "prompt": "Publish an already processed report whose transcript is empty.",
+      "expected_output": "The agent writes an empty tags list instead of inventing topics, and publishers do not substitute platform or workflow tags."
+    }
+  ]
+}

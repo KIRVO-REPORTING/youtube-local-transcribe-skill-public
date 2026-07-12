@@ -12,6 +12,7 @@ from typing import Any
 from .reporting import (
     TIMESTAMP_RE,
     is_summary_section_heading,
+    read_content_tags,
     read_metadata,
     source_url_at_time,
     summary_file_path,
@@ -145,6 +146,7 @@ def report_markdown(
     transcript_path = folder / str(metadata.get("transcript_file") or "transcript.txt")
     transcript = transcript_path.read_text(encoding="utf-8-sig") if transcript_path.exists() else ""
     local_report = folder / "report.html"
+    content_tags = read_content_tags(folder)
 
     frontmatter = _frontmatter(
         {
@@ -160,7 +162,7 @@ def report_markdown(
             "local_report": str(local_report),
             "local_folder": str(folder),
             "workspace": str(workspace) if workspace else None,
-            "tags": ["video-report", "video-to-notes", str(metadata.get("platform") or "video")],
+            "tags": content_tags or None,
         }
     )
 

@@ -35,6 +35,7 @@ class FakeNotionClient:
                 "Processing Seconds": {"type": "number"},
                 "Summary": {"type": "rich_text"},
                 "Local Report": {"type": "rich_text"},
+                "Tags": {"type": "multi_select"},
             },
         }
 
@@ -81,6 +82,10 @@ class NotionPublishingTests(unittest.TestCase):
             self.assertEqual(client.created[0]["properties"]["Processed"]["date"]["start"], "2026-07-05T00:00:00+00:00")
             self.assertEqual(client.created[0]["properties"]["Processing Seconds"]["number"], 12.345)
             self.assertIn("Local Report", client.created[0]["properties"])
+            self.assertEqual(
+                client.created[0]["properties"]["Tags"]["multi_select"],
+                [{"name": "AI基础设施"}, {"name": "半导体"}],
+            )
             self.assertNotIn("Status", client.created[0]["properties"])
             self.assertFalse(client.cleared)
 
@@ -223,6 +228,21 @@ class NotionPublishingTests(unittest.TestCase):
             encoding="utf-8",
         )
         (folder / "transcript.txt").write_text("Transcript text.", encoding="utf-8")
+        (folder / "tags.json").write_text(
+            json.dumps(
+                {
+                    "tags": [
+                        "AI基础设施",
+                        "半导体",
+                        "youtube",
+                        "video-report",
+                        "AI基础设施",
+                    ]
+                },
+                ensure_ascii=False,
+            ),
+            encoding="utf-8",
+        )
 
 
 if __name__ == "__main__":

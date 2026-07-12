@@ -18,6 +18,7 @@ from .reporting import (
     TIMESTAMP_RE,
     _bullet_line,
     is_summary_section_heading,
+    read_content_tags,
     read_metadata,
     source_url_at_time,
     summary_file_path,
@@ -225,6 +226,9 @@ def report_blocks(folder: Path, metadata: dict[str, Any], *, workspace: Path | N
     ]
     if metadata.get("processing_seconds") not in (None, ""):
         blocks.append(_bullet("Processing seconds", metadata.get("processing_seconds")))
+    content_tags = read_content_tags(folder)
+    if content_tags:
+        blocks.append(_bullet("Tags", ", ".join(content_tags)))
     blocks.append(_bullet("Local report", str(local_report)))
     if workspace:
         blocks.append(_bullet("Workspace", str(workspace)))
@@ -287,6 +291,7 @@ def _page_properties(schema: dict[str, Any], metadata: dict[str, Any], folder: P
     _maybe_set_property(properties, properties_schema, ["Folder", "Report Folder"], folder.name)
     _maybe_set_property(properties, properties_schema, ["Local Report", "Report Path"], str((folder / "report.html").resolve()))
     _maybe_set_property(properties, properties_schema, ["Summary", "Summary Preview"], summary_preview(folder))
+    _maybe_set_property(properties, properties_schema, ["Tags", "Topics"], read_content_tags(folder))
     return properties
 
 
@@ -296,7 +301,7 @@ def _maybe_set_property(
     names: list[str],
     value: Any,
 ) -> None:
-    if value in (None, ""):
+    if value in (None, "", []):
         return
     name = _find_named_property(schema, names)
     if not name:
@@ -316,7 +321,14 @@ def _property_value(prop_type: str | None, value: Any) -> dict[str, Any] | None:
     if prop_type == "select":
         return {"select": {"name": text[:100]}}
     if prop_type == "multi_select":
-        return {"multi_select": [{"name": text[:100]}]}
+        values = value if isinstance(value, list) else [value]
+        return {
+            "multi_select": [
+                {"name": str(item)[:100]}
+                for item in values
+                if str(item).strip()
+            ]
+        }
     if prop_type == "number":
         try:
             return {"number": float(value)}

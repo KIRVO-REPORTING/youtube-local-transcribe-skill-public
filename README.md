@@ -53,7 +53,7 @@ https://github.com/user-attachments/assets/3605df08-c558-4060-ae46-48d93420736c
 2. `video-to-notes process "VIDEO_URL"` 调用 `yt-dlp` 获取元数据和字幕。
 3. 工具优先使用人工字幕或自动字幕；字幕不可用时，才走本地 Whisper。
 4. 每个视频会生成独立目录，包含 `metadata.json`、`transcript.txt` 和 `report.html`。
-5. Codex 或其他 Agent 读取 `metadata.json` 与 `transcript.txt`，写入有依据的 `summary.md`。
+5. Codex 或其他 Agent 读取完整 `transcript.txt`，写入有依据的 `summary.md`，并把 3-8 个内容主题标签写入 `tags.json`。标签不包含平台、来源或工作流属性。
 6. `video-to-notes finalize "<video-folder>"` 重新渲染最终 HTML 报告，清理下载的视频文件，并刷新 dashboard。
 7. 根据配置或命令参数，把报告保留在本地 dashboard，或发布/更新到 Notion、Obsidian。
 
@@ -168,6 +168,7 @@ video-to-notes process "VIDEO_URL" --workspace /path/to/workspace
 - `metadata.json`: 视频标题、来源、平台、时长、发布时间、处理时间和 transcript 来源。
 - `transcript.txt`: 字幕或本地 Whisper 生成的全文。
 - `summary.md`: Agent 或用户写入的摘要。
+- `tags.json`: Agent 基于完整转写生成的内容主题标签，供 Notion `Tags` 列和 Obsidian frontmatter 共用。
 - `report.html`: 浏览器可读报告。
 
 ### Codex Skill 安装
@@ -330,7 +331,7 @@ Install and configure video-to-notes: clone https://github.com/KIRVO-REPORTING/v
 2. `video-to-notes process "VIDEO_URL"` uses `yt-dlp` to fetch metadata and captions.
 3. The tool uses manual or automatic captions first; if captions are unavailable, it can fall back to local Whisper.
 4. Each video gets its own folder with `metadata.json`, `transcript.txt`, and `report.html`.
-5. Codex or another agent reads `metadata.json` and `transcript.txt`, then writes a grounded `summary.md`.
+5. Codex or another agent reads the full `transcript.txt`, writes a grounded `summary.md`, and writes 3-8 content-only subject tags to `tags.json`. Tags exclude platform, source, and workflow attributes.
 6. `video-to-notes finalize "<video-folder>"` re-renders the final HTML report, removes retained downloaded video files, and refreshes the dashboard.
 7. Based on configuration or command flags, keep the report local or publish/update it in Notion or Obsidian.
 
@@ -445,6 +446,7 @@ Typical outputs:
 - `metadata.json`: title, source URL, platform, duration, publish time, processing time, and transcript source.
 - `transcript.txt`: transcript from captions or local Whisper.
 - `summary.md`: summary written by an agent or user.
+- `tags.json`: content-only subject tags generated from the full transcript for the Notion `Tags` property and Obsidian frontmatter.
 - `report.html`: browser-readable report.
 
 ### Codex skill install

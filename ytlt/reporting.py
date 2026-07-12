@@ -12,6 +12,19 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 VIDEO_EXTENSIONS = {".mp4", ".mkv", ".webm", ".mov", ".m4v"}
 SUMMARY_FILENAME = "summary.md"
 LEGACY_SUMMARY_FILENAME = "summary.txt"
+TAGS_FILENAME = "tags.json"
+NON_CONTENT_TAGS = {
+    "video-report",
+    "video-to-notes",
+    "youtube",
+    "bilibili",
+    "video",
+    "notion-import",
+    "manual_subtitle",
+    "auto_subtitle",
+    "local_whisper",
+    "unknown",
+}
 TIMESTAMP_RE = re.compile(
     r"\[(?P<start>\d{1,2}:\d{2}(?::\d{2})?)(?:-(?P<end>\d{1,2}:\d{2}(?::\d{2})?))?\]"
 )
@@ -394,6 +407,32 @@ def read_metadata(folder: Path) -> dict[str, Any] | None:
         return json.loads(path.read_text(encoding="utf-8-sig"))
     except json.JSONDecodeError:
         return None
+
+
+def read_content_tags(folder: Path, *, limit: int = 8) -> list[str]:
+    """Read AI-generated subject tags, excluding workflow and source attributes."""
+    path = folder / TAGS_FILENAME
+    if not path.exists():
+        return []
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8-sig"))
+    except (json.JSONDecodeError, OSError):
+        return []
+    values = payload.get("tags", []) if isinstance(payload, dict) else payload
+    if not isinstance(values, list):
+        return []
+    tags: list[str] = []
+    seen: set[str] = set()
+    for value in values:
+        tag = re.sub(r"\s+", " ", str(value)).strip().lstrip("#")
+        key = tag.casefold()
+        if not tag or key in NON_CONTENT_TAGS or key in seen:
+            continue
+        seen.add(key)
+        tags.append(tag[:60])
+        if len(tags) >= limit:
+            break
+    return tags
 
 
 def summary_preview(folder: Path, limit: int = 220) -> str:

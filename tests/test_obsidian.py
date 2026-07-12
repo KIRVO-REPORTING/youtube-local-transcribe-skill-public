@@ -39,6 +39,10 @@ class ObsidianPublishingTests(unittest.TestCase):
             self.assertIn("# Video Title", note_text)
             self.assertIn("## Segment Conclusions", note_text)
             self.assertIn("[01:24-02:44](https://example.test/watch?v=abc&t=84)", note_text)
+            self.assertIn('  - "AI基础设施"', note_text)
+            self.assertIn('  - "半导体"', note_text)
+            self.assertNotIn('  - "youtube"', note_text)
+            self.assertNotIn('  - "video-report"', note_text)
             self.assertIn("[[Video Reports/", index.read_text(encoding="utf-8"))
 
             metadata = json.loads((folder / "metadata.json").read_text(encoding="utf-8"))
@@ -109,6 +113,21 @@ class ObsidianPublishingTests(unittest.TestCase):
             encoding="utf-8",
         )
         (folder / "transcript.txt").write_text("Transcript text.", encoding="utf-8")
+        (folder / "tags.json").write_text(
+            json.dumps(
+                {
+                    "tags": [
+                        "AI基础设施",
+                        "半导体",
+                        "youtube",
+                        "video-report",
+                        "AI基础设施",
+                    ]
+                },
+                ensure_ascii=False,
+            ),
+            encoding="utf-8",
+        )
 
 
 if __name__ == "__main__":

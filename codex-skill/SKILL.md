@@ -12,7 +12,7 @@ Use this workflow for bare video URLs and explicit video transcription, summary,
 For bare video links, report requests, Notion sync requests, Obsidian sync requests, or the current clean report output, produce the configured artifact directly:
 
 1. Process the video with `video-to-notes process`, preferring captions and falling back to local Whisper only when needed.
-2. Read `metadata.json` and `transcript.txt`; write `summary.md` with an answer-first overview and timestamped Key Points grounded in the transcript.
+2. Read `metadata.json` and the full `transcript.txt`; write `summary.md` with an answer-first overview and timestamped Key Points grounded in the transcript, then write AI-generated subject tags to `tags.json`.
 3. Run `video-to-notes finalize "<video-folder>"` to refresh the local `report.html` and dashboard index.
 4. Publish or update the configured target when applicable: Notion database row for `notion`, Obsidian note/dashboard for `obsidian`, or local dashboard only for `local`.
 5. Rename the current Codex thread to a concise video-topic title when a thread-title tool is available and the current thread id can be resolved.
@@ -140,6 +140,20 @@ Notes
 
 For video reports, each Key Point bullet and nested supporting bullet should start with a bracketed timestamp or time range such as `[01:24-02:44]`, using the transcript's actual timing. Use `[hh:mm:ss-hh:mm:ss]` for videos longer than one hour. The report renderer and CLI Notion publisher convert bracketed timestamps into clickable source-video links that seek to the start time, so keep the timestamp at the beginning of each bullet. When writing report content through the Notion connector Markdown path, avoid colons in the linked label because Notion can split the link; use an inline link like `[01m24s-02m44s](https://www.youtube.com/watch?v=VIDEO_ID&t=84)` instead of leaving it as plain text.
 
+## Generate Content Tags
+
+After reading the full transcript, generate 3-8 concise subject tags in the same language as the report and write them to `<video-folder>/tags.json`:
+
+```json
+{
+  "tags": ["AI基础设施", "Meta", "半导体", "光通信", "存储芯片", "美股投资"]
+}
+```
+
+Tags must describe the video's actual subjects, entities, industries, methods, or durable concepts. Prefer specific noun phrases that help retrieve related notes later. Merge synonyms, avoid near-duplicates, and do not infer topics unsupported by the transcript.
+
+Do not emit source, platform, processing, or workflow attributes as tags. Exclude values such as `video`, `youtube`, `bilibili`, `video-report`, `video-to-notes`, `notion-import`, `manual_subtitle`, `auto_subtitle`, `local_whisper`, channel names used only as provenance, and generic labels such as `summary` or `transcript`. If transcript evidence is insufficient, write `{"tags": []}` rather than inventing tags.
+
 For long videos, consider parallel drafting after reading the full transcript once. Treat a video as long when it is roughly over 45 minutes, has a very large transcript, or naturally breaks into many segments. Split the transcript into contiguous timestamp ranges and, when subagents or parallel work are available, draft each range independently into candidate Key Points. Each parallel draft must receive only the metadata, its transcript slice, neighboring boundary context when needed, and the output structure above. The main agent must then merge the drafts into one coherent `summary.md`, remove repetition, normalize point wording, verify timestamp ranges against the transcript, and keep the final response focused on the report rather than the coordination process.
 
 Finalize:
@@ -213,6 +227,7 @@ Create or reuse a database named `本地视频报告数据库` under the parent 
 - `Duration Seconds` number
 - `Summary` rich text
 - `Local Report` rich text
+- `Tags` multi-select containing only AI-generated subject tags from `tags.json`
 
 Create database views:
 
@@ -245,6 +260,7 @@ One answer-first summary paragraph.
 - Transcript Source: manual_subtitle | auto_subtitle | local_whisper
 - Processing Seconds: PROCESSING_SECONDS
 - Local Report: /absolute/path/to/report.html
+- Tags: AI-generated subject tags from tags.json
 
 <toggle title="Transcript">
 Full transcript text.
@@ -288,7 +304,7 @@ video-to-notes publish-obsidian "<video-folder>"
 video-to-notes sync-obsidian
 ```
 
-The Obsidian publisher creates or updates one Markdown note per report and maintains a dashboard note. It writes YAML frontmatter, source metadata, timestamp-linked summary sections, local report path, and the transcript unless `--obsidian-no-transcript` is used.
+The Obsidian publisher creates or updates one Markdown note per report and maintains a dashboard note. It writes YAML frontmatter, source metadata, timestamp-linked summary sections, local report path, and the transcript unless `--obsidian-no-transcript` is used. Its frontmatter `tags` must come only from AI-generated `tags.json`; never substitute platform or workflow attributes when that file is missing or empty.
 
 When Obsidian publishing succeeds, the JSON output includes `obsidian.obsidian_note_path`, `obsidian.obsidian_note_uri`, and `obsidian.obsidian_index_note_path`. Include the note path or URI in the final response alongside the local report path. The publisher stores `obsidian_note_path`, `obsidian_vault_path`, `obsidian_synced_at`, and `obsidian_sync_method` in `metadata.json`; later publishes update the same note.
 
@@ -337,6 +353,7 @@ Each processed folder should contain:
 - `metadata.json`: source URL, title, channel, platform, publish time, duration, processing time, and `transcript_source`
 - `transcript.txt`: subtitle-derived or local Whisper transcript
 - `summary.md`: Codex-written summary, after the summary step
+- `tags.json`: 3-8 AI-generated subject tags grounded in the transcript, or an empty list when evidence is insufficient
 - `report.html`: browser-readable report
 
 `transcript_source` is one of:
