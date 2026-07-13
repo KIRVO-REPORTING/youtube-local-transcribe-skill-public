@@ -55,7 +55,7 @@ class SetupTests(unittest.TestCase):
             target = model_cache_dir(Path(tmp))
             commands = install_commands(_profile(), Path("/repo"), model_target=target)
 
-        self.assertIn("/repo[mlx]", commands[0])
+        self.assertIn(f"{Path('/repo').resolve()}[mlx]", commands[0])
         self.assertIn("resolve_ffmpeg_path", commands[1][-1])
         self.assertEqual(commands[2][-2:], ["--target", str(target)])
         self.assertIn("mlx-community/whisper-large-v3-turbo", commands[2])
