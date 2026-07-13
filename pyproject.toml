@@ -4,10 +4,10 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "video-to-notes"
-version = "0.1.0"
+version = "0.2.0"
 description = "Turn video links into transcripts, summaries, reports, and local/Notion/Obsidian notes."
 readme = "README.md"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = { file = "LICENSE" }
 keywords = ["video", "transcription", "summarization", "notion", "obsidian", "whisper"]
 classifiers = [
@@ -16,7 +16,6 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
@@ -25,7 +24,7 @@ classifiers = [
   "Topic :: Text Processing",
 ]
 dependencies = [
-  "yt-dlp>=2025.1.0",
+  "yt-dlp[default]>=2025.11.12",
   "imageio-ffmpeg>=0.5.0",
 ]
 

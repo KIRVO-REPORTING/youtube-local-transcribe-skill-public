@@ -18,6 +18,7 @@ from .config import (
     configured_language,
     configured_model_path,
     configured_output_environment,
+    configured_profile,
     config_path,
     local_whisper_disabled,
     model_cache_dir,
@@ -37,11 +38,12 @@ from .reporting import (
     summary_file_path,
     write_report,
 )
+from .runtime import doctor, youtube_ydl_options
 from .spec import InstallProfile, MODEL_MATRIX, default_workspace, install_commands, probe, recommend, should_cache_model, to_json
 from .transcribe import download_model, transcribe_video
 
 
-VIDEO_EXTENSIONS = {".mp4", ".mkv", ".webm", ".mov", ".m4v"}
+MEDIA_EXTENSIONS = {".mp4", ".mkv", ".webm", ".mov", ".m4v", ".mp3", ".wav", ".m4a", ".ogg", ".opus"}
 OUTPUT_ENVIRONMENTS = {"local", "notion", "obsidian"}
 COMMON_LANGUAGES = [
     ("zh", "中文"),
@@ -204,6 +206,7 @@ def extract_info(url: str, *, cookies_from_browser: str | None = None, cookies: 
         "skip_download": True,
         "noplaylist": True,
     }
+    opts.update(youtube_ydl_options(url))
     if cookies_from_browser:
         opts["cookiesfrombrowser"] = (cookies_from_browser,)
     if cookies:
@@ -225,13 +228,13 @@ def download_video(
     before = {path.resolve() for path in folder.glob("*")}
     opts: dict[str, Any] = {
         "noplaylist": True,
-        "format": "bv*[height<=1080]+ba/b[height<=1080]/best",
-        "merge_output_format": "mp4",
+        "format": "bestaudio/best",
         "outtmpl": str(folder / "video.%(ext)s"),
         "quiet": False,
         "no_warnings": False,
         "writeinfojson": True,
     }
+    opts.update(youtube_ydl_options(url))
     resolved_ffmpeg = resolve_ffmpeg_path(explicit=ffmpeg_location)
     if resolved_ffmpeg:
         opts["ffmpeg_location"] = resolved_ffmpeg
@@ -247,10 +250,10 @@ def download_video(
     candidates = [
         path
         for path in folder.iterdir()
-        if path.is_file() and path.suffix.lower() in VIDEO_EXTENSIONS and path.resolve() not in before
+        if path.is_file() and path.suffix.lower() in MEDIA_EXTENSIONS and path.resolve() not in before
     ]
     if not candidates:
-        candidates = [path for path in folder.iterdir() if path.is_file() and path.suffix.lower() in VIDEO_EXTENSIONS]
+        candidates = [path for path in folder.iterdir() if path.is_file() and path.suffix.lower() in MEDIA_EXTENSIONS]
     if not candidates:
         raise RuntimeError(f"Could not find downloaded video in {folder}")
     return max(candidates, key=lambda path: path.stat().st_size)
@@ -283,7 +286,7 @@ def process_url(args: argparse.Namespace) -> int:
     transcript_path = folder / "transcript.txt"
     caption_path: Path | None = None
     video_path: Path | None = None
-    profile = recommend(probe(workspace))
+    profile = configured_profile(workspace) or recommend(probe(workspace))
 
     if track:
         try:
@@ -481,15 +484,20 @@ def run_configure(args: argparse.Namespace) -> int:
         commands: list[list[str]] = []
     elif args.model:
         profile = _custom_model_profile(recommendation, args.model)
-        commands = install_commands(profile, Path.cwd(), model_target=model_cache_dir(workspace))
+        commands = install_commands(profile, model_target=model_cache_dir(workspace))
     else:
         profile = recommendation
-        commands = install_commands(profile, Path.cwd(), model_target=model_cache_dir(workspace))
+        commands = install_commands(profile, model_target=model_cache_dir(workspace))
 
     execute = bool(args.execute)
     if interactive and not args.dry_run and not execute and model_choice != "none":
         answer = input("Install the selected Whisper backend/model now? [Y/n] ").strip().lower()
         execute = answer in {"", "y", "yes"}
+    if not args.dry_run and model_choice != "none" and not execute:
+        raise SystemExit(
+            "Recommended/custom Whisper setup was selected but not installed. "
+            "Re-run configure with --execute, or explicitly choose --model-choice none."
+        )
 
     payload: dict[str, Any] = {
         "workspace": str(workspace),
@@ -560,6 +568,12 @@ def run_probe(args: argparse.Namespace) -> int:
     return 0
 
 
+def run_doctor(args: argparse.Namespace) -> int:
+    payload = doctor(_workspace(args.workspace), check_config=not args.base_only)
+    print(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", end="")
+    return 0 if payload["ready"] else 2
+
+
 def run_recommend(args: argparse.Namespace) -> int:
     spec = probe(_workspace(args.workspace))
     profile = recommend(spec)
@@ -577,7 +591,7 @@ def run_install(args: argparse.Namespace) -> int:
     spec = probe(workspace)
     profile = recommend(spec)
     target = model_cache_dir(workspace)
-    commands = install_commands(profile, Path.cwd(), model_target=target)
+    commands = install_commands(profile, model_target=target)
     print(
         to_json(
             {
@@ -665,6 +679,11 @@ def build_parser() -> argparse.ArgumentParser:
     probe_parser = sub.add_parser("probe", help="Inspect local machine specs.")
     probe_parser.add_argument("--workspace")
     probe_parser.set_defaults(func=run_probe)
+
+    doctor_parser = sub.add_parser("doctor", help="Validate the base runtime and configured Whisper fallback.")
+    doctor_parser.add_argument("--workspace")
+    doctor_parser.add_argument("--base-only", action="store_true", help="Skip configured Whisper validation.")
+    doctor_parser.set_defaults(func=run_doctor)
 
     recommend_parser = sub.add_parser("recommend", help="Recommend a local transcription profile.")
     recommend_parser.add_argument("--workspace")

@@ -296,9 +296,9 @@ def install_commands(
     *,
     model_target: Path | None = None,
 ) -> list[list[str]]:
-    root = project_root or Path.cwd()
+    root = (project_root or Path(__file__).resolve().parent.parent).resolve()
     extras = ",".join(profile.pip_extras)
-    target = f".[{extras}]" if extras else "."
+    target = f"{root}[{extras}]" if extras else str(root)
     commands = [[sys.executable, "-m", "pip", "install", "-e", target]]
     commands.append(
         [
