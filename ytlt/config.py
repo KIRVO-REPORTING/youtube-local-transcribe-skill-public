@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import importlib.util
 import json
 from dataclasses import asdict
 from pathlib import Path
@@ -88,6 +89,18 @@ def configured_model_path(workspace: Path, profile: InstallProfile) -> str | Non
     return str(path) if path.exists() else None
 
 
+def configured_profile(workspace: Path) -> InstallProfile | None:
+    config = read_config(workspace)
+    raw = (config or {}).get("profile") or {}
+    required = {"id", "backend", "model", "device", "compute_type", "pip_extras", "reason", "notes"}
+    if not required.issubset(raw):
+        return None
+    try:
+        return InstallProfile(**{key: raw[key] for key in required})
+    except (TypeError, ValueError):
+        return None
+
+
 def configured_language(workspace: Path) -> str | None:
     config = read_config(workspace) or {}
     language = (config.get("preferences") or {}).get("language")
@@ -108,4 +121,16 @@ def local_whisper_disabled(workspace: Path) -> bool:
     if whisper.get("fallback_enabled") is False:
         return True
     profile = config.get("profile") or {}
-    return profile.get("backend") == "none" or profile.get("model") in {None, "none"}
+    backend = profile.get("backend")
+    model_source = profile.get("model")
+    if backend == "none" or model_source in {None, "none"}:
+        return True
+    module = "mlx_whisper" if backend == "mlx" else "faster_whisper" if backend == "faster-whisper" else None
+    if not module or importlib.util.find_spec(module) is None:
+        return True
+    if "/" in str(model_source):
+        model = config.get("model") or {}
+        model_path = model.get("path")
+        if not model_path or not Path(str(model_path)).expanduser().exists():
+            return True
+    return False

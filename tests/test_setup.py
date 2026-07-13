@@ -14,6 +14,7 @@ from ytlt.config import (
     configured_language,
     configured_model_path,
     configured_output_environment,
+    configured_profile,
     local_whisper_disabled,
     model_cache_dir,
     model_cache_path,
@@ -54,7 +55,7 @@ class SetupTests(unittest.TestCase):
             target = model_cache_dir(Path(tmp))
             commands = install_commands(_profile(), Path("/repo"), model_target=target)
 
-        self.assertIn(".[mlx]", commands[0])
+        self.assertIn("/repo[mlx]", commands[0])
         self.assertIn("resolve_ffmpeg_path", commands[1][-1])
         self.assertEqual(commands[2][-2:], ["--target", str(target)])
         self.assertIn("mlx-community/whisper-large-v3-turbo", commands[2])
@@ -94,6 +95,14 @@ class SetupTests(unittest.TestCase):
             self.assertEqual(configured_language(workspace), "ja")
             self.assertEqual(configured_output_environment(workspace), "obsidian")
             self.assertTrue(local_whisper_disabled(workspace))
+
+    def test_config_treats_missing_recommended_backend_as_disabled(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = Path(tmp)
+            write_config(workspace, _spec(workspace), _profile(), model_path=None)
+
+            with patch("ytlt.config.importlib.util.find_spec", return_value=None):
+                self.assertTrue(local_whisper_disabled(workspace))
 
     def test_apple_silicon_limited_memory_uses_public_mlx_small_checkpoint(self) -> None:
         spec = MachineSpec(
@@ -144,6 +153,23 @@ class SetupTests(unittest.TestCase):
 
             self.assertEqual(configured_model_path(workspace, profile), str(model_path))
 
+    def test_configured_profile_round_trips_custom_model(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = Path(tmp)
+            profile = InstallProfile(
+                id="apple-silicon-turbo-custom",
+                backend="mlx",
+                model="mlx-community/whisper-tiny-mlx",
+                device="mlx",
+                compute_type="mlx",
+                pip_extras=["mlx"],
+                reason="custom",
+                notes=[],
+            )
+            write_config(workspace, _spec(workspace), profile, model_path=workspace / "model")
+
+            self.assertEqual(configured_profile(workspace), profile)
+
     def test_process_uses_configured_model_path_for_whisper(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             workspace = Path(tmp)
@@ -184,9 +210,11 @@ class SetupTests(unittest.TestCase):
                 transcript.write_text("transcribed\n", encoding="utf-8")
                 return transcript
 
-            with patch("ytlt.cli.extract_info", return_value=info), patch("ytlt.cli.probe", return_value=spec), patch(
-                "ytlt.cli.recommend", return_value=profile
-            ), patch("ytlt.cli.download_video", return_value=workspace / "video.mp4"), patch(
+            with patch("ytlt.cli.extract_info", return_value=info), patch(
+                "ytlt.cli.local_whisper_disabled", return_value=False
+            ), patch("ytlt.cli.probe", return_value=spec), patch("ytlt.cli.recommend", return_value=profile), patch(
+                "ytlt.cli.download_video", return_value=workspace / "video.mp4"
+            ), patch(
                 "ytlt.cli.transcribe_video", side_effect=fake_transcribe
             ):
                 with contextlib.redirect_stdout(io.StringIO()):
@@ -280,6 +308,28 @@ class SetupTests(unittest.TestCase):
             next_steps = "\n".join(payload["next_steps"])
             self.assertIn("Notion connector/MCP", next_steps)
             self.assertIn("NOTION_TOKEN", next_steps)
+
+    def test_noninteractive_recommended_configure_requires_execute(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = Path(tmp)
+            args = argparse.Namespace(
+                workspace=str(workspace),
+                language="zh",
+                environment="local",
+                model_choice="recommended",
+                model=None,
+                execute=False,
+                dry_run=False,
+            )
+
+            with patch("ytlt.cli.probe", return_value=_spec(workspace)), patch(
+                "ytlt.cli._is_interactive", return_value=False
+            ):
+                with self.assertRaises(SystemExit) as raised:
+                    run_configure(args)
+
+            self.assertIn("--execute", str(raised.exception))
+            self.assertFalse((workspace / "config.json").exists())
 
 
 if __name__ == "__main__":

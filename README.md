@@ -44,7 +44,7 @@ https://github.com/user-attachments/assets/3605df08-c558-4060-ae46-48d93420736c
 把下面这一行复制给 Codex 或 Claude Code，它就可以按这个项目的方式安装和配置：
 
 ```text
-请安装并配置 video-to-notes：克隆 https://github.com/KIRVO-REPORTING/video-to-notes，进入仓库后在 macOS/Linux 运行 ./install.sh，Windows PowerShell 运行 powershell -ExecutionPolicy Bypass -File .\install.ps1；如果脚本提示没有 Python，请先按脚本给出的系统指令安装 Python 3.9+ 后重跑；如果当前工具是 Codex，请把 codex-skill 安装到 ~/.codex/skills/video-to-notes；然后运行 video-to-notes configure，让用户选择常用语言、硬件推荐的 Whisper fallback 模型或不安装模型，以及默认输出环境 local/notion/obsidian；最后用 video-to-notes process "VIDEO_URL" 处理视频。
+请安装并配置 video-to-notes：克隆 https://github.com/KIRVO-REPORTING/video-to-notes，进入仓库后在 macOS/Linux 运行 ./install.sh，Windows PowerShell 运行 powershell -ExecutionPolicy Bypass -File .\install.ps1；安装器会寻找或通过 uv 准备 Python 3.10+，安装 yt-dlp EJS，检查 Deno 2.3+ 或 Node.js 22+ 与 ffmpeg，并在检测到 Codex 时安装 codex-skill；然后运行 video-to-notes configure，让用户选择常用语言、硬件推荐的 Whisper fallback 模型或不安装模型，以及默认输出环境 local/notion/obsidian；非交互模式选择模型时必须加 --execute；最后用 video-to-notes process "VIDEO_URL" 处理视频。
 ```
 
 ### 工作流程简介
@@ -59,7 +59,7 @@ https://github.com/user-attachments/assets/3605df08-c558-4060-ae46-48d93420736c
 
 ### 快速安装
 
-推荐使用仓库自带的 bootstrap 脚本。它会先检测 Python 3.9+、pip 和 venv；如果缺失，会给出 macOS、Linux 或 Windows 的安装指令。检测通过后，它会创建 `.venv`、安装基础依赖，并提示是否启动 `video-to-notes configure`。
+推荐使用仓库自带的 bootstrap 脚本。它会寻找 Python 3.10+，并在检测到 `uv` 时自动准备 Python 3.12；随后检查 pip/venv，创建 `.venv`，安装 yt-dlp EJS，验证 Deno 2.3+ 或 Node.js 22+ 与 ffmpeg，并提示是否启动 `video-to-notes configure`。检测到 `CODEX_HOME` 或 `~/.codex` 时，它也会同步安装 Codex skill。
 
 macOS / Linux:
 
@@ -80,6 +80,7 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1
 如果安装脚本没有自动启动配置，手动运行：
 
 ```bash
+video-to-notes doctor
 video-to-notes configure
 ```
 
@@ -100,13 +101,14 @@ video-to-notes configure --language zh --model-choice none --environment local
 
 `--execute` 会安装推荐后端、确认 ffmpeg、按硬件条件下载或配置推荐模型，并写入 workspace 配置。`video-to-notes setup --execute` 仍然可用，但推荐先用 `video-to-notes configure`，因为它同时保存语言和输出环境偏好。
 
-如果你已经有 Python 3.9+，也可以手动安装到虚拟环境：
+如果你已经有 Python 3.10+，并安装了 Deno 2.3+ 或 Node.js 22+，也可以手动安装到虚拟环境：
 
 ```bash
 python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install --upgrade pip setuptools wheel
 python -m pip install -e .
+video-to-notes doctor
 video-to-notes configure
 ```
 
@@ -117,6 +119,7 @@ py -3 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip setuptools wheel
 python -m pip install -e .
+video-to-notes doctor
 video-to-notes configure
 ```
 
@@ -285,7 +288,7 @@ video-to-notes process "https://www.ted.com/talks/sir_ken_robinson_do_schools_ki
 
 ### 注意事项
 
-- 需要 Python 3.9 或更新版本，推荐 Python 3.10+。
+- 需要 Python 3.10+，推荐 Python 3.12；YouTube 还需要 Deno 2.3+ 或 Node.js 22+。
 - 字幕永远优先于本地 Whisper。
 - 推荐 `video-to-notes configure`；`video-to-notes setup --execute` 只配置模型，不保存语言和输出环境偏好。
 - 选择不安装 Whisper 模型不推荐；有字幕的视频仍可处理，但无字幕视频无法本地 fallback。
@@ -325,7 +328,7 @@ This project makes the workflow repeatable: captions first, local transcription 
 Copy this single line into Codex or Claude Code:
 
 ```text
-Install and configure video-to-notes: clone https://github.com/KIRVO-REPORTING/video-to-notes, enter the repo, run ./install.sh on macOS/Linux or powershell -ExecutionPolicy Bypass -File .\install.ps1 in Windows PowerShell; if the script says Python is missing, install Python 3.9+ using the script's OS-specific instructions and re-run it; if this is Codex, install codex-skill to ~/.codex/skills/video-to-notes; then run video-to-notes configure so the user can choose their usual language, the hardware-recommended Whisper fallback model or no model, and the default output environment local/notion/obsidian; finally process a video with video-to-notes process "VIDEO_URL".
+Install and configure video-to-notes: clone https://github.com/KIRVO-REPORTING/video-to-notes, enter the repo, run ./install.sh on macOS/Linux or powershell -ExecutionPolicy Bypass -File .\install.ps1 in Windows PowerShell; the installer finds or provisions Python 3.10+, installs yt-dlp EJS, validates Deno 2.3+ or Node.js 22+ and ffmpeg, and installs codex-skill when Codex is detected; then run video-to-notes configure so the user can choose their usual language, the hardware-recommended Whisper fallback model or no model, and the default output environment local/notion/obsidian; non-interactive model setup must include --execute; finally process a video with video-to-notes process "VIDEO_URL".
 ```
 
 ### Workflow overview
@@ -340,7 +343,7 @@ Install and configure video-to-notes: clone https://github.com/KIRVO-REPORTING/v
 
 ### Quick install
 
-Use the repository bootstrap script first. It checks for Python 3.9+, pip, and venv support; if something is missing, it prints platform-specific install instructions. After the checks pass, it creates `.venv`, installs the base dependencies, and offers to start `video-to-notes configure`.
+Use the repository bootstrap script first. It finds Python 3.10+ and can provision Python 3.12 through `uv`; it then checks pip/venv, creates `.venv`, installs yt-dlp EJS, validates Deno 2.3+ or Node.js 22+ and ffmpeg, and offers to start `video-to-notes configure`. When `CODEX_HOME` or `~/.codex` exists, it also installs the Codex skill.
 
 macOS / Linux:
 
@@ -361,6 +364,7 @@ powershell -ExecutionPolicy Bypass -File .\install.ps1
 If the installer did not start the wizard automatically, run:
 
 ```bash
+video-to-notes doctor
 video-to-notes configure
 ```
 
@@ -381,13 +385,14 @@ video-to-notes configure --language en --model-choice none --environment local
 
 `--execute` installs the selected backend, verifies ffmpeg, downloads or configures the recommended model when needed, and writes workspace configuration. `video-to-notes setup --execute` remains available, but `video-to-notes configure` is recommended because it also saves language and output-environment preferences.
 
-If Python 3.9+ is already installed and you prefer a manual setup, use a virtual environment:
+If Python 3.10+ and Deno 2.3+ or Node.js 22+ are already installed, you can use a virtual environment:
 
 ```bash
 python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install --upgrade pip setuptools wheel
 python -m pip install -e .
+video-to-notes doctor
 video-to-notes configure
 ```
 
@@ -398,6 +403,7 @@ py -3 -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip setuptools wheel
 python -m pip install -e .
+video-to-notes doctor
 video-to-notes configure
 ```
 
@@ -566,7 +572,7 @@ video-to-notes process "https://www.ted.com/talks/sir_ken_robinson_do_schools_ki
 
 ### Notes
 
-- Python 3.9+ is required. Python 3.10+ is recommended.
+- Python 3.10+ is required; Python 3.12 is recommended. YouTube also requires Deno 2.3+ or Node.js 22+.
 - Captions are always preferred before local Whisper.
 - `video-to-notes configure` is recommended; `video-to-notes setup --execute` only configures the model and does not save language or output-environment preferences.
 - Choosing no Whisper model is not recommended. Captioned videos still work, but captionless videos cannot fall back to local transcription.

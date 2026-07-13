@@ -9,7 +9,7 @@ from typing import Any
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 
-VIDEO_EXTENSIONS = {".mp4", ".mkv", ".webm", ".mov", ".m4v"}
+MEDIA_EXTENSIONS = {".mp4", ".mkv", ".webm", ".mov", ".m4v", ".mp3", ".wav", ".m4a", ".ogg", ".opus"}
 SUMMARY_FILENAME = "summary.md"
 LEGACY_SUMMARY_FILENAME = "summary.txt"
 TAGS_FILENAME = "tags.json"
@@ -394,7 +394,7 @@ def delete_video_files(folder: Path, metadata: dict[str, Any]) -> list[str]:
     video_file = metadata.get("video_file")
     if video_file:
         candidates.append(folder / str(video_file))
-    candidates.extend(path for path in folder.glob("video.*") if path.suffix.lower() in VIDEO_EXTENSIONS)
+    candidates.extend(path for path in folder.glob("video.*") if path.suffix.lower() in MEDIA_EXTENSIONS)
 
     deleted: list[str] = []
     seen: set[Path] = set()
