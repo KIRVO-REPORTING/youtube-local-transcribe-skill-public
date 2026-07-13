@@ -1,6 +1,6 @@
 interface:
   display_name: "Video to Notes"
-  short_description: "Turn video links into timestamped notes"
-  default_prompt: "Use $video-to-notes for this video link: prefer captions, write timestamped notes, finalize the report, publish to the configured target, and return the report path or URL."
+  short_description: "Turn video links into tagged, timestamped notes"
+  default_prompt: "Use $video-to-notes for this video link: prefer captions, write timestamped notes and subject tags, finalize the report, publish to the configured target, and return the report path or URL."
 policy:
   allow_implicit_invocation: true

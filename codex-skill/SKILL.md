@@ -13,7 +13,7 @@ For bare video links, report requests, Notion sync requests, Obsidian sync reque
 
 1. Process the video with `video-to-notes process`, preferring captions and falling back to local Whisper only when needed.
 2. Read `metadata.json` and the full `transcript.txt`; write `summary.md` with an answer-first overview and timestamped Key Points grounded in the transcript, then write AI-generated subject tags to `tags.json`.
-3. Run `video-to-notes finalize "<video-folder>"` to refresh the local `report.html` and dashboard index.
+3. Run `video-to-notes finalize "<video-folder>"` to add sanitized subject tags to the local `report.html` and dashboard index, then refresh both artifacts.
 4. Publish or update the configured target when applicable: Notion database row for `notion`, Obsidian note/dashboard for `obsidian`, or local dashboard only for `local`.
 5. Rename the current Codex thread to a concise video-topic title when a thread-title tool is available and the current thread id can be resolved.
 6. Return the primary reader-facing output for the configured target: Notion row URL, Obsidian note path/URI, or local `report.html` path.
@@ -162,7 +162,7 @@ Finalize:
 video-to-notes finalize "<video-folder>"
 ```
 
-Finalization re-renders `report.html`, deletes any retained downloaded `video.*` media file, and refreshes the dashboard index. Continue into the configured output target before responding. Use `--environment local`, `--environment notion`, or `--environment obsidian` to override the configured destination for one run.
+Finalization reads and sanitizes `tags.json`, re-renders `report.html`, deletes any retained downloaded `video.*` media file, and refreshes the dashboard index. Missing, invalid, or empty tag files are backward-compatible and produce an empty tag list. Continue into the configured output target before responding. Use `--environment local`, `--environment notion`, or `--environment obsidian` to override the configured destination for one run.
 
 ## Notion Publishing
 
@@ -345,6 +345,7 @@ video-to-notes serve --open
 ```
 
 `video-to-notes serve` binds to `127.0.0.1` by default and opens a local dashboard of past reports. Do not expose the server publicly unless the user explicitly asks.
+The dashboard search includes sanitized subject tags from `tags.json`.
 
 ## Output Contract
 

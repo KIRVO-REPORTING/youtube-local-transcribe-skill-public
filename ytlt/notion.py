@@ -291,7 +291,13 @@ def _page_properties(schema: dict[str, Any], metadata: dict[str, Any], folder: P
     _maybe_set_property(properties, properties_schema, ["Folder", "Report Folder"], folder.name)
     _maybe_set_property(properties, properties_schema, ["Local Report", "Report Path"], str((folder / "report.html").resolve()))
     _maybe_set_property(properties, properties_schema, ["Summary", "Summary Preview"], summary_preview(folder))
-    _maybe_set_property(properties, properties_schema, ["Tags", "Topics"], read_content_tags(folder))
+    _maybe_set_property(
+        properties,
+        properties_schema,
+        ["Tags", "Topics"],
+        read_content_tags(folder),
+        allow_empty=True,
+    )
     return properties
 
 
@@ -300,13 +306,17 @@ def _maybe_set_property(
     schema: dict[str, Any],
     names: list[str],
     value: Any,
+    *,
+    allow_empty: bool = False,
 ) -> None:
-    if value in (None, "", []):
+    if value in (None, "", []) and not allow_empty:
         return
     name = _find_named_property(schema, names)
     if not name:
         return
     prop_type = schema[name].get("type")
+    if value == [] and prop_type != "multi_select":
+        return
     converted = _property_value(prop_type, value)
     if converted is not None:
         properties[name] = converted

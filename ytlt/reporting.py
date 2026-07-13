@@ -20,9 +20,9 @@ NON_CONTENT_TAGS = {
     "bilibili",
     "video",
     "notion-import",
-    "manual_subtitle",
-    "auto_subtitle",
-    "local_whisper",
+    "manual-subtitle",
+    "auto-subtitle",
+    "local-whisper",
     "unknown",
 }
 TIMESTAMP_RE = re.compile(
@@ -283,7 +283,12 @@ def _render_details_block(
     )
 
 
-def build_report_html(metadata: dict[str, Any], summary: str, transcript: str) -> str:
+def build_report_html(
+    metadata: dict[str, Any],
+    summary: str,
+    transcript: str,
+    content_tags: list[str] | None = None,
+) -> str:
     title = html.escape(str(metadata.get("title") or "Untitled video"))
     source_url = html.escape(str(metadata.get("source_url") or ""), quote=True)
     rows = [
@@ -297,6 +302,8 @@ def build_report_html(metadata: dict[str, Any], summary: str, transcript: str) -
         ("Transcript source", html.escape(str(metadata.get("transcript_source") or "Unknown"))),
         ("Transcript file", f"<code>{html.escape(str(metadata.get('transcript_file', 'transcript.txt')))}</code>"),
     ]
+    if content_tags:
+        rows.insert(4, ("Tags", html.escape(", ".join(content_tags))))
     if metadata.get("processing_seconds") not in (None, ""):
         rows.insert(-2, ("Processing time", f"{html.escape(str(metadata.get('processing_seconds')))} seconds"))
     metadata_rows = "\n".join(f"<tr><th>{label}</th><td>{value}</td></tr>" for label, value in rows)
@@ -356,7 +363,10 @@ def write_report(folder: Path, metadata: dict[str, Any]) -> Path:
     transcript = transcript_path.read_text(encoding="utf-8-sig") if transcript_path.exists() else ""
     summary = summary_path.read_text(encoding="utf-8-sig") if summary_path.exists() else ""
     report = folder / "report.html"
-    report.write_text(build_report_html(metadata, summary, transcript), encoding="utf-8")
+    report.write_text(
+        build_report_html(metadata, summary, transcript, read_content_tags(folder)),
+        encoding="utf-8",
+    )
     return report
 
 
@@ -411,6 +421,8 @@ def read_metadata(folder: Path) -> dict[str, Any] | None:
 
 def read_content_tags(folder: Path, *, limit: int = 8) -> list[str]:
     """Read AI-generated subject tags, excluding workflow and source attributes."""
+    if limit <= 0:
+        return []
     path = folder / TAGS_FILENAME
     if not path.exists():
         return []
@@ -424,12 +436,16 @@ def read_content_tags(folder: Path, *, limit: int = 8) -> list[str]:
     tags: list[str] = []
     seen: set[str] = set()
     for value in values:
-        tag = re.sub(r"\s+", " ", str(value)).strip().lstrip("#")
-        key = tag.casefold()
+        if not isinstance(value, str):
+            continue
+        tag = re.sub(r"[\x00-\x1f\x7f]+", " ", value)
+        tag = re.sub(r"\s+", " ", tag).strip().lstrip("#").strip()
+        tag = tag[:60].rstrip()
+        key = re.sub(r"[\s_-]+", "-", tag.casefold()).strip("-")
         if not tag or key in NON_CONTENT_TAGS or key in seen:
             continue
         seen.add(key)
-        tags.append(tag[:60])
+        tags.append(tag)
         if len(tags) >= limit:
             break
     return tags
@@ -464,6 +480,7 @@ def rebuild_index(workspace: Path) -> dict[str, Any]:
                 "processed_at": metadata.get("processed_at") or metadata.get("downloaded_at"),
                 "duration_seconds": metadata.get("duration_seconds"),
                 "transcript_source": metadata.get("transcript_source"),
+                "tags": read_content_tags(folder),
                 "summary_preview": summary_preview(folder),
                 "report_exists": report_path.exists(),
                 "transcript_exists": transcript_path.exists(),
@@ -898,7 +915,7 @@ function filteredReports() {
   const platformValue = platform.value;
   const sourceValue = source.value;
   return reports.filter(item => {
-    const haystack = [item.title, item.channel, item.summary_preview, item.platform, labelSource(sourceKey(item))]
+    const haystack = [item.title, item.channel, item.summary_preview, item.platform, labelSource(sourceKey(item)), ...(item.tags || [])]
       .join(' ')
       .toLowerCase();
     return matchesView(item)

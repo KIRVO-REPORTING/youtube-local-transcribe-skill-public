@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+import json
 import tempfile
 import unittest
 from pathlib import Path
 
-from ytlt.reporting import render_summary, summary_preview, write_report
+from ytlt.reporting import read_content_tags, rebuild_index, render_summary, summary_preview, write_report
 
 
 class ReportingTests(unittest.TestCase):
@@ -104,6 +105,65 @@ The speaker shows why the dock animation matters for the overall workflow.
             self.assertEqual("legacy summary", summary_preview(folder))
             self.assertTrue((folder / "summary.md").exists())
             self.assertFalse((folder / "summary.txt").exists())
+
+    def test_content_tags_are_sanitized_deduplicated_and_limited(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            (folder / "tags.json").write_text(
+                json.dumps(
+                    {
+                        "tags": [
+                            "  #AI Infrastructure ",
+                            "AI-Infrastructure",
+                            "youtube",
+                            "manual subtitle",
+                            None,
+                            42,
+                            "Semiconductors",
+                            "Optical Networking",
+                        ]
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            self.assertEqual(
+                read_content_tags(folder, limit=3),
+                ["AI Infrastructure", "Semiconductors", "Optical Networking"],
+            )
+
+    def test_empty_or_invalid_content_tags_are_backward_compatible(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            self.assertEqual(read_content_tags(folder), [])
+            (folder / "tags.json").write_text("not-json", encoding="utf-8")
+            self.assertEqual(read_content_tags(folder), [])
+
+    def test_report_and_dashboard_include_content_tags(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            workspace = Path(tmp)
+            folder = workspace / "processed" / "video"
+            folder.mkdir(parents=True)
+            metadata = {
+                "id": "abc",
+                "title": "Video",
+                "source_url": "https://example.test/video",
+                "processed_at": "2026-07-13T00:00:00+00:00",
+            }
+            (folder / "metadata.json").write_text(json.dumps(metadata), encoding="utf-8")
+            (folder / "transcript.txt").write_text("Transcript", encoding="utf-8")
+            (folder / "summary.md").write_text("Summary\n\nShort summary.", encoding="utf-8")
+            (folder / "tags.json").write_text(
+                '{"tags": ["AI Infrastructure", "Semiconductors"]}',
+                encoding="utf-8",
+            )
+
+            report = write_report(folder, metadata)
+            index = rebuild_index(workspace)
+
+            self.assertIn("AI Infrastructure, Semiconductors", report.read_text(encoding="utf-8"))
+            self.assertEqual(index["reports"][0]["tags"], ["AI Infrastructure", "Semiconductors"])
+            self.assertIn("...(item.tags || [])", (workspace / "dashboard.html").read_text(encoding="utf-8"))
 
 
 if __name__ == "__main__":

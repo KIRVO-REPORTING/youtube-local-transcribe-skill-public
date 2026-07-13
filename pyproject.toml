@@ -8,6 +8,22 @@ version = "0.1.0"
 description = "Turn video links into transcripts, summaries, reports, and local/Notion/Obsidian notes."
 readme = "README.md"
 requires-python = ">=3.9"
+license = { file = "LICENSE" }
+keywords = ["video", "transcription", "summarization", "notion", "obsidian", "whisper"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Environment :: Console",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Multimedia :: Video",
+  "Topic :: Text Processing",
+]
 dependencies = [
   "yt-dlp>=2025.1.0",
   "imageio-ffmpeg>=0.5.0",
@@ -33,6 +49,12 @@ all = [
 [project.scripts]
 video-to-notes = "ytlt.cli:main"
 ytlt = "ytlt.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/KIRVO-REPORTING/video-to-notes"
+Documentation = "https://kirvo-reporting.github.io/video-to-notes/"
+Repository = "https://github.com/KIRVO-REPORTING/video-to-notes.git"
+Issues = "https://github.com/KIRVO-REPORTING/video-to-notes/issues"
 
 [tool.setuptools.packages.find]
 include = ["ytlt*"]

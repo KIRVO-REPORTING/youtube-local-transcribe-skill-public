@@ -112,6 +112,21 @@ class NotionPublishingTests(unittest.TestCase):
             self.assertFalse(client.created)
             self.assertEqual(client.appended[0]["block_id"], "existing-page")
 
+    def test_publish_clears_stale_notion_tags_when_tags_are_empty(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            folder = Path(tmp)
+            self._write_report_files(folder, extra_metadata={"notion_page_id": "existing-page"})
+            (folder / "tags.json").write_text('{"tags": []}', encoding="utf-8")
+            client = FakeNotionClient()
+
+            publish_report_to_notion(
+                folder,
+                NotionPublishConfig(token="secret", data_source_id="data-source-123"),
+                client=client,  # type: ignore[arg-type]
+            )
+
+            self.assertEqual(client.updated[0]["properties"]["Tags"], {"multi_select": []})
+
     def test_summary_timestamps_become_notion_links(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             folder = Path(tmp)

@@ -54,7 +54,7 @@ https://github.com/user-attachments/assets/3605df08-c558-4060-ae46-48d93420736c
 3. 工具优先使用人工字幕或自动字幕；字幕不可用时，才走本地 Whisper。
 4. 每个视频会生成独立目录，包含 `metadata.json`、`transcript.txt` 和 `report.html`。
 5. Codex 或其他 Agent 读取完整 `transcript.txt`，写入有依据的 `summary.md`，并把 3-8 个内容主题标签写入 `tags.json`。标签不包含平台、来源或工作流属性。
-6. `video-to-notes finalize "<video-folder>"` 重新渲染最终 HTML 报告，清理下载的视频文件，并刷新 dashboard。
+6. `video-to-notes finalize "<video-folder>"` 把过滤后的主题标签写入本地 HTML 报告和 dashboard 索引，清理下载的视频文件，并刷新 dashboard。
 7. 根据配置或命令参数，把报告保留在本地 dashboard，或发布/更新到 Notion、Obsidian。
 
 ### 快速安装
@@ -168,8 +168,10 @@ video-to-notes process "VIDEO_URL" --workspace /path/to/workspace
 - `metadata.json`: 视频标题、来源、平台、时长、发布时间、处理时间和 transcript 来源。
 - `transcript.txt`: 字幕或本地 Whisper 生成的全文。
 - `summary.md`: Agent 或用户写入的摘要。
-- `tags.json`: Agent 基于完整转写生成的内容主题标签，供 Notion `Tags` 列和 Obsidian frontmatter 共用。
+- `tags.json`: Agent 基于完整转写生成的内容主题标签，供本地报告/dashboard 搜索、Notion `Tags` 列和 Obsidian frontmatter 共用。
 - `report.html`: 浏览器可读报告。
+
+CLI 本身不会调用外部 AI 标签服务；`tags.json` 由运行此 skill 的 Agent 在读完转写后生成。旧报告缺少该文件、文件损坏或标签为空时仍可正常 finalize 和发布；输出会使用空标签，并在更新 Notion 行时清除旧标签。
 
 ### Codex Skill 安装
 
@@ -289,6 +291,7 @@ video-to-notes process "https://www.ted.com/talks/sir_ken_robinson_do_schools_ki
 - 选择不安装 Whisper 模型不推荐；有字幕的视频仍可处理，但无字幕视频无法本地 fallback。
 - 硬件模型选择规则见 `codex-skill/references/model-selection.md`。
 - workspace、下载媒体、模型、虚拟环境和构建产物会被 `.gitignore` 排除。
+- 本项目采用 [MIT License](LICENSE)。
 
 ## English
 
@@ -332,7 +335,7 @@ Install and configure video-to-notes: clone https://github.com/KIRVO-REPORTING/v
 3. The tool uses manual or automatic captions first; if captions are unavailable, it can fall back to local Whisper.
 4. Each video gets its own folder with `metadata.json`, `transcript.txt`, and `report.html`.
 5. Codex or another agent reads the full `transcript.txt`, writes a grounded `summary.md`, and writes 3-8 content-only subject tags to `tags.json`. Tags exclude platform, source, and workflow attributes.
-6. `video-to-notes finalize "<video-folder>"` re-renders the final HTML report, removes retained downloaded video files, and refreshes the dashboard.
+6. `video-to-notes finalize "<video-folder>"` adds sanitized subject tags to the local HTML report and dashboard index, removes retained downloaded video files, and refreshes the dashboard.
 7. Based on configuration or command flags, keep the report local or publish/update it in Notion or Obsidian.
 
 ### Quick install
@@ -446,8 +449,10 @@ Typical outputs:
 - `metadata.json`: title, source URL, platform, duration, publish time, processing time, and transcript source.
 - `transcript.txt`: transcript from captions or local Whisper.
 - `summary.md`: summary written by an agent or user.
-- `tags.json`: content-only subject tags generated from the full transcript for the Notion `Tags` property and Obsidian frontmatter.
+- `tags.json`: content-only subject tags generated from the full transcript for local report/dashboard search, the Notion `Tags` property, and Obsidian frontmatter.
 - `report.html`: browser-readable report.
+
+The CLI does not call an external AI tagging service. The agent running this skill creates `tags.json` after reading the transcript. Older reports remain compatible when the file is missing, invalid, or empty; finalization and publishing use an empty tag list, and Notion updates clear stale tags.
 
 ### Codex skill install
 
@@ -567,3 +572,4 @@ video-to-notes process "https://www.ted.com/talks/sir_ken_robinson_do_schools_ki
 - Choosing no Whisper model is not recommended. Captioned videos still work, but captionless videos cannot fall back to local transcription.
 - Hardware model selection lives in `codex-skill/references/model-selection.md`.
 - Generated workspaces, downloaded media, models, virtual environments, and build metadata are ignored by `.gitignore`.
+- This project is licensed under the [MIT License](LICENSE).
